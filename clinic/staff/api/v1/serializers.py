@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from clinic.staff.models import Staff
 from clinic.users.api.defaults import CurrentClinicDefault
-from clinic.users.api.v1.serializers import UserDetailSerializer, UserModifySerializer
+from clinic.users.api.v1.serializers import PermissionDetailSerializer, UserDetailSerializer, UserModifySerializer
 
 
 class StaffModifySerializer(serializers.ModelSerializer):
@@ -35,6 +35,15 @@ class StaffModifySerializer(serializers.ModelSerializer):
 
 
 class StaffDetailSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer(read_only=True)
+    permissions = PermissionDetailSerializer(source="user.permissions", many=True, read_only=True)
+
+    class Meta:
+        model = Staff
+        fields = "__all__"
+
+
+class StaffListSerializer(serializers.ModelSerializer):
     user = UserDetailSerializer(read_only=True)
 
     class Meta:
