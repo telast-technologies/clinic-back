@@ -7,6 +7,7 @@ from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
 from clinic.approvals.choices import JoinRequestStatusChoices
+from clinic.approvals.forms import JoinRequestForm
 from clinic.approvals.models import JoinRequest
 from clinic.staff.models import Staff
 from clinic.system_management.models import Clinic
@@ -16,6 +17,7 @@ from clinic.utils.notifications import send_email
 
 @admin.register(JoinRequest)
 class JoinRequestAdmin(admin.ModelAdmin):
+    form = JoinRequestForm
     list_display = (
         "uid",
         "administrator_first_name",
@@ -44,14 +46,6 @@ class JoinRequestAdmin(admin.ModelAdmin):
         "updated_at",
     ]
 
-    def get_readonly_fields(self, request, obj=None):
-        fields = super().get_readonly_fields(request, obj)
-
-        if obj and obj.status not in [JoinRequestStatusChoices.PENDING] and "status" not in fields:
-            fields.append("status")
-
-        return fields
-
     @transaction.atomic
     def save_model(self, request: Any, obj: Any, form: Any, change: Any) -> Any:
         if (obj.tracker.previous("status") == JoinRequestStatusChoices.PENDING) and (
@@ -76,9 +70,11 @@ class JoinRequestAdmin(admin.ModelAdmin):
             }
 
             if any(
-                User.objects.filter(email=user_data["email"]).exists(),
-                User.objects.filter(phone=user_data["phone"]).exists(),
-                Clinic.objects.filter(name=clinic_data["name"]).exists(),
+                [
+                    User.objects.filter(email=user_data["email"]).exists(),
+                    User.objects.filter(phone=user_data["phone"]).exists(),
+                    Clinic.objects.filter(name=clinic_data["name"]).exists(),
+                ]
             ):
                 raise ValueError("data already exists")
 
