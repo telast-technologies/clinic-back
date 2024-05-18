@@ -6,19 +6,6 @@ from clinic.users.api.defaults import CurrentClinicDefault
 from clinic.users.models import Patient, Staff, User
 
 
-class UserDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = (
-            "id",
-            "first_name",
-            "last_name",
-            "email",
-            "phone",
-            "is_active",
-        )
-
-
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
@@ -31,6 +18,19 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "phone",
             "avatar",
         ]
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "is_active",
+        )
 
 
 class UserModifySerializer(serializers.ModelSerializer):
