@@ -66,10 +66,17 @@ THIRD_PARTY_APPS = [
     "anymail",
 ]
 
-LOCAL_APPS = [
+CONTROLLED_LOCAL_APPS = [
     "clinic.users",
     "clinic.system_management",
+    "clinic.approvals",
 ]
+EXPOSED_LOCAL_APPS = [
+    "clinic.patients",
+    "clinic.staff",
+]
+
+LOCAL_APPS = CONTROLLED_LOCAL_APPS + EXPOSED_LOCAL_APPS
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -153,6 +160,8 @@ REST_AUTH = {
     "JWT_AUTH_HTTPONLY": False,
 }
 
+# allowed permissions apps
+ALLOWED_PERMISSIONS_APPS = [app.split(".")[-1] for app in EXPOSED_LOCAL_APPS]
 
 # Internationalization
 # Local time zone. Choices are

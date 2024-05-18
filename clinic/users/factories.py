@@ -1,7 +1,7 @@
 from collections.abc import Sequence
 from typing import Any
 
-from factory import Faker, SubFactory, post_generation
+from factory import Faker, post_generation
 from factory.django import DjangoModelFactory
 
 
@@ -38,11 +38,3 @@ class UserFactory(DjangoModelFactory):
         if create and results and not cls._meta.skip_postgeneration_save:
             # Some post-generation hooks ran, and may have modified us.
             instance.save()
-
-
-class StaffFactory(DjangoModelFactory):
-    class Meta:
-        model = "users.Staff"
-
-    user = SubFactory("clinic.users.factories.UserFactory", password="0000")
-    clinic = SubFactory("clinic.system_management.factories.ClinicFactory")

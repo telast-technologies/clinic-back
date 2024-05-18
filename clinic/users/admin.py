@@ -6,7 +6,7 @@ from django.db.models.query import QuerySet
 from django.http.request import HttpRequest
 from django.utils.translation import gettext_lazy as _
 
-from clinic.users.models import Patient, Staff, User
+from clinic.users.models import User
 
 
 @admin.register(User)
@@ -64,51 +64,3 @@ class UserAdmin(auth_admin):
     @admin.display(ordering="role")
     def display_role(self, obj: User) -> str:
         return obj.role
-
-
-@admin.register(Staff)
-class StaffAdmin(admin.ModelAdmin):
-    list_display = [
-        "uid",
-        "user",
-        "clinic",
-    ]
-    search_fields = ["user__first_name", "user__last_name", "user__email", "user__phone"]
-    list_filter = ("clinic",)
-
-    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
-
-    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
-
-    def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
-
-    def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
-        return super().get_queryset(request).exclude(user=request.user)
-
-
-@admin.register(Patient)
-class PatientAdmin(admin.ModelAdmin):
-    list_display = [
-        "uid",
-        "first_name",
-        "last_name",
-        "email",
-        "phone",
-        "clinic",
-        "birthdate",
-        "address",
-    ]
-    search_fields = ["first_name", "last_name", "email", "phone"]
-    list_filter = ("clinic",)
-
-    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
-
-    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
-
-    def has_delete_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False

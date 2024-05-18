@@ -1,12 +1,22 @@
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from clinic.users.api.defaults import CurrentClinicDefault
-from clinic.users.models import Patient, Staff, User
+from clinic.system_management.api.v1.serializers import ClinicSerializer
+from clinic.users.models import User
+
+
+class PermissionDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Permission
+        fields = ["name", "codename"]
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    clinic = ClinicSerializer(read_only=True)
+    permissions = PermissionDetailSerializer(many=True, read_only=True)
+
     class Meta:
         model = User
         fields = [
@@ -16,7 +26,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "first_name",
             "last_name",
             "phone",
+            "clinic",
             "avatar",
+            "permissions",
         ]
 
 
@@ -95,48 +107,3 @@ class UserModifySerializer(serializers.ModelSerializer):
             instance.save()
 
         return super().update(instance=instance, validated_data=validated_data)
-
-
-class StaffModifySerializer(serializers.ModelSerializer):
-    user = UserModifySerializer()
-    clinic = serializers.HiddenField(default=CurrentClinicDefault())
-
-    class Meta:
-        model = Staff
-        fields = "__all__"
-
-    def create(self, validated_data):
-        user_data = validated_data.pop("user")
-        user_serializer = self.fields["user"]
-        # create user data
-        user = user_serializer.create(user_data)
-        validated_data["user"] = user
-        # create utility staff
-        staff = super().create(validated_data)
-        # return utility staff
-        return staff
-
-    def update(self, instance, validated_data):
-        user_data = validated_data.pop("user", None)
-        user_serializer = self.fields["user"]
-
-        if user_data:
-            user_serializer.update(instance=instance.user, validated_data=user_data)
-
-        return super().update(instance, validated_data)
-
-
-class StaffDetailSerializer(serializers.ModelSerializer):
-    user = UserDetailSerializer(read_only=True)
-
-    class Meta:
-        model = Staff
-        fields = "__all__"
-
-
-class PatientSerializer(serializers.ModelSerializer):
-    clinic = serializers.HiddenField(default=CurrentClinicDefault())
-
-    class Meta:
-        model = Patient
-        fields = "__all__"
