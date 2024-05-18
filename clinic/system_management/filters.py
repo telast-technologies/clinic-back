@@ -1,6 +1,18 @@
 import django_filters
 
-from clinic.system_management.models import ExposedPermission
+from clinic.system_management.models import ExposedPermission, Package
+
+
+class PackageFilter(django_filters.FilterSet):
+    name = django_filters.CharFilter(
+        field_name="name",
+        lookup_expr="icontains",
+        label="anyone can filter by package name matches by containing this string",
+    )
+
+    class Meta:
+        model = Package
+        fields = ["name"]
 
 
 class PermissionFilter(django_filters.FilterSet):

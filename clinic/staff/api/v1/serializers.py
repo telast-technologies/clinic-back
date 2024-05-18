@@ -35,6 +35,7 @@ class StaffModifySerializer(serializers.ModelSerializer):
 
 
 class StaffDetailSerializer(serializers.ModelSerializer):
+    clinic = serializers.HiddenField(default=CurrentClinicDefault())
     user = UserDetailSerializer(read_only=True)
     permissions = PermissionDetailSerializer(source="user.permissions", many=True, read_only=True)
 
@@ -45,7 +46,8 @@ class StaffDetailSerializer(serializers.ModelSerializer):
 
 class StaffListSerializer(serializers.ModelSerializer):
     user = UserDetailSerializer(read_only=True)
+    clinic = serializers.HiddenField(default=CurrentClinicDefault())
 
     class Meta:
         model = Staff
-        fields = "__all__"
+        exclude = ["permissions"]

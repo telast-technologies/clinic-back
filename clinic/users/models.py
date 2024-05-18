@@ -27,7 +27,7 @@ class User(AbstractUser):
     def permissions(self):
         if hasattr(self, "staff") and self.staff.is_client_admin:
             return Permission.objects.filter(content_type__app_label__in=settings.ALLOWED_PERMISSIONS_APPS)
-        if hasattr(self, "staff") and self.staff.is_client_admin:
+        if hasattr(self, "staff") and not self.staff.is_client_admin:
             return Permission.objects.filter(id__in=self.staff.permissions.values_list("permission", flat=True))
 
         return Permission.objects.none()
