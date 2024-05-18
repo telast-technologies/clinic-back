@@ -68,6 +68,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "clinic.users",
+    "clinic.system_management",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -209,9 +210,23 @@ PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = env.str("PASSWORD_RESET_CONFIRM_REDIR
 # https://github.com/tfranzel/drf-spectacular
 SPECTACULAR_SETTINGS = {
     "TITLE": "Clinic API",
-    "DESCRIPTION": "API for Clinic",
+    "DESCRIPTION": """
+    Clinic management involves coordinating administrative, financial, and clinical tasks.
+    clinic management is a comprehensive healthcare management system that provides a centralized platform as following
+    1- encompasses appointment scheduling.
+    2- patient registration.
+    3- electronic health records management.
+    4- billing.
+    5- inventory control.
+    6- staff optimization.
+    7- regulatory compliance.
+    8- Effective management enhances patient experiences.
+    9- streamlines workflows.
+    10- improves overall clinic performance.
+    """,
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
     "SWAGGER_UI_SETTINGS": {
         "deepLinking": True,
         "defaultModelRendering": "model",
