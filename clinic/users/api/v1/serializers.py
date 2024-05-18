@@ -2,7 +2,6 @@ from django.contrib.auth.hashers import make_password
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
-from clinic.system_management.api.v1.serializers import ClinicDetailSerializer
 from clinic.users.api.defaults import CurrentClinicDefault
 from clinic.users.models import Patient, Staff, User
 
@@ -21,8 +20,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    clinic = ClinicDetailSerializer(read_only=True)
-
     class Meta:
         model = User
         fields = [
@@ -31,7 +28,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "email",
             "first_name",
             "last_name",
-            "clinic",
             "phone",
             "avatar",
         ]
