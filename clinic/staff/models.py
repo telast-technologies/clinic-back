@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from clinic.utils.models import TimestampMixin, UUIDMixin
 
@@ -15,7 +16,7 @@ class Staff(UUIDMixin, TimestampMixin):
         db_index=True,
     )
     permissions = models.ManyToManyField("system_management.ExposedPermission", related_name="staff")
-    is_client_admin = models.BooleanField(default=False)
+    is_client_admin = models.BooleanField(_("Client Admin"), default=False)
 
     class Meta:
         ordering = ("-created_at",)
