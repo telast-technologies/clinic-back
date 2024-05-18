@@ -41,7 +41,7 @@ class ProfileViewSet(BaseProfileViewSet):
         super().invalidate_prefetch_cache(instance)
 
 
-class PasswordReseConfirmRedirect(views.APIView):
+class PasswordResetConfirmRedirect(views.APIView):
     permission_classes = []
 
     def get(self, request, uidb64, token, *args, **kwargs):

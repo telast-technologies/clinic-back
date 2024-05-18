@@ -20,7 +20,7 @@ from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerSplitView
 
-from clinic.users.abstracts.views import PasswordReseConfirmRedirect
+from clinic.users.abstracts.views import PasswordResetConfirmRedirect
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,7 +28,7 @@ urlpatterns = [
     path("api/auth/", include("dj_rest_auth.urls")),
     path(
         "api/auth/password/reset/confirm/<uidb64>/<token>/",
-        PasswordReseConfirmRedirect.as_view(),
+        PasswordResetConfirmRedirect.as_view(),
         name="password_reset_confirm",
     ),
     path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
