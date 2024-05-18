@@ -13,6 +13,9 @@ class Package(UUIDMixin, TimestampMixin):
     price = models.PositiveIntegerField()
     active = models.BooleanField(default=True)
 
+    class Meta:
+        ordering = ("-created_at",)
+
     def __str__(self) -> str:
         return self.name
 
@@ -25,6 +28,9 @@ class Clinic(UUIDMixin, TimestampMixin):
     phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
+
+    class Meta:
+        ordering = ("-created_at",)
 
     def __str__(self) -> str:
         return self.name

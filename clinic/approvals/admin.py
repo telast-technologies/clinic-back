@@ -27,7 +27,7 @@ class JoinRequestAdmin(admin.ModelAdmin):
     )
     list_filter = ("status",)
     search_fields = ("administrator_first_name", "administrator_last_name", "clinic_name")
-    readonly_fields = (
+    readonly_fields = [
         "uid",
         "administrator_first_name",
         "administrator_last_name",
@@ -42,11 +42,19 @@ class JoinRequestAdmin(admin.ModelAdmin):
         "package",
         "created_at",
         "updated_at",
-    )
+    ]
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = super().get_readonly_fields(request, obj)
+
+        if obj and not obj.status == JoinRequestStatusChoices.PENDING and "status" not in fields:
+            fields.append("status")
+
+        return fields
 
     @transaction.atomic
     def save_model(self, request: Any, obj: Any, form: Any, change: Any) -> Any:
-        if (not obj.tracker.previous("status") == JoinRequestStatusChoices.APPROVED) and (
+        if (obj.tracker.previous("status") == JoinRequestStatusChoices.PENDING) and (
             obj.status == JoinRequestStatusChoices.APPROVED
         ):
             # create clinic data
@@ -90,7 +98,7 @@ class JoinRequestAdmin(admin.ModelAdmin):
             """
             send_email(recipient_list=[staff.user.email], subject=subject, message=message)
 
-        elif (not obj.tracker.previous("status") == JoinRequestStatusChoices.REJECTED) and (
+        elif (obj.tracker.previous("status") == JoinRequestStatusChoices.PENDING) and (
             obj.status == JoinRequestStatusChoices.REJECTED
         ):
             subject = _("Join Request Rejected")
@@ -102,7 +110,7 @@ class JoinRequestAdmin(admin.ModelAdmin):
             """
             send_email(recipient_list=[obj.administrator_email], subject=subject, message=message)
 
-        return super().save_form(request, form, change)
+        return super().save_model(request, obj, form, change)
 
     def has_add_permission(self, request: HttpRequest) -> bool:
         return False
