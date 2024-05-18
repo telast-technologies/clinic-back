@@ -47,7 +47,7 @@ class JoinRequestAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         fields = super().get_readonly_fields(request, obj)
 
-        if obj and not obj.status == JoinRequestStatusChoices.PENDING and "status" not in fields:
+        if obj and obj.status not in [JoinRequestStatusChoices.PENDING] and "status" not in fields:
             fields.append("status")
 
         return fields
@@ -67,24 +67,30 @@ class JoinRequestAdmin(admin.ModelAdmin):
                 "website": obj.clinic_website,
                 "package": obj.package,
             }
-            # create username and password
-            username = get_random_string(length=10)
-            password = get_random_string(length=10)
-            # create staff
+            # create user data
             user_data = {
                 "first_name": obj.administrator_first_name,
                 "last_name": obj.administrator_last_name,
                 "email": obj.administrator_email,
                 "phone": obj.administrator_phone,
-                "username": username,
-                "password": password,
             }
 
-            clinic = Clinic.objects.create(**clinic_data)
-            user = User.objects.create(**user_data)
+            if any(
+                User.objects.filter(email=user_data["email"]).exists(),
+                User.objects.filter(phone=user_data["phone"]).exists(),
+                Clinic.objects.filter(name=clinic_data["name"]).exists(),
+            ):
+                raise ValueError("data already exists")
+
+            # create username and password
+            username = get_random_string(length=10)
+            password = get_random_string(length=10)
             # create staff
-            staff_data = {"user": user, "clinic": clinic}
-            staff = Staff.objects.create(**staff_data, is_client_admin=True)
+            staff = Staff.objects.create(
+                clinic=Clinic.objects.create(**clinic_data),
+                user=User.objects.create(username=username, password=password, **user_data),
+                is_client_admin=True,
+            )
 
             subject = _("Join Request Approved")
             message = f"""
