@@ -54,7 +54,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "phonenumber_field",
     "corsheaders",
-    "debug_toolbar",
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
@@ -74,6 +73,8 @@ CONTROLLED_LOCAL_APPS = [
 EXPOSED_LOCAL_APPS = [
     "clinic.patients",
     "clinic.staff",
+    "clinic.healthcare",
+    "clinic.inventory",
 ]
 
 LOCAL_APPS = CONTROLLED_LOCAL_APPS + EXPOSED_LOCAL_APPS
@@ -90,7 +91,6 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "clinic.urls"
@@ -188,6 +188,8 @@ LOCALE_PATHS = [str(LOCALE_PATH)]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+# Add STATIC_ROOT setting
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATIC_URL = "static/"
 
@@ -261,7 +263,6 @@ DRF_NESTED_MULTIPART_PARSER = {
 }
 
 # Email
-# MailGun
 EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"  # or sendgrid.EmailBackend, or...
 ANYMAIL = {
     # (exact settings here depend on your ESP...)
@@ -272,3 +273,8 @@ ANYMAIL = {
 # if you don't already have this in settings
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="")  # default from-email for Django errors
 SERVER_EMAIL = env.str("MAILGUN_SERVER_EMAIL", default="")  # ditto (default from-email for Django errors)
+
+# Debug Toolbar settings
+DEBUG_TOOLBAR_CONFIG = {
+    "INTERCEPT_REDIRECTS": False,
+}
