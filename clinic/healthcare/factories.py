@@ -8,5 +8,5 @@ class ServiceFactory(DjangoModelFactory):
 
     clinic = SubFactory("clinic.system_management.factories.ClinicFactory")
     name = Faker("name")
-    charge = Faker("pyfloat")
+    charge = Faker("pyfloat", min_value=0.0, max_value=100.0)
     active = True

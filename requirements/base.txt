@@ -17,3 +17,5 @@ django-cors-headers==4.3.1 # https://pypi.org/project/django-cors-headers/
 django-notifications-hq==1.8.3 # https://pypi.org/project/django-notifications-hq/
 django-anymail==10.3 # https://pypi.org/project/django-anymail/
 django-model-utils==4.5.0 # https://django-model-utils.readthedocs.io/en/latest/
+psycopg2==2.9.9 # https://pypi.org/project/psycopg2/
+psycopg2-binary==2.9.9 # https://pypi.org/project/psycopg2-binary/

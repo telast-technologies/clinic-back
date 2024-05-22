@@ -75,6 +75,7 @@ EXPOSED_LOCAL_APPS = [
     "clinic.staff",
     "clinic.healthcare",
     "clinic.inventory",
+    "clinic.visits",
 ]
 
 LOCAL_APPS = CONTROLLED_LOCAL_APPS + EXPOSED_LOCAL_APPS
@@ -189,7 +190,7 @@ LOCALE_PATHS = [str(LOCALE_PATH)]
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 # Add STATIC_ROOT setting
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = os.path.join("staticfiles")
 
 STATIC_URL = "static/"
 
@@ -273,8 +274,3 @@ ANYMAIL = {
 # if you don't already have this in settings
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="")  # default from-email for Django errors
 SERVER_EMAIL = env.str("MAILGUN_SERVER_EMAIL", default="")  # ditto (default from-email for Django errors)
-
-# Debug Toolbar settings
-DEBUG_TOOLBAR_CONFIG = {
-    "INTERCEPT_REDIRECTS": False,
-}
