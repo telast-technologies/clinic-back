@@ -49,6 +49,7 @@ DJANGO_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.humanize",
 ]
 
 THIRD_PARTY_APPS = [
@@ -264,13 +265,12 @@ DRF_NESTED_MULTIPART_PARSER = {
 }
 
 # Email
-EMAIL_BACKEND = "anymail.backends.mailgun.EmailBackend"  # or sendgrid.EmailBackend, or...
+EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"  # or sendgrid.EmailBackend, or...
 ANYMAIL = {
     # (exact settings here depend on your ESP...)
-    "MAILGUN_API_KEY": env.str("MAILGUN_API_KEY", default=""),
-    "MAILGUN_SENDER_DOMAIN": env.str("MAILGUN_SENDER_DOMAIN", default=""),  # your Mailgun domain, if needed
+    "BREVO_API_KEY": env.str("BREVO_API_KEY", default=""),
 }
 # email from which all outgoing emails will be sent (for security reasons)
 # if you don't already have this in settings
-DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="")  # default from-email for Django errors
-SERVER_EMAIL = env.str("MAILGUN_SERVER_EMAIL", default="")  # ditto (default from-email for Django errors)
+BREVO_API_URL = env.str("BREVO_API_URL", default="")  # default from-email for Django errors
+DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="")

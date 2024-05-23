@@ -12,7 +12,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class ServiceListSelectSerializer(serializers.ModelSerializer):
+class SelectServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="name")
     value = serializers.CharField(source="uid")
 

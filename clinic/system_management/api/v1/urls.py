@@ -1,10 +1,10 @@
 from django.urls import path
 
-from clinic.system_management.api.v1.views import PackageView, PermissionView
+from clinic.system_management.api.v1.views import SelectPackageView, SelectPermissionView
 
 app_name = "system_management"
 
 urlpatterns = [
-    path("packages/", PackageView.as_view(), name="packages"),
-    path("permissions/", PermissionView.as_view(), name="permissions"),
+    path("packages/", SelectPackageView.as_view(), name="packages"),
+    path("permissions/", SelectPermissionView.as_view(), name="permissions"),
 ]

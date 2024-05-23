@@ -1,13 +1,13 @@
 from rest_framework import generics, viewsets
 
-from clinic.healthcare.api.v1.serializers import ServiceListSelectSerializer, ServiceSerializer
-from clinic.healthcare.filters import ServiceFilter, ServiceListFilter
+from clinic.healthcare.api.v1.serializers import SelectServiceSerializer, ServiceSerializer
+from clinic.healthcare.filters import SelectServiceFilter, ServiceFilter
 from clinic.healthcare.models import Service
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsAdminStaff, IsStaff
 
 
-class ServiceViewset(QuerysetFilteredMixin, viewsets.ModelViewSet):
+class ServiceViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows services to be viewed or edited.
     """
@@ -18,12 +18,12 @@ class ServiceViewset(QuerysetFilteredMixin, viewsets.ModelViewSet):
     permission_classes = [IsAdminStaff]
 
 
-class ServiceListView(QuerysetFilteredMixin, generics.ListAPIView):
+class SelectServiceView(QuerysetFilteredMixin, generics.ListAPIView):
     """
     API endpoint that allows services to be viewed as list.
     """
 
     queryset = Service.objects.get_queryset().filter(active=True)
-    serializer_class = ServiceListSelectSerializer
-    filterset_class = ServiceListFilter
+    serializer_class = SelectServiceSerializer
+    filterset_class = SelectServiceFilter
     permission_classes = [IsStaff]

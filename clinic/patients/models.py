@@ -21,3 +21,19 @@ class Patient(UUIDMixin, TimestampMixin):
 
     def __str__(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+
+class PatientReport(UUIDMixin, TimestampMixin):
+    patient = models.ForeignKey(
+        "patients.Patient",
+        on_delete=models.CASCADE,
+        related_name="reports",
+        db_index=True,
+    )
+    document = models.FileField(upload_to="patients/reports")
+
+    class Meta:
+        ordering = ("-created_at",)
+
+    def __str__(self) -> str:
+        return f"{self.document.url if self.document else '-'}"

@@ -7,7 +7,7 @@ from clinic.visits.filters import TimeSlotFilter
 from clinic.visits.models import TimeSlot
 
 
-class TimeSlotViewset(QuerysetFilteredMixin, viewsets.ModelViewSet):
+class TimeSlotViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows TimeSlot to be viewed or edited.
     """
