@@ -18,6 +18,7 @@ from clinic.visits.api.v1.serializers import (
     TimeSlotSerializer,
     UpdateChargeItemSerializer,
     UpdateVisitSerializer,
+    VisitDetailSerializer,
 )
 from clinic.visits.filters import ChargeItemFilter, ChargeServiceFilter, SelectVisitFilter, TimeSlotFilter, VisitFilter
 from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
@@ -49,7 +50,7 @@ class VisitViewSet(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
-            return CreateVisitSerializer
+            return VisitDetailSerializer
         if self.request.method in ["PUT", "PATCH"]:
             return UpdateVisitSerializer
 

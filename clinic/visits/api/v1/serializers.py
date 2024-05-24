@@ -6,11 +6,14 @@ from clinic.healthcare.api.v1.serializers import ServiceDetailSerializer
 from clinic.inventory.api.v1.serializers import SupplyDetailSerializer
 from clinic.patients.api.v1.serializers import PatientSerializer
 from clinic.system_management.services.clinic_service import ClinicService
+from clinic.users.api.defaults import CurrentClinicDefault
 from clinic.visits.choices import VisitType
 from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
+    clinic = serializers.HiddenField(default=CurrentClinicDefault())
+
     class Meta:
         model = TimeSlot
         fields = "__all__"
@@ -25,8 +28,8 @@ class CreateVisitSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         visit_type = data.get("visit_type")
-        date = data.get("date", self.instance.date)
-        time = data.get("time", self.instance.time)
+        date = data.get("date")
+        time = data.get("time")
 
         if any(
             [
@@ -55,16 +58,19 @@ class UpdateVisitSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         visit_type = data.get("visit_type", self.instance.visit_type)
-        date = data.get("date", self.instance.date)
-        time = data.get("time", self.instance.time)
+        date = data.get("date")
+        time = data.get("time")
 
         if any(
             [
                 visit_type == VisitType.SCHEDULED
+                and date
+                and time
                 and not ClinicService(self.instance.patient.clinic).valid_slot(date, time),
             ]
         ):
             raise serializers.ValidationError({"visit": _("invalid visit data")})
+
         return data
 
     def update(self, instance, validated_data):
@@ -76,7 +82,7 @@ class UpdateVisitSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-class visitDetailSerializer(serializers.ModelSerializer):
+class VisitDetailSerializer(serializers.ModelSerializer):
     patient = PatientSerializer(read_only=True)
 
     class Meta:
@@ -103,6 +109,7 @@ class CreateChargeItemSerializer(serializers.ModelSerializer):
         if any(
             [
                 data["visit"].patient.clinic != self.context["request"].user.staff.clinic,
+                data["supply"].clinic != self.context["request"].user.staff.clinic,
                 data["quantity"] > data["supply"].remains,
             ]
         ):
@@ -132,7 +139,13 @@ class ChargeServiceModifySerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        if data["visit"].patient.clinic != self.context["request"].user.staff.clinic:
+        if any(
+            [
+                data["visit"].patient.clinic != self.context["request"].user.staff.clinic,
+                data["service"].clinic != self.context["request"].user.staff.clinic,
+                not data["service"].active,
+            ]
+        ):
             raise serializers.ValidationError({"visit": _("invalid visit data")})
         return data
 

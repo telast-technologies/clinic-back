@@ -1,6 +1,8 @@
 import django_filters
+from django.db.models import Q
+from django.utils import timezone
 
-from clinic.visits.choices import DaysOfWeek
+from clinic.visits.choices import DaysOfWeek, TimeChoices
 from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
 
 
@@ -14,12 +16,21 @@ class TimeSlotFilter(django_filters.FilterSet):
 
 class VisitFilter(django_filters.FilterSet):
     date = django_filters.DateFromToRangeFilter(field_name="date")
-    time_after = django_filters.NumberFilter(lookup_expr="gte", field_name="created_at__hour")
-    time_before = django_filters.NumberFilter(lookup_expr="lte", field_name="created_at__hour")
+    time = django_filters.ChoiceFilter(method="filter_time", choices=TimeChoices.choices, required=True)
 
     class Meta:
         model = Visit
-        fields = ["patient", "date", "time_after", "time_before", "status", "visit_type"]
+        fields = ["patient", "date", "time", "time", "status", "visit_type"]
+
+    def filter_time(self, queryset, name, value):
+        now = timezone.now()
+
+        if value == TimeChoices.UPCOMING:
+            queryset = queryset.filter(Q(Q(date=now.date()), Q(time__gte=now.time())) | Q(date__gt=now.date()))
+        if value == TimeChoices.PAST:
+            queryset = queryset.filter(date__lte=now.date(), time__lt=now.time())
+
+        return queryset
 
 
 class SelectVisitFilter(django_filters.FilterSet):

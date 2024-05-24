@@ -23,3 +23,9 @@ class VisitStatus(models.TextChoices):
 class VisitType(models.TextChoices):
     SCHEDULED = "scheduled", _("Scheduled")
     WALK_IN = "walk_in", _("Walk In")
+
+
+class TimeChoices(models.TextChoices):
+    UPCOMING = "upcoming", _("Up Coming")
+    PAST = "past", _("Pasr")
+    ALL = "all", _("All")
