@@ -119,7 +119,7 @@ class VisitAvailableSlotsView(views.APIView):
                 examples=[
                     OpenApiExample(
                         "Example Response",
-                        value={"hours": ["09:00:00", "11:00:00", "23:00:00", "00:00:00"]},
+                        value={"slots": ["09:00:00", "11:00:00", "23:00:00", "00:00:00"]},
                     ),
                 ],
             )
@@ -131,6 +131,6 @@ class VisitAvailableSlotsView(views.APIView):
         # get all available slot
         available_slots = clinic_handler.get_available_slots(date)
         # serialize data
-        serializer = AvailableSlotListSerializer({"hours": available_slots}, read_only=True)
+        serializer = AvailableSlotListSerializer({"slots": available_slots}, read_only=True)
         # return response
         return Response(serializer.data, status=status.HTTP_200_OK)

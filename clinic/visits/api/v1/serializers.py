@@ -160,4 +160,4 @@ class ChargeServiceDetailSerializer(serializers.ModelSerializer):
 
 
 class AvailableSlotListSerializer(serializers.Serializer):
-    hours = serializers.ListField(child=serializers.TimeField())
+    slots = serializers.ListField(child=serializers.TimeField())
