@@ -14,7 +14,7 @@ class SupplyViewSet(viewsets.ModelViewSet):
 
 
 class SelectSupplyViewSet(generics.ListAPIView):
-    queryset = Supply.objects.all()
+    queryset = Supply.objects.query_remains(remain__gt=0)
     serializer_class = SelectSupplySerializer
     filterset_class = SelectSupplyFilter
     permission_classes = [IsStaff]

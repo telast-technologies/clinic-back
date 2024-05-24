@@ -4,6 +4,7 @@ from django.db.models import F, Sum, Value
 from django.db.models.functions import Coalesce
 from django_extensions.db.fields import RandomCharField
 
+from clinic.inventory.managers import SupplyManager
 from clinic.utils.models import TimestampMixin, UUIDMixin
 
 
@@ -27,6 +28,8 @@ class Supply(TimestampMixin, UUIDMixin):
         db_persist=True,
     )
     qrcode = RandomCharField(length=160, editable=False, unique=True)
+
+    objects = SupplyManager()
 
     class Meta:
         ordering = ("-created_at",)
