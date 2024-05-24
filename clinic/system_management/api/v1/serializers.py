@@ -20,7 +20,7 @@ class SelectPackageSerializer(serializers.ModelSerializer):
         fields = ("value", "label")
 
 
-class SelectExposedSelectPermissionSerializer(serializers.ModelSerializer):
+class SelectExposedPermissionSerializer(serializers.ModelSerializer):
     value = serializers.CharField(source="uid", read_only=True)
     label = serializers.CharField(source="permission.name", read_only=True)
 

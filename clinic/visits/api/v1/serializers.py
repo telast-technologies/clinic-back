@@ -117,7 +117,7 @@ class CreateChargeItemSerializer(serializers.ModelSerializer):
         return data
 
 
-class ListChargeItemSerializer(serializers.ModelSerializer):
+class ChargeItemDetailSerializer(serializers.ModelSerializer):
     supply = SupplyDetailSerializer(read_only=True)
     charge = serializers.FloatField(read_only=True)
 
@@ -159,5 +159,5 @@ class ChargeServiceDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class AvailableSlotsSerializer(serializers.Serializer):
+class AvailableSlotListSerializer(serializers.Serializer):
     hours = serializers.ListField(child=serializers.TimeField())

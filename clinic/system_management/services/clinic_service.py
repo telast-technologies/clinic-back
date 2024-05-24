@@ -1,10 +1,12 @@
 import calendar
 import logging
-from collections import defaultdict
+from datetime import time
 
 from django.db import transaction
+from django.db.models import Count, Value
+from django.db.models.functions import Coalesce, ExtractHour
 
-from clinic.utils.functions import generate_hourly_range
+from clinic.utils.functions import range_time
 from clinic.visits.choices import VisitStatus, VisitType
 from clinic.visits.models import Visit
 
@@ -42,7 +44,7 @@ class ClinicService:
                 date=date,
                 time=time,
                 visit_type=VisitType.SCHEDULED,
-                status__in=[VisitStatus.BOOKED, VisitStatus.CHECKED_IN],
+                status__in=[VisitStatus.BOOKED],
             ).count()
 
             return slots.exists() and visits_count <= self.clinic.capacity
@@ -65,7 +67,7 @@ class ClinicService:
         Returns:
             list: A list of available time slots for the given date.
         """
-        times = []
+        available_hours_set = set()
         dow = date.weekday()
         weekday_name = calendar.day_name[dow]
 
@@ -74,22 +76,35 @@ class ClinicService:
 
         # Generate all possible times for the slots
         for slot in slots:
-            times += generate_hourly_range(slot.start_time, slot.end_time)
-
-        # Convert times to a set to ensure unique values
-        available_times_set = set(times)
+            available_hours_set.update(time.hour for time in range_time(slot.start_time, slot.end_time))
 
         # Fetch all scheduled visits for the date in one query
-        scheduled_visits = Visit.objects.filter(patient__clinic=self.clinic, date=date, visit_type=VisitType.SCHEDULED)
+        scheduled_visits = Visit.objects.filter(
+            patient__clinic=self.clinic,
+            date=date,
+            time__hour__in=available_hours_set,
+            visit_type=VisitType.SCHEDULED,
+            status__in=[VisitStatus.BOOKED],
+        )
 
-        # Create a dictionary to count the number of visits for each time
-        visit_counts = defaultdict(int)
-        for visit in scheduled_visits:
-            visit_time = visit.time.hour
-            if visit_time in available_times_set:
-                visit_counts[visit_time] += 1
+        # Annotate the visits with the hour and count the number of visits per hour
+        hourly_visits = (
+            scheduled_visits.annotate(hour=ExtractHour("time"))
+            .values("hour")
+            .annotate(count=Coalesce(Count("uid"), Value(0)))
+        )
+        # Create a dictionary to hold the count of visits per hour, initialized to 0
+        hourly_visits_dict = {hour: 0 for hour in available_hours_set}
+        # Update the dictionary with actual counts from the query
+        for visit in hourly_visits:
+            hourly_visits_dict[visit["hour"]] = visit["count"]
 
-        # Filter out times where the clinic is at capacity
-        available_times = [time for time in available_times_set if visit_counts[time] < self.clinic.capacity]
+        # Prepare the final result ensuring all hours in available_hours_set are included
+        available_slots = [
+            time(hour=hour) for hour, count in hourly_visits_dict.items() if count < self.clinic.capacity
+        ]
 
-        return available_times
+        # Sort the available slots by hour
+        available_slots.sort()
+        # return available slots
+        return available_slots

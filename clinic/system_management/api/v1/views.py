@@ -5,7 +5,7 @@ from rest_framework.permissions import AllowAny
 
 from clinic.system_management.api.v1.serializers import (
     ClinicSerializer,
-    SelectExposedSelectPermissionSerializer,
+    SelectExposedPermissionSerializer,
     SelectPackageSerializer,
 )
 from clinic.system_management.filters import SelectPackageFilter, SelectPermissionFilter
@@ -32,5 +32,5 @@ class SelectPackageView(generics.ListAPIView):
 class SelectPermissionView(generics.ListAPIView):
     permission_classes = [IsAdminStaff]
     queryset = ExposedPermission.objects.all()
-    serializer_class = SelectExposedSelectPermissionSerializer
+    serializer_class = SelectExposedPermissionSerializer
     filterset_class = SelectPermissionFilter

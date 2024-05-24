@@ -6,14 +6,13 @@ from rest_framework.response import Response
 from clinic.system_management.services.clinic_service import ClinicService
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsAdminStaff, IsStaff
-from clinic.utils.functions import convert_hours_to_times
 from clinic.visits.api.v1.serializers import (
-    AvailableSlotsSerializer,
+    AvailableSlotListSerializer,
+    ChargeItemDetailSerializer,
     ChargeServiceDetailSerializer,
     ChargeServiceModifySerializer,
     CreateChargeItemSerializer,
     CreateVisitSerializer,
-    ListChargeItemSerializer,
     SelectVisitSerializer,
     TimeSlotSerializer,
     UpdateChargeItemSerializer,
@@ -81,7 +80,7 @@ class ChargeItemViewSet(viewsets.ModelViewSet):
         if self.request.method in ["PUT", "PATCH"]:
             return UpdateChargeItemSerializer
         if self.request.method in SAFE_METHODS:
-            return ListChargeItemSerializer
+            return ChargeItemDetailSerializer
         return super().get_serializer_class()
 
 
@@ -107,13 +106,15 @@ class ChargeServiceViewSet(
 
 
 class VisitAvailableSlotsView(views.APIView):
+    """View for getting available slots for a given date."""
+
     serializer_class = None
     permission_classes = [IsStaff]
 
     @extend_schema(
         responses={
             200: OpenApiResponse(
-                response=AvailableSlotsSerializer,
+                response=AvailableSlotListSerializer,
                 description="List of available slots for the given date",
                 examples=[
                     OpenApiExample(
@@ -125,6 +126,11 @@ class VisitAvailableSlotsView(views.APIView):
         }
     )
     def get(self, request, date, *args, **kwargs):
+        # initial clinic service
         clinic_handler = ClinicService(self.request.user.staff.clinic)
-        available_time = clinic_handler.get_available_slots(date)
-        return Response({"hours": convert_hours_to_times(available_time)}, status=status.HTTP_200_OK)
+        # get all available slot
+        available_slots = clinic_handler.get_available_slots(date)
+        # serialize data
+        serializer = AvailableSlotListSerializer({"hours": available_slots}, read_only=True)
+        # return response
+        return Response(serializer.data, status=status.HTTP_200_OK)
