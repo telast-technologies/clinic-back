@@ -6,7 +6,7 @@ from clinic.users.api.defaults import CurrentClinicDefault
 
 class SupplySerializer(serializers.ModelSerializer):
     clinic = serializers.HiddenField(default=CurrentClinicDefault())
-    remain = serializers.FloatField(read_only=True)
+    remains = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Supply
