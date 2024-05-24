@@ -30,11 +30,10 @@ class PatientReportSerializer(serializers.ModelSerializer):
         model = PatientReport
         fields = "__all__"
 
-        def validate(self, data):
-            data = super(PatientReportSerializer, self).validate(data)
+    def validate(self, data):
+        data = super().validate(data)
 
-            patient = data.get("patient")
-            if any([patient.clinic != self.context["request"].user.staff.clinic]):
-                raise serializers.ValidationError({"patient": _("invalid patient")})
+        if any([data.get("patient").clinic != self.context["request"].user.staff.clinic]):
+            raise serializers.ValidationError({"patient": _("invalid patient")})
 
-            return data
+        return data

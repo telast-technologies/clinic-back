@@ -17,9 +17,14 @@ class SupplyAdmin(admin.ModelAdmin):
         "unit_cost",
         "unit_sales_price",
         "quantity",
+        "remains",
     )
     list_filter = ("clinic", "invoice")
-    readonly_fields = ("charge", "unit_sales_price")
+    readonly_fields = ("charge", "unit_sales_price", "remains")
+
+    @admin.display(description="remains")
+    def remains(self, obj: Supply) -> float:
+        return obj.remains
 
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return False

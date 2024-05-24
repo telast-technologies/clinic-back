@@ -9,7 +9,8 @@ from clinic.visits.models import ChargeItem, ChargeService, Visit
 
 class ChargeItemInline(admin.TabularInline):
     model = ChargeItem
-    fields = ["supply", "quantity"]
+    fields = ["supply", "quantity", "charge"]
+    readonly_fields = ["charge"]
     extra = 0
     can_delete = False
 
@@ -19,12 +20,21 @@ class ChargeItemInline(admin.TabularInline):
     def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return False
 
+    @admin.display(description="charge")
+    def charge(self, obj: ChargeItem) -> float:
+        return obj.charge
+
 
 class ChargeServiceInline(admin.TabularInline):
     model = ChargeService
-    fields = ["service"]
+    fields = ["service", "charge"]
     extra = 0
     can_delete = False
+    readonly_fields = ["charge"]
+
+    @admin.display(description="charge")
+    def charge(self, obj: ChargeService) -> float:
+        return obj.charge
 
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return False

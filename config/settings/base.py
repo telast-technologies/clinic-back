@@ -249,6 +249,7 @@ SPECTACULAR_SETTINGS = {
         "defaultModelsExpandDepth": 2,
         "defaultModelExpandDepth": 2,
     },
+    "COMPONENT_SPLIT_REQUEST": True,
 }
 CSP_DEFAULT_SRC = ("'self'", "'unsafe-inline'")
 CSP_IMG_SRC = ("'self'", "data:")
