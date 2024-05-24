@@ -9,8 +9,8 @@ from clinic.visits.models import ChargeItem, ChargeService, Visit
 
 class ChargeItemInline(admin.TabularInline):
     model = ChargeItem
-    fields = ["supply", "quantity", "charge"]
-    readonly_fields = ["charge"]
+    fields = ["supply", "quantity", "charge", "remains"]
+    readonly_fields = ["charge", "remains"]
     extra = 0
     can_delete = False
 
@@ -23,6 +23,10 @@ class ChargeItemInline(admin.TabularInline):
     @admin.display(description="charge")
     def charge(self, obj: ChargeItem) -> float:
         return obj.charge
+
+    @admin.display(description="remains")
+    def remains(self, obj: ChargeItem) -> float:
+        return obj.supply.remains
 
 
 class ChargeServiceInline(admin.TabularInline):
@@ -47,6 +51,7 @@ class ChargeServiceInline(admin.TabularInline):
 class VisitAdmin(FSMTransitionMixin, admin.ModelAdmin):
     list_display = ["uid", "patient", "date", "time", "status"]
     list_filter = ["status", "date", "visit_type"]
+    search_fields = ["uid"]
     fsm_fields = [
         "status",
     ]  # list your fsm fields

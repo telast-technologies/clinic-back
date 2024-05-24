@@ -35,10 +35,10 @@ class CreateVisitSerializer(serializers.ModelSerializer):
             [
                 data["patient"].clinic != self.context["request"].user.staff.clinic,
                 visit_type == VisitType.SCHEDULED
-                and not ClinicService(self.instance.patient.clinic).valid_slot(date, time),
+                and time not in ClinicService(self.context["request"].user.staff.clinic).get_available_slots(date),
             ]
         ):
-            raise serializers.ValidationError({"visit": _("invalid visit data")})
+            raise serializers.ValidationError({"visit": _("invalid or missing visit data")})
 
         return data
 
@@ -55,29 +55,26 @@ class UpdateVisitSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ["status", "visit_type", "patient"]
 
-    def validate(self, attrs):
-        data = super().validate(attrs)
-        visit_type = data.get("visit_type", self.instance.visit_type)
-        date = data.get("date")
-        time = data.get("time")
+    def validate(self, attrs, *args, **kwargs):
+        data = super().validate(attrs, *args, **kwargs)
+
+        date = data.get("date", None)
+        time = data.get("time", None)
 
         if any(
             [
-                visit_type == VisitType.SCHEDULED
-                and date
-                and time
-                and not ClinicService(self.instance.patient.clinic).valid_slot(date, time),
+                self.instance.visit_type == VisitType.SCHEDULED
+                and (date or time)
+                and time not in ClinicService(self.context["request"].user.staff.clinic).get_available_slots(date),
             ]
         ):
-            raise serializers.ValidationError({"visit": _("invalid visit data")})
+            raise serializers.ValidationError({"visit": _("invalid or missing visit data")})
 
         return data
 
     def update(self, instance, validated_data):
-        visit_type = validated_data.get("visit_type", instance.visit_type)
-        if visit_type == VisitType.WALK_IN:
-            instance.time = timezone.now().time()
-            instance.save()
+        if instance.visit_type == VisitType.WALK_IN:
+            return instance
 
         return super().update(instance, validated_data)
 

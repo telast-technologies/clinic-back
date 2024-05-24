@@ -1,4 +1,11 @@
-from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    OpenApiResponse,
+    OpenApiTypes,
+    extend_schema,
+    extend_schema_view,
+)
 from rest_framework import generics, mixins, status, views, viewsets
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
@@ -63,6 +70,18 @@ class SelectVisitView(generics.ListAPIView):
     permission_classes = [IsStaff]
 
 
+@extend_schema_view(
+    update=extend_schema(
+        parameters=[
+            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
+        ]
+    ),
+    partial_update=extend_schema(
+        parameters=[
+            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
+        ]
+    ),
+)
 class ChargeItemViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows ChargeItem to be viewed Created or edited.
@@ -73,15 +92,16 @@ class ChargeItemViewSet(viewsets.ModelViewSet):
     filterset_class = ChargeItemFilter
     permission_classes = [IsStaff]
 
-    def get_queryset(self):
+    def get_queryset(self, *args, **kwargs):
         return self.queryset.filter(visit__patient__clinic=self.request.user.staff.clinic)
 
-    def get_serializer_class(self):
+    def get_serializer_class(self, *args, **kwargs):
         if self.request.method in ["PUT", "PATCH"]:
             return UpdateChargeItemSerializer
         if self.request.method in SAFE_METHODS:
             return ChargeItemDetailSerializer
-        return super().get_serializer_class()
+
+        return super().get_serializer_class(*args, **kwargs)
 
 
 class ChargeServiceViewSet(

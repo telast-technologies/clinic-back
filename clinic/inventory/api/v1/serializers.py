@@ -14,11 +14,9 @@ class SupplySerializer(serializers.ModelSerializer):
 
 
 class SupplyDetailSerializer(serializers.ModelSerializer):
-    clinic = serializers.HiddenField(default=CurrentClinicDefault())
-
     class Meta:
         model = Supply
-        exclude = ["qrcode", "quantity"]
+        fields = ["uid", "item"]
 
 
 class SelectSupplySerializer(serializers.ModelSerializer):

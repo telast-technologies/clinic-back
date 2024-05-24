@@ -4,6 +4,7 @@ from django.db import models
 from django_fsm import FSMField, transition
 
 from clinic.utils.models import TimestampMixin, UUIDMixin
+from clinic.utils.validators import RangeValidator
 from clinic.visits.choices import DaysOfWeek, VisitStatus, VisitType
 
 
@@ -14,6 +15,14 @@ class TimeSlot(models.Model):
     start_time = models.TimeField()
     end_time = models.TimeField()
     days = ArrayField(models.CharField(max_length=10, choices=DaysOfWeek.choices), size=7)
+
+    def clean(self):
+        super().clean()
+        RangeValidator(self.start_time, self.end_time)()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Days: [{', '.join(self.days)}] | {self.start_time} - {self.end_time}"

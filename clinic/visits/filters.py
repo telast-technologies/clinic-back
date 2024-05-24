@@ -16,9 +16,7 @@ class TimeSlotFilter(django_filters.FilterSet):
 
 class VisitFilter(django_filters.FilterSet):
     date = django_filters.DateFromToRangeFilter(field_name="date")
-    time = django_filters.ChoiceFilter(
-        method="filter_time", choices=TimeChoices.choices, label="Filter by visit time", required=True
-    )
+    time = django_filters.ChoiceFilter(method="filter_time", choices=TimeChoices.choices, label="Filter by visit time")
 
     class Meta:
         model = Visit
