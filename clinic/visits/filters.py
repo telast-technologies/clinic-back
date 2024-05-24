@@ -20,7 +20,7 @@ class VisitFilter(django_filters.FilterSet):
 
     class Meta:
         model = Visit
-        fields = ["patient", "date", "time", "time", "status", "visit_type"]
+        fields = ["patient", "date", "time", "status", "visit_type"]
 
     def filter_time(self, queryset, name, value):
         now = timezone.now()
@@ -36,7 +36,7 @@ class VisitFilter(django_filters.FilterSet):
 class SelectVisitFilter(django_filters.FilterSet):
     class Meta:
         model = Visit
-        fields = ["uid"]
+        fields = ["uid", "status"]
 
 
 class ChargeItemFilter(django_filters.FilterSet):

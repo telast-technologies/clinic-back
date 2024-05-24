@@ -58,8 +58,8 @@ class UpdateVisitSerializer(serializers.ModelSerializer):
     def validate(self, attrs, *args, **kwargs):
         data = super().validate(attrs, *args, **kwargs)
 
-        date = data.get("date", None)
-        time = data.get("time", None)
+        date = data.get("date", self.instance.date)
+        time = data.get("time", self.instance.time)
 
         if any(
             [
@@ -114,6 +114,12 @@ class CreateChargeItemSerializer(serializers.ModelSerializer):
         return data
 
 
+class UpdateChargeItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChargeItem
+        fields = ["quantity"]
+
+
 class ChargeItemDetailSerializer(serializers.ModelSerializer):
     supply = SupplyDetailSerializer(read_only=True)
     charge = serializers.FloatField(read_only=True)
@@ -121,12 +127,6 @@ class ChargeItemDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChargeItem
         fields = "__all__"
-
-
-class UpdateChargeItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChargeItem
-        fields = ["quantity"]
 
 
 class ChargeServiceModifySerializer(serializers.ModelSerializer):

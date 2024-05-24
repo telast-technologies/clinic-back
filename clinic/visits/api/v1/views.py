@@ -1,3 +1,4 @@
+from django.utils import timezone
 from drf_spectacular.utils import (
     OpenApiExample,
     OpenApiParameter,
@@ -64,7 +65,7 @@ class VisitViewSet(viewsets.ModelViewSet):
 
 
 class SelectVisitView(generics.ListAPIView):
-    queryset = Visit.objects.all()
+    queryset = Visit.objects.get_queryset().filter(date__gte=timezone.now().date())
     serializer_class = SelectVisitSerializer
     filterset_class = SelectVisitFilter
     permission_classes = [IsStaff]
@@ -147,7 +148,7 @@ class VisitAvailableSlotsView(views.APIView):
     )
     def get(self, request, date, *args, **kwargs):
         # initial clinic service
-        clinic_handler = ClinicService(self.request.user.staff.clinic)
+        clinic_handler = ClinicService(request.user.staff.clinic)
         # get all available slot
         available_slots = clinic_handler.get_available_slots(date)
         # return response
