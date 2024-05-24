@@ -18,44 +18,6 @@ class ClinicService:
         self.clinic = clinic
 
     @transaction.atomic
-    def valid_slot(self, date, time):
-        """
-        Check if a given date and time slot is valid and available in the clinic schedule.
-
-        Args:
-            date (datetime.date): The date to check for availability.
-            time (datetime.time): The specific time to check for availability.
-
-        Returns:
-            bool: True if the slot is valid and available, False otherwise.
-        """
-        try:
-            dow = date.weekday()
-            weekday_name = calendar.day_name[dow]
-
-            # Check if the time slot is valid for the given day
-            slots = self.clinic.time_slots.filter(
-                days__icontains=weekday_name, start_time__lte=time, end_time__gte=time
-            )
-
-            # Count the number of visits scheduled for the given date and time
-            visits_count = Visit.objects.filter(
-                patient__clinic=self.clinic,
-                date=date,
-                time=time,
-                visit_type=VisitType.SCHEDULED,
-                status__in=[VisitStatus.BOOKED],
-            ).count()
-
-            return slots.exists() and visits_count <= self.clinic.capacity
-
-        except Exception as e:
-            # Log the exception here if logging is configured
-            # logger.error(f"Error checking valid slot: {e}")
-            logger.error("Error checking valid slot: %s", e)
-            return False
-
-    @transaction.atomic
     def get_available_slots(self, date):
         """
         Retrieve available time slots for a given date by checking the clinic's schedule
