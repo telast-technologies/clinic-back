@@ -3,7 +3,7 @@ import django_filters
 from clinic.system_management.models import ExposedPermission, Package
 
 
-class SelectSelectFilter(django_filters.FilterSet):
+class SelectPackageFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(
         field_name="name",
         lookup_expr="icontains",

@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from clinic.patients.api.v1.views import PatientReportViewSet, PatientViewSet
+from clinic.patients.api.v1.views import PatientReportViewSet, PatientViewSet, SelectPatientView
 
 router = DefaultRouter()
 
@@ -12,5 +12,6 @@ router.register("patient_report", PatientReportViewSet, basename="patient_report
 app_name = "patients"
 
 urlpatterns = [
+    path("patient/select/", SelectPatientView.as_view(), name="patient-select"),
     path("", include(router.urls)),
 ]

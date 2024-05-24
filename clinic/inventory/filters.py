@@ -11,3 +11,11 @@ class SupplyFilter(django_filters.FilterSet):
     class Meta:
         model = Supply
         fields = ["item", "invoice", "created_at"]
+
+
+class SelectSupplyFilter(django_filters.FilterSet):
+    item = django_filters.CharFilter(field_name="item", lookup_expr="icontains")
+
+    class Meta:
+        model = Supply
+        fields = ["item"]

@@ -20,6 +20,7 @@ class Staff(UUIDMixin, TimestampMixin):
 
     class Meta:
         ordering = ("-created_at",)
+        permissions = (("change_clinic", "Can Change Clinic"),)
 
     def __str__(self) -> str:
         return self.user.__str__()

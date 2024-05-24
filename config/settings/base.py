@@ -55,6 +55,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "phonenumber_field",
     "corsheaders",
+    "django_extensions",
     "rest_framework",
     "rest_framework.authtoken",
     "rest_framework_simplejwt",
@@ -64,6 +65,8 @@ THIRD_PARTY_APPS = [
     "drf_spectacular_sidecar",
     "django_filters",
     "anymail",
+    "django_fsm",
+    "fsm_admin2",
 ]
 
 CONTROLLED_LOCAL_APPS = [

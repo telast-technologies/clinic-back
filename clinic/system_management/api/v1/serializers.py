@@ -8,7 +8,7 @@ class ClinicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Clinic
-        exclude = ("uid", "created_at", "updated_at")
+        fields = "__all__"
 
 
 class SelectPackageSerializer(serializers.ModelSerializer):
@@ -20,7 +20,7 @@ class SelectPackageSerializer(serializers.ModelSerializer):
         fields = ("value", "label")
 
 
-class SelectExposedPermissionSerializer(serializers.ModelSerializer):
+class SelectExposedSelectPermissionSerializer(serializers.ModelSerializer):
     value = serializers.CharField(source="uid", read_only=True)
     label = serializers.CharField(source="permission.name", read_only=True)
 

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from clinic.system_management.choices import PackageChoices
@@ -28,6 +29,7 @@ class Clinic(UUIDMixin, TimestampMixin):
     phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
+    capacity = models.PositiveIntegerField(_("Patient Count Capacity/Hours"), default=5)
 
     class Meta:
         ordering = ("-created_at",)

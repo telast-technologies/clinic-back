@@ -10,3 +10,16 @@ class DaysOfWeek(models.TextChoices):
     FRIDAY = "friday", _("Friday")
     SATURDAY = "saturday", _("Saturday")
     SUNDAY = "sunday", _("Sunday")
+
+
+class VisitStatus(models.TextChoices):
+    BOOKED = "booked", _("Booked")
+    CHECKED_IN = "checked_in", _("Checked In")
+    FINANCIALLY_CLEARED = "financially_cleared", _("Financially Cleared")
+    CHECKED_OUT = "checked_out", _("Checked Out")
+    CANCELLED = "cancelled", _("Cancelled")
+
+
+class VisitType(models.TextChoices):
+    SCHEDULED = "scheduled", _("Scheduled")
+    WALK_IN = "walk_in", _("Walk In")

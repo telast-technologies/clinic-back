@@ -12,6 +12,10 @@ class ServiceSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class ServiceDetailSerializer(ServiceSerializer):
+    pass
+
+
 class SelectServiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="name")
     value = serializers.CharField(source="uid")

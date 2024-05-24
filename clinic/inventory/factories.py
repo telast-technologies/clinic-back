@@ -12,4 +12,5 @@ class SupplyFactory(DjangoModelFactory):
     item = FuzzyText()
     profit_share = Faker("pyfloat", min_value=0, max_value=100)
     unit_cost = Faker("pyfloat", min_value=0, max_value=100)
-    quantity = Faker("pyfloat", min_value=0, max_value=100)
+    quantity = 100
+    qrcode = FuzzyText(length=160, chars="abcdefghijklmnopqrstuvwxyz0123456789")

@@ -27,7 +27,7 @@ urlpatterns = [
     path("api/", include(("config.api_router", "api"), "api")),
     path("api/auth/", include("dj_rest_auth.urls")),
     path(
-        "api/auth/password/reset/confirm/<uidb64>/<token>/",
+        "api/auth/password/reset/confirm/<str:uidb64>/<str:token>/",
         PasswordResetConfirmRedirect.as_view(),
         name="password_reset_confirm",
     ),
