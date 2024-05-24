@@ -130,7 +130,7 @@ class VisitAvailableSlotsView(views.APIView):
         clinic_handler = ClinicService(self.request.user.staff.clinic)
         # get all available slot
         available_slots = clinic_handler.get_available_slots(date)
-        # serialize data
-        serializer = AvailableSlotListSerializer({"slots": available_slots}, read_only=True)
         # return response
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(
+            AvailableSlotListSerializer({"slots": available_slots}, read_only=True).data, status=status.HTTP_200_OK
+        )
