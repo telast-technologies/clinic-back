@@ -7,7 +7,7 @@ router = DefaultRouter()
 
 
 router.register("patient", PatientViewSet, basename="patient")
-router.register("patient_report", PatientReportViewSet, basename="patient_report")
+router.register("patient/report", PatientReportViewSet, basename="patient-report")
 
 app_name = "patients"
 

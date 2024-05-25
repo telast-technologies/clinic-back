@@ -6,7 +6,7 @@ from clinic.approvals.api.views import JoinRequestViewSet
 router = DefaultRouter()
 
 
-router.register("join_request", JoinRequestViewSet, basename="join_request")
+router.register("request/join", JoinRequestViewSet, basename="request-join")
 
 
 app_name = "approvals"
