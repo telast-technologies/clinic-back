@@ -10,7 +10,7 @@ from clinic.users.models import User
 class PermissionDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Permission
-        fields = ["name", "codename"]
+        fields = ("name", "codename")
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = [
+        fields = (
             "id",
             "username",
             "email",
@@ -29,7 +29,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "clinic",
             "avatar",
             "permissions",
-        ]
+        )
 
 
 class UserDetailSerializer(serializers.ModelSerializer):

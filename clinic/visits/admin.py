@@ -9,8 +9,8 @@ from clinic.visits.models import ChargeItem, ChargeService, Visit
 
 class ChargeItemInline(admin.TabularInline):
     model = ChargeItem
-    fields = ["supply", "quantity", "charge", "remains"]
-    readonly_fields = ["charge", "remains"]
+    fields = ("supply", "quantity", "charge", "remains")
+    readonly_fields = ("charge", "remains")
     extra = 0
     can_delete = False
 
@@ -31,10 +31,10 @@ class ChargeItemInline(admin.TabularInline):
 
 class ChargeServiceInline(admin.TabularInline):
     model = ChargeService
-    fields = ["service", "charge"]
+    fields = ("service", "charge")
     extra = 0
     can_delete = False
-    readonly_fields = ["charge"]
+    readonly_fields = ("charge",)
 
     @admin.display(description="charge")
     def charge(self, obj: ChargeService) -> float:

@@ -16,7 +16,7 @@ class StaffFilter(django_filters.FilterSet):
 
     class Meta:
         model = Staff
-        fields = ["uid", "is_active", "fullname", "is_client_admin"]
+        fields = ("uid", "is_active", "fullname", "is_client_admin")
 
     def filter_fullname(self, queryset, name, value):
         return queryset.filter(user__first_name__icontains=value) | queryset.filter(user__last_name__icontains=value)

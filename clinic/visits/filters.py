@@ -11,7 +11,7 @@ class TimeSlotFilter(django_filters.FilterSet):
 
     class Meta:
         model = TimeSlot
-        fields = ["start_time", "end_time", "days"]
+        fields = ("start_time", "end_time", "days")
 
 
 class VisitFilter(django_filters.FilterSet):
@@ -20,7 +20,7 @@ class VisitFilter(django_filters.FilterSet):
 
     class Meta:
         model = Visit
-        fields = ["patient", "date", "time", "status", "visit_type"]
+        fields = ("patient", "date", "time", "status", "visit_type")
 
     def filter_time(self, queryset, name, value):
         now = timezone.now()
@@ -36,7 +36,7 @@ class VisitFilter(django_filters.FilterSet):
 class SelectVisitFilter(django_filters.FilterSet):
     class Meta:
         model = Visit
-        fields = ["uid", "status"]
+        fields = ("uid", "status")
 
 
 class ChargeItemFilter(django_filters.FilterSet):
@@ -44,7 +44,7 @@ class ChargeItemFilter(django_filters.FilterSet):
 
     class Meta:
         model = ChargeItem
-        fields = ["uid", "visit", "supply"]
+        fields = ("uid", "visit", "supply")
 
 
 class ChargeServiceFilter(django_filters.FilterSet):
@@ -52,4 +52,4 @@ class ChargeServiceFilter(django_filters.FilterSet):
 
     class Meta:
         model = ChargeService
-        fields = ["uid", "visit", "service"]
+        fields = ("uid", "visit", "service")

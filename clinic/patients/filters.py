@@ -11,7 +11,7 @@ class PatientFilter(django_filters.FilterSet):
 
     class Meta:
         model = Patient
-        fields = ["uid", "fullname", "phone", "email", "created_at"]
+        fields = ("uid", "fullname", "phone", "email", "created_at")
 
     def filter_fullname(self, queryset, name, value):
         return queryset.filter(first_name__icontains=value) | queryset.filter(last_name__icontains=value)
@@ -24,7 +24,7 @@ class SelectPatientFilter(django_filters.FilterSet):
 
     class Meta:
         model = Patient
-        fields = ["fullname", "uid"]
+        fields = ("fullname", "uid")
 
     def filter_fullname(self, queryset, name, value):
         return queryset.filter(first_name__icontains=value) | queryset.filter(last_name__icontains=value)
@@ -41,4 +41,4 @@ class PatientReportFilter(django_filters.FilterSet):
 
     class Meta:
         model = PatientReport
-        fields = ["patient", "created_at"]
+        fields = ("patient", "created_at")

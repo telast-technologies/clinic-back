@@ -9,9 +9,7 @@ from clinic.patients.models import Patient, PatientReport
 class PatientReportInline(admin.TabularInline):
     model = PatientReport
     extra = 0
-    fields = [
-        "document",
-    ]
+    fields = ("document",)
     can_delete = False
 
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:

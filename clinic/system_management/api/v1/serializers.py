@@ -26,4 +26,4 @@ class SelectExposedPermissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ExposedPermission
-        fields = ["label", "value"]
+        fields = ("label", "value")

@@ -16,7 +16,7 @@ class SupplySerializer(serializers.ModelSerializer):
 class SupplyDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Supply
-        fields = ["uid", "item"]
+        fields = ("uid", "item")
 
 
 class SelectSupplySerializer(serializers.ModelSerializer):
@@ -25,4 +25,4 @@ class SelectSupplySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Supply
-        fields = ["label", "value"]
+        fields = ("label", "value")

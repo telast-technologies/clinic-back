@@ -64,7 +64,7 @@ class SelectVisitSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Visit
-        fields = ["label", "value"]
+        fields = ("label", "value")
 
 
 class CreateChargeItemSerializer(serializers.ModelSerializer):
@@ -77,7 +77,7 @@ class CreateChargeItemSerializer(serializers.ModelSerializer):
 class UpdateChargeItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChargeItem
-        fields = ["quantity"]
+        fields = ("quantity",)
 
 
 class ChargeItemDetailSerializer(serializers.ModelSerializer):

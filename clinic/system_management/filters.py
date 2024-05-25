@@ -12,7 +12,7 @@ class SelectPackageFilter(django_filters.FilterSet):
 
     class Meta:
         model = Package
-        fields = ["name"]
+        fields = ("name",)
 
 
 class SelectPermissionFilter(django_filters.FilterSet):
@@ -24,4 +24,4 @@ class SelectPermissionFilter(django_filters.FilterSet):
 
     class Meta:
         model = ExposedPermission
-        fields = ["name"]
+        fields = ("name",)

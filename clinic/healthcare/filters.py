@@ -9,7 +9,7 @@ class ServiceFilter(django_filters.FilterSet):
 
     class Meta:
         model = Service
-        fields = ["name", "active", "created_at"]
+        fields = ("name", "active", "created_at")
 
 
 class SelectServiceFilter(django_filters.FilterSet):
@@ -17,4 +17,4 @@ class SelectServiceFilter(django_filters.FilterSet):
 
     class Meta:
         model = Service
-        fields = ["name"]
+        fields = ("name",)

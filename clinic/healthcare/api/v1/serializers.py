@@ -15,7 +15,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 class ServiceDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Service
-        fields = ["uid", "name"]
+        fields = ("uid", "name")
 
 
 class SelectServiceSerializer(serializers.ModelSerializer):

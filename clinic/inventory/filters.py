@@ -10,7 +10,7 @@ class SupplyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Supply
-        fields = ["item", "invoice", "created_at"]
+        fields = ("item", "invoice", "created_at")
 
 
 class SelectSupplyFilter(django_filters.FilterSet):
@@ -18,4 +18,4 @@ class SelectSupplyFilter(django_filters.FilterSet):
 
     class Meta:
         model = Supply
-        fields = ["item"]
+        fields = ("item",)

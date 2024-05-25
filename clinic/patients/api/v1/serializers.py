@@ -19,7 +19,7 @@ class SelectPatientSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Patient
-        fields = ["label", "value"]
+        fields = ("label", "value")
 
 
 class PatientReportSerializer(serializers.ModelSerializer):
