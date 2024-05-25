@@ -8,6 +8,8 @@ from django.core.cache import cache
 from django.http import HttpResponseForbidden
 from django.utils.translation import gettext_lazy as _
 
+from clinic.system_management.models import Clinic
+
 # Initializing logger for logging errors and information
 logger = logging.getLogger(__name__)
 
@@ -53,7 +55,7 @@ class ClinicWhiteListMiddleware:
         if cached_data is not None:
             return cached_data
         else:
-            clinic: Any | None = getattr(request.user.staff, "clinic", None)
+            clinic: Clinic | None = getattr(request.user.staff, "clinic", None)
             allowed: bool = clinic and getattr(request.user.staff.clinic, "active", False)
             # Caching the result for 10 seconds
             cache.set(cache_key, allowed, 10)
