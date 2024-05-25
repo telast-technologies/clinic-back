@@ -29,6 +29,7 @@ class CreateVisitSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         visit_type = validated_data.get("visit_type")
         if visit_type == VisitType.WALK_IN:
+            validated_data["date"] = timezone.now().date()
             validated_data["time"] = timezone.now().time()
         return super().create(validated_data)
 
