@@ -19,8 +19,9 @@ class SupplyAdmin(admin.ModelAdmin):
         "quantity",
         "remains",
     )
-    list_filter = ("clinic", "invoice")
+    list_filter = ("clinic",)
     readonly_fields = ("charge", "unit_sales_price", "remains")
+    search_fields = ("item", "invoice", "clinic", "uid")
 
     @admin.display(description="remains")
     def remains(self, obj: Supply) -> float:

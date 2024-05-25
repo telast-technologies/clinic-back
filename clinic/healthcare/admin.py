@@ -15,9 +15,10 @@ class ServiceAdmin(admin.ModelAdmin):
         "active",
     )
     list_filter = (
-        "clinic",
         "active",
+        "clinic",
     )
+    search_fields = ("name", "uid")
 
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return False

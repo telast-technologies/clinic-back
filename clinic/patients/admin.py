@@ -28,8 +28,6 @@ class PatientAdmin(admin.ModelAdmin):
         "email",
         "phone",
         "clinic",
-        "birthdate",
-        "address",
     ]
     search_fields = ["first_name", "last_name", "email", "phone"]
     list_filter = ("clinic",)
