@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.db import models
+from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -30,12 +31,36 @@ class Clinic(UUIDMixin, TimestampMixin):
     email = models.EmailField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     capacity = models.PositiveIntegerField(_("Patient Count Capacity/Hours"), default=5)
+    active = models.BooleanField(default=True)
 
     class Meta:
         ordering = ("-created_at",)
 
     def __str__(self) -> str:
         return self.name
+
+    @cached_property
+    def days(self):
+        slots = self.time_slots.values_list("days", flat=True)
+        dow_set = {day for sublist in slots for day in sublist}
+        return dow_set
+
+    @cached_property
+    def slots(self):
+        slot_dict = dict({})
+
+        for day in self.days:
+            available_hours_set = set()
+            # Retrieve all time slots for the given weekday
+            slots = self.time_slots.filter(days__icontains=day)
+
+            # Generate all possible times for the slots
+            available_hours_set.update(
+                slot_hour for slot in slots for slot_hour in range(slot.start_time.hour, slot.end_time.hour)
+            )
+            slot_dict[day] = available_hours_set
+
+        return slot_dict
 
 
 class ExposedPermission(UUIDMixin, TimestampMixin):

@@ -8,7 +8,7 @@ class ClinicSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Clinic
-        fields = "__all__"
+        exclude = ["active"]
 
 
 class SelectPackageSerializer(serializers.ModelSerializer):

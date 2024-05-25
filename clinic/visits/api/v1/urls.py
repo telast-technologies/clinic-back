@@ -7,6 +7,7 @@ from clinic.visits.api.v1.views import (
     ChargeServiceViewSet,
     SelectVisitView,
     TimeSlotViewSet,
+    VisitAvailableDatesView,
     VisitAvailableSlotsView,
     VisitViewSet,
 )
@@ -25,9 +26,14 @@ app_name = "visits"
 
 urlpatterns = [
     path(
-        "slots/available/<date:date>/",
+        "slots/time/available/<date:date>/",
         VisitAvailableSlotsView.as_view(),
-        name="slots-available",
+        name="slots-time-available",
+    ),
+    path(
+        "slots/date/available/<uuid:patient>",
+        VisitAvailableDatesView.as_view(),
+        name="slots-date-available",
     ),
     path("visits/select/", SelectVisitView.as_view(), name="visits-select"),
     path("", include(router.urls)),

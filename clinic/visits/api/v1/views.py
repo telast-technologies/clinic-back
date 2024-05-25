@@ -15,6 +15,7 @@ from clinic.system_management.services.clinic_service import ClinicService
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsAdminStaff, IsStaff
 from clinic.visits.api.v1.serializers import (
+    AvailableDateListSerializer,
     AvailableSlotListSerializer,
     ChargeItemDetailSerializer,
     ChargeServiceDetailSerializer,
@@ -154,4 +155,35 @@ class VisitAvailableSlotsView(views.APIView):
         # return response
         return Response(
             AvailableSlotListSerializer({"slots": available_slots}, read_only=True).data, status=status.HTTP_200_OK
+        )
+
+
+class VisitAvailableDatesView(views.APIView):
+    """View for getting available dates for a patient for next 30 days including today."""
+
+    serializer_class = None
+    permission_classes = [IsStaff]
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response=AvailableDateListSerializer,
+                description="List of available dates for the patient",
+                examples=[
+                    OpenApiExample(
+                        "Example Response",
+                        value={"dates": ["2022-01-01", "2022-01-02", "2022-01-03"]},
+                    ),
+                ],
+            )
+        }
+    )
+    def get(self, request, patient, *args, **kwargs):
+        # initial clinic service
+        clinic_handler = ClinicService(request.user.staff.clinic)
+        # get all available dates
+        available_dates = clinic_handler.get_available_dates(patient)
+        # return response
+        return Response(
+            AvailableDateListSerializer({"dates": available_dates}, read_only=True).data, status=status.HTTP_200_OK
         )

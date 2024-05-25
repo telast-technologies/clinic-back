@@ -32,14 +32,19 @@ class ClinicAdmin(admin.ModelAdmin):
         "uid",
         "name",
         "package",
-        "address",
-        "phone",
-        "email",
         "website",
+        "active",
     )
+    list_filter = ("package", "active")
+    search_fields = ("name", "uid", "address", "phone", "email", "website")
     inlines = [TimeSlotInline]
     ordering = ("name",)
-    search_fields = ("name",)
+
+    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
+        return False
+
+    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
+        return False
 
 
 @admin.register(ExposedPermission)

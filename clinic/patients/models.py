@@ -19,8 +19,11 @@ class Patient(UUIDMixin, TimestampMixin):
     class Meta:
         ordering = ("-created_at",)
 
-    def __str__(self) -> str:
+    def get_full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+    def __str__(self) -> str:
+        return f"{self.get_full_name()}"
 
 
 class PatientReport(UUIDMixin, TimestampMixin):

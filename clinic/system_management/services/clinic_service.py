@@ -1,11 +1,9 @@
 import calendar
 import logging
-from datetime import time
+from datetime import date, time, timedelta
 
 from django.db import transaction
-from django.db.models import Count, Value
-from django.db.models.functions import Coalesce, ExtractHour
-from django.utils.translation import gettext_lazy as _
+from django.db.models import Count
 
 from clinic.visits.choices import VisitStatus, VisitType
 from clinic.visits.models import Visit
@@ -17,57 +15,76 @@ class ClinicService:
     def __init__(self, clinic):
         self.clinic = clinic
 
-    @transaction.atomic
-    def get_available_slots(self, date):
+    def get_available_dates(self, patient_id: int) -> list[date]:
         """
-        Retrieve available time slots for a given date by checking the clinic's schedule
+        Get the available dates for a patient's visits.
+
+        This method retrieves the available dates for a patient's visits within the next 30 days.
+        It does this by querying the `Visit` model for visits of the specified patient that
+        are scheduled within the next 30 days and belong to the current clinic.
+
+        Args:
+            patient_id (int): The ID of the patient.
+
+        Returns:
+            List[date]: A list of available dates for the patient's visits.
+        """
+        # Get today's date
+        today: date = date.today()
+
+        # Generate a list of the next 30 days
+        available_dates: list[date] = [today + timedelta(days=i) for i in range(30)]
+        # Query the Visit model for visits of the specified patient that are scheduled within
+        # the next 30 days and belong to the current clinic
+        booked_dates: list[date] = (
+            Visit.objects.filter(
+                patient_id=patient_id,  # Filter by patient ID
+                patient__clinic=self.clinic,  # Filter by current clinic
+                date__in=available_dates,  # Filter by date within the next 30 days
+            )
+            .values("date")  # Group the visits by date
+            .annotate(count=Count("date"))  # Count the number of visits for each date
+            .values_list("date", flat=True)  # Extract the date values from the queryset
+        )
+        available_dates = filter(lambda date: date not in booked_dates, available_dates)
+        # Return the list of available dates
+        return list(available_dates)
+
+    @transaction.atomic
+    def get_available_slots(self, date: date) -> list[time]:
+        """
+        Get available time slots for a given date by checking the clinic's schedule
         and existing appointments.
 
         Args:
             date (datetime.date): The date for which to retrieve available time slots.
 
         Returns:
-            list: A list of available time slots for the given date.
+            List[time]: A list of available time slots for the given date.
         """
         try:
-            available_hours_set = set()
-            dow = date.weekday()
-            weekday_name = calendar.day_name[dow]
+            day_of_week = date.weekday()
+            available_hours = self.clinic.slots[calendar.day_name[day_of_week].lower()]
 
-            # Retrieve all time slots for the given weekday
-            slots = self.clinic.time_slots.filter(days__icontains=weekday_name)
+            # Precompute the hourly visit counts for the clinic and date
+            hourly_visits_dict = {
+                hour: Visit.objects.filter(
+                    patient__clinic=self.clinic,
+                    date=date,
+                    time__hour=hour,
+                    visit_type=VisitType.SCHEDULED,
+                    status=VisitStatus.BOOKED,
+                ).count()
+                for hour in available_hours
+            }
 
-            # Generate all possible times for the slots
-            available_hours_set.update(
-                slot_hour for slot in slots for slot_hour in range(slot.start_time.hour, slot.end_time.hour)
-            )
-            # Fetch all scheduled visits for the date in one query
-            scheduled_visits = Visit.objects.filter(
-                patient__clinic=self.clinic,
-                date=date,
-                time__hour__in=available_hours_set,
-                visit_type=VisitType.SCHEDULED,
-                status__in=[VisitStatus.BOOKED],
-            ).prefetch_related("patient")
-            # Annotate the visits with the hour and count the number of visits per hour
-            hourly_visits = (
-                scheduled_visits.annotate(hour=ExtractHour("time"))
-                .values("hour")
-                .annotate(count=Coalesce(Count("uid"), Value(0)))
-            )
-            # Create a dictionary to hold the count of visits per hour, initialized to 0
-            hourly_visits_dict = {visit["hour"]: visit["count"] for visit in hourly_visits}
-            # Update the dictionary with actual counts from the query
-            hourly_visits_dict.update({hour: 0 for hour in available_hours_set if hour not in hourly_visits_dict})
+            # Filter out hours with booked visits
+            available_slots = [
+                time(hour=hour) for hour, count in hourly_visits_dict.items() if count < self.clinic.capacity
+            ]
 
-            # Prepare the final result ensuring all hours in available_hours_set are included
-            # Sort the available slots by hour
-            available_slots = sorted(
-                [time(hour=hour) for hour, count in hourly_visits_dict.items() if count < self.clinic.capacity]
-            )
-            # return available slots
-            return available_slots
+            return sorted(available_slots)
 
         except Exception as e:
-            logger.error("Error checking get available slot: %s", e)
-            raise Exception(_(str(e)))
+            logger.exception(f"Error checking get available slot: {e}")
+            raise Exception(str(e))

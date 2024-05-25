@@ -1,6 +1,6 @@
-from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from clinic.patients.api.v1.validators import PatientReportValidator
 from clinic.patients.models import Patient, PatientReport
 from clinic.users.api.defaults import CurrentClinicDefault
 
@@ -14,7 +14,7 @@ class PatientSerializer(serializers.ModelSerializer):
 
 
 class SelectPatientSerializer(serializers.ModelSerializer):
-    label = serializers.CharField(source="fullname", read_only=True)
+    label = serializers.CharField(source="get_full_name", read_only=True)
     value = serializers.CharField(source="uid", read_only=True)
 
     class Meta:
@@ -29,11 +29,4 @@ class PatientReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientReport
         fields = "__all__"
-
-    def validate(self, data):
-        data = super().validate(data)
-
-        if any([data.get("patient").clinic != self.context["request"].user.staff.clinic]):
-            raise serializers.ValidationError({"patient": _("invalid patient")})
-
-        return data
+        validations = [PatientReportValidator()]
