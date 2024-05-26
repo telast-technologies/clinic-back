@@ -6,12 +6,12 @@ from clinic.healthcare.api.v1.views import SelectServiceView, ServiceViewSet
 router = DefaultRouter()
 
 
-router.register("services", ServiceViewSet, basename="services")
+router.register("service", ServiceViewSet, basename="service")
 
 
 app_name = "healthcare"
 
 urlpatterns = [
-    path("services/select/", SelectServiceView.as_view(), name="services-select"),
+    path("service/select/", SelectServiceView.as_view(), name="service-select"),
     path("", include(router.urls)),
 ]

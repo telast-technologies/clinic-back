@@ -16,8 +16,8 @@ router = DefaultRouter()
 
 register_converter(DateConverter, "date")
 
-router.register("slots", TimeSlotViewSet, basename="slots")
-router.register("visits", VisitViewSet, basename="visits")
+router.register("slot", TimeSlotViewSet, basename="slot")
+router.register("visit", VisitViewSet, basename="visit")
 router.register("charge/items", ChargeItemViewSet, basename="charge-items")
 router.register("charge/services", ChargeServiceViewSet, basename="charge-services")
 
@@ -26,15 +26,15 @@ app_name = "visits"
 
 urlpatterns = [
     path(
-        "slots/time/available/<date:date>/",
+        "slot/time/available/<date:date>/",
         VisitAvailableSlotsView.as_view(),
         name="slots-time-available",
     ),
     path(
-        "slots/date/available/<uuid:patient>",
+        "slot/date/available/<uuid:patient>",
         VisitAvailableDatesView.as_view(),
         name="slots-date-available",
     ),
-    path("visits/select/", SelectVisitView.as_view(), name="visits-select"),
+    path("visit/select/", SelectVisitView.as_view(), name="visit-select"),
     path("", include(router.urls)),
 ]

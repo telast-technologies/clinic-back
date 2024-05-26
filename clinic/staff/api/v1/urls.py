@@ -6,7 +6,7 @@ from clinic.staff.api.v1.views import StaffViewSet
 router = DefaultRouter()
 
 
-router.register("staff", StaffViewSet, basename="staff")
+router.register("", StaffViewSet, basename="staff")
 
 
 app_name = "staff"

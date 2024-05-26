@@ -6,12 +6,12 @@ from clinic.inventory.api.v1.views import SelectSupplyViewSet, SupplyViewSet
 router = DefaultRouter()
 
 
-router.register("supplies", SupplyViewSet, basename="supplies")
+router.register("supply", SupplyViewSet, basename="supply")
 
 
 app_name = "inventory"
 
 urlpatterns = [
-    path("supplies/select/", SelectSupplyViewSet.as_view(), name="supplies-select"),
+    path("supply/select/", SelectSupplyViewSet.as_view(), name="supply-select"),
     path("", include(router.urls)),
 ]
