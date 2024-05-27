@@ -1,0 +1,100 @@
+name: Tag new release
+
+# Enable Buildkit and let compose use it to speed up image building
+env:
+  DOCKER_BUILDKIT: 1
+  COMPOSE_DOCKER_CLI_BUILD: 1
+  IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
+  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the github plan doens't support environments
+
+on:
+  push:
+    branches: ['main']
+    paths-ignore: ['docs/**']
+
+concurrency:
+  group: ${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  linter:
+    runs-on: [self-hosted]
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      # Consider using pre-commit.ci for open source project
+      - name: Run pre-commit
+        uses: pre-commit/action@v3.0.1
+
+  # With no caching at all the entire ci process takes 4m 30s to complete!
+  pytest:
+    runs-on: [self-hosted]
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+
+      - name: Start Clean
+        run: docker compose -f docker-compose-local.yml down -v
+
+      - name: Build
+        run: docker compose -f docker-compose-local.yml build
+
+      - name: Run Django Tests
+        run: docker compose -f docker-compose-local.yml run django coverage run -m pytest
+
+      - name: Run Check Coverage Percentage
+        run: docker compose -f docker-compose-local.yml run django coverage report --fail-under=100
+
+      - name: Tear Down
+        run: docker compose -f docker-compose-local.yml down -v
+
+  release:
+    runs-on: [self-hosted]
+    concurrency: release
+    permissions:
+      id-token: write
+      contents: write
+    needs: [linter, pytest]
+    steps:
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ vars.DOCKER_REGISTRY }}
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch
+
+      - name: Build and push Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: "./docker/production/django/Dockerfile"
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: |
+            type=registry,ref=${{ env.IMAGE_NAME }}
+          build-args: "DJANGO_ENV"
+
+      - name: Python Semantic Release
+        uses: python-semantic-release/python-semantic-release@master
+        with:
+          github_token: ${{ secrets.PATOKEN }}

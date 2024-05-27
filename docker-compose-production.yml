@@ -1,0 +1,53 @@
+version: '3.8'
+
+volumes:
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+  locale: {}
+  media: {}
+services:
+  django: &django
+    image: telast.tech:5443/clinic_django:latest
+    ports:
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: host # only accessible form localhost, access through 443 port on reverse proxy
+    depends_on:
+      - postgres
+    volumes:
+     - locale:/app/locale
+     - media:/app/fortuneit/media/
+    environment:
+      - DEBUG=${DEBUG}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
+      - SECRET_KEY=${SECRET_KEY}
+      - INTERNAL_IPS=${INTERNAL_IPS}
+      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
+      - BREVO_API_URL=${BREVO_API_URL}
+      - BREVO_API_KEY=${BREVO_API_KEY}
+      - PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL=${PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL}
+      - FERNET_KEY=${FERNET_KEY}
+      - DJANGO_ENV=${DJANGO_ENV}
+      - IPYTHONDIR=${IPYTHONDIR}
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+      - USE_DOCKER=yes
+      - DJANGO_SETTINGS_MODULE=config.settings.production
+    command: /start
+
+  postgres:
+    image: telast.tech:5443/clinic_postgres:latest
+    volumes:
+      - production_postgres_data:/var/lib/postgresql/data
+      - production_postgres_data_backups:/backups
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
