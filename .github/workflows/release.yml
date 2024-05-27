@@ -18,7 +18,7 @@ concurrency:
 
 jobs:
   linter:
-    runs-on: [self-hosted]
+    runs-on: [${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}]
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
 
   # With no caching at all the entire ci process takes 4m 30s to complete!
   pytest:
-    runs-on: [self-hosted]
+    runs-on: [${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}]
 
     steps:
       - name: Checkout Code Repository
@@ -55,7 +55,7 @@ jobs:
         run: docker compose -f docker-compose-local.yml down -v
 
   release:
-    runs-on: [self-hosted]
+    runs-on: [${{ fromJSON('["ubuntu-latest", "self-hosted"]')[github.repository == 'github/docs-internal'] }}]
     concurrency: release
     permissions:
       id-token: write
