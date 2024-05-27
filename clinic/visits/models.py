@@ -88,5 +88,4 @@ class ChargeItem(UUIDMixin, TimestampMixin):
 
     @property
     def charge(self):
-        # charge = supply.unit_sales_price * quantity
         return self.quantity * self.supply.unit_sales_price
