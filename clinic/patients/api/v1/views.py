@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema, extend_schema_view
 from rest_framework import generics, mixins, viewsets
 
 from clinic.patients.api.v1.serializers import PatientReportSerializer, PatientSerializer, SelectPatientSerializer
@@ -21,10 +22,16 @@ class SelectPatientView(QuerysetFilteredMixin, generics.ListAPIView):
     permission_classes = [IsStaff]
 
 
+@extend_schema_view(
+    destroy=extend_schema(
+        parameters=[
+            OpenApiParameter(name="patient", description="Patient ID", required=True, type=OpenApiTypes.UUID),
+        ]
+    ),
+)
 class PatientReportViewSet(
-    mixins.ListModelMixin,
-    mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
+    mixins.ListModelMixin,
     mixins.DestroyModelMixin,
     viewsets.GenericViewSet,
 ):

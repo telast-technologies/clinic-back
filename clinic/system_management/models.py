@@ -56,7 +56,7 @@ class Clinic(UUIDMixin, TimestampMixin):
 
             # Generate all possible times for the slots
             available_hours_set.update(
-                slot_hour for slot in slots for slot_hour in range(slot.start_time.hour, slot.end_time.hour)
+                slot_hour for slot in slots for slot_hour in range(slot.start_time.hour, slot.end_time.hour + 1)
             )
             slot_dict[day] = available_hours_set
 

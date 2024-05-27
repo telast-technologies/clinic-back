@@ -23,6 +23,7 @@ class ClinicFactory(DjangoModelFactory):
     phone = Faker("phone_number")
     email = Faker("email")
     website = Faker("url")
+    capacity = 5
 
     class Meta:
         model = "system_management.Clinic"

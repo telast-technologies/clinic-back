@@ -19,7 +19,7 @@ class ClinicProfileView(ProfileUpdateViewSet):
     permission_classes = [IsAdminStaff]
 
     def get_object(self) -> Any:
-        return self.request.user.staff.clinic
+        return getattr(self.request.user.staff, "clinic", None)
 
 
 class SelectPackageView(generics.ListAPIView):

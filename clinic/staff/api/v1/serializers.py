@@ -12,8 +12,10 @@ class StaffModifySerializer(serializers.ModelSerializer):
     class Meta:
         model = Staff
         fields = "__all__"
+        extra_kwargs = {"permissions": {"required": False}}
 
     def create(self, validated_data):
+        permissions = validated_data.pop("permissions", [])
         user_data = validated_data.pop("user")
         user_serializer = self.fields["user"]
         # create user data
@@ -21,15 +23,20 @@ class StaffModifySerializer(serializers.ModelSerializer):
         validated_data["user"] = user
         # create utility staff
         staff = super().create(validated_data)
+        staff.permissions.set(permissions)
         # return utility staff
         return staff
 
     def update(self, instance, validated_data):
+        permissions = validated_data.pop("permissions", None)
         user_data = validated_data.pop("user", None)
         user_serializer = self.fields["user"]
 
         if user_data:
             user_serializer.update(instance=instance.user, validated_data=user_data)
+
+        if permissions:
+            instance.permissions.set(permissions)
 
         return super().update(instance, validated_data)
 

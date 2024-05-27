@@ -1,0 +1,37 @@
+version: "3"
+
+volumes:
+  clinic_local_postgres_data: {}
+  clinic_local_postgres_data_backups: {}
+
+services:
+  django: &django
+    build:
+      context: .
+      dockerfile: ./docker/local/django/Dockerfile
+    image: clinic_local_django
+    container_name: clinic_local_django
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app:z
+    env_file:
+      - ./docker/local/.envs/.django
+      - ./docker/local/.envs/.postgres
+    environment:
+      - OPENBLAS_NUM_THREADS=1
+    ports:
+      - "8000:8000"
+    command: /start
+
+  postgres:
+    build:
+      context: .
+      dockerfile: ./docker/local/postgres/Dockerfile
+    image: clinic_local_postgres
+    container_name: clinic_local_postgres
+    volumes:
+      - clinic_local_postgres_data:/var/lib/postgresql/data
+      - clinic_local_postgres_data_backups:/backups
+    env_file:
+      - ./docker/local/.envs/.postgres

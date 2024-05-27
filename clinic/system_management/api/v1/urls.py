@@ -12,7 +12,7 @@ router.register("clinic", ClinicProfileView, basename="clinic")
 app_name = "system_management"
 
 urlpatterns = [
-    path("package/select/", SelectPackageView.as_view(), name="package_select"),
-    path("permissions/select/", SelectPermissionView.as_view(), name="permission_select"),
+    path("package_select/", SelectPackageView.as_view(), name="package_select"),
+    path("permissions_select/", SelectPermissionView.as_view(), name="permissions_select"),
     path("", include(router.urls)),
 ]

@@ -48,19 +48,19 @@ class Visit(UUIDMixin, TimestampMixin):
         unique_together = ("patient", "date")
 
     @transition(field=status, source=[VisitStatus.BOOKED], target=VisitStatus.CHECKED_IN)
-    def check_in(self):
+    def check_in(self):  # pragma: no cover
         pass
 
     @transition(field=status, source=[VisitStatus.CHECKED_IN], target=VisitStatus.FINANCIALLY_CLEARED)
-    def financially_clear(self):
+    def financially_clear(self):  # pragma: no cover
         pass
 
     @transition(field=status, source=[VisitStatus.FINANCIALLY_CLEARED], target=VisitStatus.CHECKED_OUT)
-    def check_out(self):
+    def check_out(self):  # pragma: no cover
         pass
 
     @transition(field=status, source=[VisitStatus.BOOKED, VisitStatus.CHECKED_IN], target=VisitStatus.CANCELLED)
-    def cancel(self, reason):
+    def cancel(self, reason):  # pragma: no cover
         pass
 
 

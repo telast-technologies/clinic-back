@@ -19,9 +19,9 @@ class ClinicService:
         """
         Get the available dates for a patient's visits.
 
-        This method retrieves the available dates for a patient's visits within the next 30 days.
+        This method retrieves the available dates for a patient's visits within the next 31 days.
         It does this by querying the `Visit` model for visits of the specified patient that
-        are scheduled within the next 30 days and belong to the current clinic.
+        are scheduled within the next 31 days and belong to the current clinic.
 
         Args:
             patient_id (int): The ID of the patient.
@@ -32,15 +32,15 @@ class ClinicService:
         # Get today's date
         today: date = date.today()
 
-        # Generate a list of the next 30 days
-        available_dates: list[date] = [today + timedelta(days=i) for i in range(30)]
+        # Generate a list of the next 31 days
+        available_dates: list[date] = [today + timedelta(days=i) for i in range(31)]
         # Query the Visit model for visits of the specified patient that are scheduled within
-        # the next 30 days and belong to the current clinic
+        # the next 31 days and belong to the current clinic
         booked_dates: list[date] = (
             Visit.objects.filter(
                 patient_id=patient_id,  # Filter by patient ID
                 patient__clinic=self.clinic,  # Filter by current clinic
-                date__in=available_dates,  # Filter by date within the next 30 days
+                date__in=available_dates,  # Filter by date within the next 31 days
             )
             .values("date")  # Group the visits by date
             .annotate(count=Count("date"))  # Count the number of visits for each date
@@ -62,29 +62,24 @@ class ClinicService:
         Returns:
             List[time]: A list of available time slots for the given date.
         """
-        try:
-            day_of_week = date.weekday()
-            available_hours = self.clinic.slots[calendar.day_name[day_of_week].lower()]
+        day_of_week = date.weekday()
+        available_hours = self.clinic.slots.get(calendar.day_name[day_of_week].lower(), [])
 
-            # Precompute the hourly visit counts for the clinic and date
-            hourly_visits_dict = {
-                hour: Visit.objects.filter(
-                    patient__clinic=self.clinic,
-                    date=date,
-                    time__hour=hour,
-                    visit_type=VisitType.SCHEDULED,
-                    status=VisitStatus.BOOKED,
-                ).count()
-                for hour in available_hours
-            }
+        # Precompute the hourly visit counts for the clinic and date
+        hourly_visits_dict = {
+            hour: Visit.objects.filter(
+                patient__clinic=self.clinic,
+                date=date,
+                time__hour=hour,
+                visit_type=VisitType.SCHEDULED,
+                status=VisitStatus.BOOKED,
+            ).count()
+            for hour in available_hours
+        }
 
-            # Filter out hours with booked visits
-            available_slots = [
-                time(hour=hour) for hour, count in hourly_visits_dict.items() if count < self.clinic.capacity
-            ]
+        # Filter out hours with booked visits
+        available_slots = [
+            time(hour=hour) for hour, count in hourly_visits_dict.items() if count < self.clinic.capacity
+        ]
 
-            return sorted(available_slots)
-
-        except Exception as e:
-            logger.exception(f"Error checking get available slot: {e}")
-            raise Exception(str(e))
+        return sorted(available_slots)

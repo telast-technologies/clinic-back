@@ -9,7 +9,7 @@ from .base import env
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
-    "DJANGO_SECRET_KEY",
+    "SECRET_KEY",
     default="eFZFWdNAd4mIjn9Z2zIcsj4vblyoU5HVNtHaBL7CtieDLqU8OngU4B6GgvlA5XCV",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
@@ -35,18 +35,3 @@ TEMPLATES[0]["OPTIONS"]["debug"] = True  # type: ignore # noqa: F405
 MEDIA_URL = "http://media.testserver"
 # Your stuff...
 # ------------------------------------------------------------------------------
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": env.str("DB_NAME"),
-        "USER": env.str("DB_USER"),
-        "PASSWORD": env.str("DB_PASSWORD"),
-        "HOST": env.str("DB_HOST"),
-        "PORT": env.str("DB_PORT"),
-    }
-}

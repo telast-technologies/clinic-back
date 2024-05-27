@@ -12,6 +12,6 @@ router.register("supply", SupplyViewSet, basename="supply")
 app_name = "inventory"
 
 urlpatterns = [
-    path("supply/select/", SelectSupplyViewSet.as_view(), name="supply-select"),
+    path("supply_select/", SelectSupplyViewSet.as_view(), name="supply_select"),
     path("", include(router.urls)),
 ]

@@ -12,6 +12,6 @@ router.register("service", ServiceViewSet, basename="service")
 app_name = "healthcare"
 
 urlpatterns = [
-    path("service/select/", SelectServiceView.as_view(), name="service-select"),
+    path("service_select/", SelectServiceView.as_view(), name="service_select"),
     path("", include(router.urls)),
 ]

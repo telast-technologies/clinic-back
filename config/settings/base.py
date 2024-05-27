@@ -25,8 +25,6 @@ env = environ.Env(
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent / "clinic"
 
 
-environ.Env.read_env(os.path.join("config", ".env"))
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -40,7 +38,6 @@ DEBUG = env.bool("DEBUG", default=False)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
-INTERNAL_IPS = env.list("INTERNAL_IPS", default=[])
 # Application definition
 DJANGO_APPS = [
     "django.contrib.admin",
@@ -64,6 +61,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "drf_spectacular_sidecar",
     "django_filters",
+    "notifications",
     "anymail",
     "django_fsm",
     "fsm_admin2",
@@ -168,6 +166,11 @@ REST_AUTH = {
 
 # allowed permissions apps
 ALLOWED_PERMISSIONS_APPS = [app.split(".")[-1] for app in EXPOSED_LOCAL_APPS]
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES["default"]["ATOMIC_REQUESTS"] = True
+DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql"
 
 # Internationalization
 # Local time zone. Choices are

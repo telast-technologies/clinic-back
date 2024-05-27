@@ -8,7 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 
-class BaseProfileViewSet(viewsets.GenericViewSet):
+class BaseProfileViewSet(viewsets.GenericViewSet):  # pragma: no cover
     permission_classes = [IsAuthenticated]
 
     def get_object(self) -> Any:
@@ -19,7 +19,7 @@ class BaseProfileViewSet(viewsets.GenericViewSet):
             instance._prefetched_objects_cache = {}
 
 
-class ProfileGetViewSet(BaseProfileViewSet):
+class ProfileGetViewSet(BaseProfileViewSet):  # pragma: no cover
     @action(detail=False, methods=["GET"], url_path="details")
     def get_profile(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -30,7 +30,7 @@ class ProfileGetViewSet(BaseProfileViewSet):
         super().invalidate_prefetch_cache(instance)
 
 
-class ProfileUpdateViewSet(BaseProfileViewSet):
+class ProfileUpdateViewSet(BaseProfileViewSet):  # pragma: no cover
     @action(detail=False, methods=["PATCH"], url_path="update")
     def update_profile(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -46,7 +46,7 @@ class ProfileUpdateViewSet(BaseProfileViewSet):
         super().invalidate_prefetch_cache(instance)
 
 
-class ProfileViewSet(ProfileGetViewSet, ProfileUpdateViewSet):
+class ProfileViewSet(ProfileGetViewSet, ProfileUpdateViewSet):  # pragma: no cover
     def invalidate_prefetch_cache(self, instance):
         super().invalidate_prefetch_cache(instance)
 

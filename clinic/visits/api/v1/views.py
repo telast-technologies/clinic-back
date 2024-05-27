@@ -83,8 +83,19 @@ class SelectVisitView(generics.ListAPIView):
             OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
         ]
     ),
+    destroy=extend_schema(
+        parameters=[
+            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
+        ]
+    ),
 )
-class ChargeItemViewSet(viewsets.ModelViewSet):
+class ChargeItemViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.UpdateModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
     """
     API endpoint that allows ChargeItem to be viewed Created or edited.
     """
@@ -106,8 +117,15 @@ class ChargeItemViewSet(viewsets.ModelViewSet):
         return super().get_serializer_class(*args, **kwargs)
 
 
+@extend_schema_view(
+    destroy=extend_schema(
+        parameters=[
+            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
+        ]
+    ),
+)
 class ChargeServiceViewSet(
-    mixins.CreateModelMixin, mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+    mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet
 ):
     """
     API endpoint that allows ChargeService to be created or viewed.
@@ -159,7 +177,7 @@ class VisitAvailableSlotsView(views.APIView):
 
 
 class VisitAvailableDatesView(views.APIView):
-    """View for getting available dates for a patient for next 30 days including today."""
+    """View for getting available dates for a patient for next 31 days including today."""
 
     serializer_class = None
     permission_classes = [IsStaff]
