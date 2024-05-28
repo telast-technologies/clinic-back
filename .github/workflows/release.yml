@@ -1,10 +1,11 @@
 name: Tag new release
 
+# Enable Buildkit and let compose use it to speed up image building
 env:
   DOCKER_BUILDKIT: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
   IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
-  DJANGO_ENV: ${{ vars.DJANGO_ENV }}
+  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the github plan doens't support environments
 
 on:
   push:
@@ -17,63 +18,60 @@ concurrency:
 
 jobs:
   linter:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
+      # Consider using pre-commit.ci for open source project
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
+  # With no caching at all the entire ci process takes 4m 30s to complete!
   pytest:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
+
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
 
       - name: Start Clean
-        run: docker compose -f docker-compose-local.yml down -v
+        run: docker compose -f local.yml down -v
 
       - name: Build
-        run: docker compose -f docker-compose-local.yml build
+        run: docker compose -f local.yml build
 
       - name: Run Django Tests
-        run: docker compose -f docker-compose-local.yml run django coverage run -m pytest
+        run: docker compose -f local.yml run django coverage run -m pytest
 
       - name: Run Check Coverage Percentage
-        run: docker compose -f docker-compose-local.yml run django coverage report --fail-under=100
+        run: docker compose -f local.yml run django coverage report --fail-under=100
 
       - name: Tear Down
-        run: docker compose -f docker-compose-local.yml down -v
+        run: docker compose -f local.yml down -v
 
   release:
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
     concurrency: release
     permissions:
       id-token: write
       contents: write
     needs: [linter, pytest]
     steps:
-      - name: Checkout Code Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
       - name: Login to Docker Hub
-        id: docker_login
         uses: docker/login-action@v3
         with:
           registry: ${{ vars.DOCKER_REGISTRY }}
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Verify Docker Login
-        run: docker info
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Extract Docker metadata
         id: meta
@@ -88,13 +86,13 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./docker/production/django/Dockerfile
+          file: "./docker/production/django/Dockerfile"
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/clinic_django:${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}
-          build-args: 
-            DJANGO_ENV: ${{ env.DJANGO_ENV }}
+          cache-from: |
+            type=registry,ref=${{ env.IMAGE_NAME }}
+          build-args: "DJANGO_ENV"
 
       - name: Python Semantic Release
         uses: python-semantic-release/python-semantic-release@master
