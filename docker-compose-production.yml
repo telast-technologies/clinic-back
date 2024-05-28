@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3'
 
 volumes:
   production_postgres_data: {}
@@ -8,14 +8,14 @@ volumes:
 
 services:
   django:
-    image: docker.io/clinic_django:latest
+    image: telasttechnologies/clinic_django:main
     ports:
       - target: 8000
         published: 8000
         protocol: tcp
         mode: host
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
     volumes:
       - locale:/app/locale
       - media:/app/media/
@@ -40,14 +40,14 @@ services:
       - DJANGO_SETTINGS_MODULE=config.settings.production
     command: /start
 
-  postgres:
-    image: docker.io/clinic_postgres:latest
-    volumes:
-      - production_postgres_data:/var/lib/postgresql/data
-      - production_postgres_data_backups:/backups
-    environment:
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-    ports:
-      - "5432:5432"
+  # postgres:
+  #   image: telasttechnologies/clinic_postgres:main
+  #   volumes:
+  #     - production_postgres_data:/var/lib/postgresql/data
+  #     - production_postgres_data_backups:/backups
+  #   environment:
+  #     - POSTGRES_DB=${POSTGRES_DB}
+  #     - POSTGRES_USER=${POSTGRES_USER}
+  #     - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+  #   ports:
+  #     - "5432:5432"
