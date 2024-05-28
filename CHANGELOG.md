@@ -2,6 +2,17 @@
 
 
 
+## v0.3.0 (2024-05-28)
+
+### Feature
+
+* feat: push postgres image ([`018abdc`](https://github.com/telast-technologies/clinic/commit/018abdc7690ec4491aef35de8273730a6004c18a))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of https://github.com/telast-technologies/clinic ([`3375702`](https://github.com/telast-technologies/clinic/commit/33757024b19f787eff8ec076200868ff4df2ce48))
+
+
 ## v0.2.0 (2024-05-28)
 
 ### Feature
