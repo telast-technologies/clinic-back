@@ -40,19 +40,19 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Start Clean
-        run: docker compose -f local.yml down -v
+        run: docker compose -f docker-compose-local.yml down -v
 
       - name: Build
-        run: docker compose -f local.yml build
+        run: docker compose -f docker-compose-local.yml build
 
       - name: Run Django Tests
-        run: docker compose -f local.yml run django coverage run -m pytest
+        run: docker compose -f docker-compose-local.yml run django coverage run -m pytest
 
       - name: Run Check Coverage Percentage
-        run: docker compose -f local.yml run django coverage report --fail-under=100
+        run: docker compose -f docker-compose-local.yml run django coverage report --fail-under=100
 
       - name: Tear Down
-        run: docker compose -f local.yml down -v
+        run: docker compose -f docker-compose-local.yml down -v
 
   release:
     runs-on: [ubuntu-latest]
