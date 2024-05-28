@@ -94,8 +94,8 @@ jobs:
             type=registry,ref=${{ env.IMAGE_NAME }}
           build-args: "DJANGO_ENV"
 
-        
-          
+
+
       - name: Python Semantic Release
         uses: python-semantic-release/python-semantic-release@master
         with:
