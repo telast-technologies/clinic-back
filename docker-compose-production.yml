@@ -16,8 +16,8 @@ services:
     volumes:
       - .:/app:z
     env_file:
-      - ./docker/.envs/.django
-      - ./docker/.envs/.postgres
+      - ./docker/.envs/.production/.django
+      - ./docker/.envs/.production/.postgres
     environment:
       - OPENBLAS_NUM_THREADS=1
     ports:
@@ -34,4 +34,4 @@ services:
       - clinic_production_postgres_data:/var/lib/postgresql/data
       - clinic_production_postgres_data_backups:/backups
     env_file:
-      - ./docker/.envs/.postgres
+      - ./docker/.envs/.production/.postgres

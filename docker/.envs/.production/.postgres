@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=clinic
+POSTGRES_USER=i9NsPmQxS6UxZrTyAfGhJ3LtE5DyWvVb
+POSTGRES_PASSWORD=w4GtN5qVoJzKHrD3cLyFxBoY9rS1U8TxMfB2Qs0PeLjUiCgA3nXkWdR2EzOp3JvK
