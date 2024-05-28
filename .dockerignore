@@ -10,4 +10,4 @@
 venv
 .git
 .envs/
-fortuneit/media/
+/media/

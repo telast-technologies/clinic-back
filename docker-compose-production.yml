@@ -8,7 +8,7 @@ volumes:
 
 services:
   django:
-    image: docker.io/clinic_django:main
+    image: docker.io/clinic_django:latest
     ports:
       - target: 8000
         published: 8000
@@ -41,7 +41,7 @@ services:
     command: /start
 
   postgres:
-    image: docker.io/clinic_postgres:main
+    image: docker.io/clinic_postgres:latest
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
