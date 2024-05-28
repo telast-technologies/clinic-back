@@ -2,6 +2,25 @@
 
 
 
+## v0.2.0 (2024-05-28)
+
+### Feature
+
+* feat: push postgres image ([`94effb8`](https://github.com/telast-technologies/clinic/commit/94effb8fcba666a4a453e7c2fc058928276579fa))
+
+* feat: push postgres image ([`db948ce`](https://github.com/telast-technologies/clinic/commit/db948ce515abcbe4274e4acd2e367eb901b2a810))
+
+* feat: push postgres image ([`5de93be`](https://github.com/telast-technologies/clinic/commit/5de93be079c536c594ee47f2736e3b946df7482a))
+
+* feat: push postgres image ([`58277d8`](https://github.com/telast-technologies/clinic/commit/58277d8cedd4effcf4a3213452b542476c994a1d))
+
+* feat: push postgres image ([`c5fec78`](https://github.com/telast-technologies/clinic/commit/c5fec782f972631ae88a3780a9ee20aa0e00450e))
+
+* feat: push postgres image ([`9a57202`](https://github.com/telast-technologies/clinic/commit/9a5720216e5e8ae68024bd393efac81e348abc45))
+
+* feat: push db image ([`9544f4b`](https://github.com/telast-technologies/clinic/commit/9544f4bf2424b9af89c0a18e2be0f9a28efae75b))
+
+
 ## v0.1.3 (2024-05-28)
 
 ### Fix
