@@ -81,7 +81,7 @@ jobs:
           tags: |
             type=ref,event=branch
 
-      - name: Build and push Docker image
+      - name: Build and push Django image
         id: build-and-push
         uses: docker/build-push-action@v5
         with:
@@ -94,6 +94,18 @@ jobs:
             type=registry,ref=${{ env.IMAGE_NAME }}
           build-args: "DJANGO_ENV"
 
+      - name: Build and push DB image
+        id: build-and-push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: "./docker/production/postgres/Dockerfile"
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ vars.DOCKER_USERNAME }}/clinic_postgres:${{ steps.meta.outputs.version }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: |
+            type=registry,ref=${{ env.IMAGE_NAME }}
+          build-args: "DJANGO_ENV"
 
 
       - name: Python Semantic Release
