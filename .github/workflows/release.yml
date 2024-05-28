@@ -2,6 +2,8 @@
 env:
   DOCKER_BUILDKIT: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
+  DJANGO_IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
+  POSTGRES_IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_postgres
   ENVIRONMENT: ${{ vars.ENVIRONMENT }} # This should be different per environment but the github plan doesn't support environments
 
 on:
@@ -72,7 +74,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ env.DJANGO_IMAGE_NAME }} ${{ env.POSTGRES_IMAGE_NAME }}
           tags: |
             type=ref,event=branch
 
@@ -86,7 +88,7 @@ jobs:
           tags: ${{ vars.DOCKER_USERNAME }}/clinic_django:${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ env.IMAGE_NAME }}
+            type=registry,ref=${{ env.DJANGO_IMAGE_NAME }}
           build-args: "ENVIRONMENT"
 
       - name: Build and push DB image
@@ -99,7 +101,7 @@ jobs:
           tags: ${{ vars.DOCKER_USERNAME }}/postgres_django:${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ env.IMAGE_NAME }}-postgres
+            type=registry,ref=${{ env.DJANGO_IMAGE_NAME }}
           build-args: "ENVIRONMENT"
 
       - name: Python Semantic Release
