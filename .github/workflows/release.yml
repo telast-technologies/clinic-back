@@ -4,7 +4,7 @@ name: Tag new release
 env:
   DOCKER_BUILDKIT: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
-  IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
+  IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django:latest
   DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the github plan doens't support environments
 
 on:
