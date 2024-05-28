@@ -9,7 +9,7 @@ drf-spectacular-sidecar==2024.5.1 # https://pypi.org/project/drf-spectacular-sid
 dj-rest-auth==6.0.0 # https://dj-rest-auth.readthedocs.io/en/latest/
 django-filter==24.2 # https://django-filter.readthedocs.io/en/stable/
 nested-multipart-parser==1.5.0 # https://pypi.org/project/nested-multipart-parser/
-django-fsm==2.8.1 # https://github.com/viewflow/django-fsm
+django-fsm==3.0.0 # https://github.com/viewflow/django-fsm
 django-fsm-admin2==0.1.3 # https://pypi.org/project/django-fsm-admin2/
 cryptography==42.0.7 # https://pypi.org/project/cryptography/
 djangorestframework-simplejwt==5.3.1 # https://pypi.org/project/djangorestframework-simplejwt/
