@@ -88,7 +88,7 @@ jobs:
           context: .
           file: "./docker/production/django/Dockerfile"
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ secrets.DOCKER_USERNAME }}/clinic_django:${{ steps.meta.outputs.version }}
+          tags: ${{ vars.DOCKER_USERNAME }}/clinic_django:${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
             type=registry,ref=${{ env.IMAGE_NAME }}
