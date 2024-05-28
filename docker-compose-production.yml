@@ -1,37 +1,33 @@
-version: "3"
+version: '3.8'
 
 volumes:
-  clinic_production_postgres_data: {}
-  clinic_production_postgres_data_backups: {}
-
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+  locale: {}
+  media: {}
 services:
   django: &django
-    build:
-      context: .
-      dockerfile: ./docker/production/django/Dockerfile
-    image: clinic_production_django
-    container_name: clinic_production_django
+    image: telasttechnologies/clinic_django:latest
+    ports:
+      - target: 8000
+        published: 8000
+        protocol: tcp
+        mode: host # only accessible form localhost, access through 443 port on reverse proxy
     depends_on:
       - postgres
+      - redis
     volumes:
-      - .:/app:z
+     - locale:/app/locale
+     - media:/app/media/
     env_file:
       - ./docker/.envs/.production/.django
       - ./docker/.envs/.production/.postgres
-    environment:
-      - OPENBLAS_NUM_THREADS=1
-    ports:
-      - "8000:8000"
     command: /start
 
   postgres:
-    build:
-      context: .
-      dockerfile: ./docker/production/postgres/Dockerfile
-    image: clinic_production_postgres
-    container_name: clinic_production_postgres
+    image: telasttechnologies/clinic_postgres:main
     volumes:
-      - clinic_production_postgres_data:/var/lib/postgresql/data
-      - clinic_production_postgres_data_backups:/backups
+      - production_postgres_data:/var/lib/postgresql/data
+      - production_postgres_data_backups:/backups
     env_file:
       - ./docker/.envs/.production/.postgres
