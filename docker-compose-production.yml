@@ -7,7 +7,7 @@ volumes:
   media: {}
 services:
   django: &django
-    image: telast.tech:5443/clinic_django:latest
+    image: telasttechnologies/clinic_django:latest
     ports:
       - target: 8000
         published: 8000
@@ -41,7 +41,7 @@ services:
 
 
   postgres:
-    image: telast.tech:5443/clinic_postgres:latest
+    image: telasttechnologies/clinic_postgres:latest
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
