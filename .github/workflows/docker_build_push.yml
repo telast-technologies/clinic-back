@@ -6,12 +6,15 @@ on:
 
 env:
   IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
-  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the github plan doens't support environments
+  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the GitHub plan doesn't support environments
 
 jobs:
   deploy:
-    runs-on: [self-hosted]
-    concurrency: build
+    runs-on: self-hosted
+    concurrency:
+      group: build
+      cancel-in-progress: true
+
     steps:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -19,9 +22,12 @@ jobs:
           registry: ${{ vars.DOCKER_REGISTRY }}
           username: ${{ vars.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - uses: actions/checkout@v4
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -34,14 +40,14 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push Docker image
+      - name: Build and Push Docker Image
         id: build-and-push
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: "./docker/production/django/Dockerfile"
-          push: ${{ github.event_name != 'pull_request' }}
+          file: ./docker/production/django/Dockerfile
+          push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:main
-          build-args: "DJANGO_ENV"
+          build-args: DJANGO_ENV=${{ env.DJANGO_ENV }}
