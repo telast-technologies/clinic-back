@@ -107,7 +107,7 @@ indent_size = 2
 [tool.poetry]
 name = "clinic"
 description = "clinic"
-version = "0.1.0"
+version = "0.1.1"
 readme = "README.md"
 authors = ["ahmed hatem"]
 classifiers = [

@@ -2,6 +2,19 @@
 
 
 
+## v0.1.1 (2024-05-28)
+
+### Fix
+
+* fix: self hosted ([`d34d29c`](https://github.com/telast-technologies/clinic/commit/d34d29c9f027fe535328f59711cfc06163a57df1))
+
+* fix: self hosted ([`4c7115a`](https://github.com/telast-technologies/clinic/commit/4c7115a45cfad7b843be4dbd36537e30fa0173b9))
+
+### Unknown
+
+* Merge branch &#39;main&#39; of https://github.com/telast-technologies/clinic ([`3f1673d`](https://github.com/telast-technologies/clinic/commit/3f1673dce3d1673195f3a3372d10e4d327d139b2))
+
+
 ## v0.1.0 (2024-05-28)
 
 ### Build
