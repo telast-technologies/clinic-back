@@ -2,7 +2,7 @@
 env:
   DOCKER_BUILDKIT: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
-  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the github plan doesn't support environments
+  ENVIRONMENT: ${{ vars.ENVIRONMENT }} # This should be different per environment but the github plan doesn't support environments
 
 on:
   push:
@@ -87,7 +87,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
             type=registry,ref=${{ env.IMAGE_NAME }}
-          build-args: "DJANGO_ENV"
+          build-args: "ENVIRONMENT"
 
       - name: Build and push DB image
         id: build-and-push-postgres
@@ -99,8 +99,8 @@ jobs:
           tags: ${{ vars.DOCKER_USERNAME }}/postgres_django:${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: |
-            type=registry,ref=${{ env.IMAGE_NAME }}-dependent1
-          build-args: "DEPENDENT_ENV1"
+            type=registry,ref=${{ env.IMAGE_NAME }}-postgres
+          build-args: "ENVIRONMENT"
 
       - name: Python Semantic Release
         uses: python-semantic-release/python-semantic-release@master
