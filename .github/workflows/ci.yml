@@ -5,7 +5,7 @@ env:
   DOCKER_BUILDKIT: 1
   COMPOSE_DOCKER_CLI_BUILD: 1
   IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
-  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the GitHub plan doesn't support environments
+  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the github plan doens't support environments
 
 on:
   pull_request:
@@ -18,32 +18,23 @@ concurrency:
 
 jobs:
   linter:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.11'
-
-      - name: Cache pip
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-
+      # Consider using pre-commit.ci for open source project
       - name: Run pre-commit
         uses: pre-commit/action@v3.0.1
 
+  # With no caching at all the entire ci process takes 4m 30s to complete!
   pytest:
-    runs-on: [ubuntu-latest]
+    runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Code Repository
         uses: actions/checkout@v4
@@ -51,18 +42,8 @@ jobs:
       - name: Start Clean
         run: docker compose -f docker-compose-local.yml down -v
 
-      - name: Cache Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile') }}
-          restore-keys: |
-            ${{ runner.os }}-docker-
-
       - name: Build
-        run: |
-          docker buildx create --use --name builder --driver docker-container
-          docker buildx build --cache-from=type=local,src=/tmp/.buildx-cache --cache-to=type=local,dest=/tmp/.buildx-cache --tag ${{ env.IMAGE_NAME }} -f docker-compose-local.yml .
+        run: docker compose -f docker-compose-local.yml build
 
       - name: Run Django Tests
         run: docker compose -f docker-compose-local.yml run django coverage run -m pytest
