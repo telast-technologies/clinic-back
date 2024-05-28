@@ -1,5 +1,4 @@
 from django.utils import timezone
-from clinic.visits.flows import VisitFlow
 from drf_spectacular.utils import (
     OpenApiExample,
     OpenApiParameter,
@@ -30,6 +29,7 @@ from clinic.visits.api.v1.serializers import (
     VisitDetailSerializer,
 )
 from clinic.visits.filters import ChargeItemFilter, ChargeServiceFilter, SelectVisitFilter, TimeSlotFilter, VisitFilter
+from clinic.visits.flows import VisitFlow
 from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
 
 
@@ -48,6 +48,7 @@ class VisitViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Visit to be viewed or edited.
     """
+
     queryset = Visit.objects.all()
     serializer_class = CreateVisitSerializer
     flow_class = VisitFlow

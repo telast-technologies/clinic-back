@@ -1,7 +1,7 @@
-
 from django.db import transaction
 
 from clinic.visits.flows import VisitFlow
+
 
 class VisitService:
     def __init__(self, visit):

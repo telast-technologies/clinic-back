@@ -12,4 +12,3 @@ STORAGES = {
         "BACKEND": "django.core.files.storage.FileSystemStorage",
     }
 }
-

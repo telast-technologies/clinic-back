@@ -5,8 +5,9 @@ on:
     types: [published]
 
 env:
-  IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
-  DJANGO_ENV: ${{ vars.DJANGO_ENV }} # This should be different per environment but the github plan doens't support environments
+  DJANGO_IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_django
+  POSTGRES_IMAGE_NAME: ${{ vars.DOCKER_REGISTRY }}/clinic_postgres
+  ENVIRONMENT: ${{ vars.ENVIRONMENT }} # This should be different per environment but the github plan doens't support environments
 
 jobs:
   deploy:
@@ -26,7 +27,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.IMAGE_NAME }}
+          images: ${{ env.DJANGO_IMAGE_NAME }}
           tags: |
             type=ref,event=tag
             type=ref,event=pr
@@ -34,14 +35,26 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build and push Docker image
+      - name: Build and push Django image
         id: build-and-push
         uses: docker/build-push-action@v5
         with:
           context: .
           file: "./docker/production/django/Dockerfile"
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{vars.DOCKER_USERNAME }}/clinic_django:${{ steps.meta.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}:main
-          build-args: "DJANGO_ENV"
+          cache-from: type=registry,ref=${{ env.DJANGO_IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          build-args: "ENVIRONMENT"
+
+      - name: Build and push DB image
+        id: build-and-push-postgres
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: "./docker/production/postgres/Dockerfile"
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{vars.DOCKER_USERNAME }}/clinic_postgres:${{ steps.meta.outputs.version }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ env.POSTGRES_IMAGE_NAME }}:${{ steps.meta.outputs.version }}
+          build-args: "ENVIRONMENT"

@@ -53,7 +53,6 @@ class VisitAdmin(admin.ModelAdmin):
     search_fields = ["uid"]
     inlines = [ChargeItemInline, ChargeServiceInline]
 
-
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return False
 
