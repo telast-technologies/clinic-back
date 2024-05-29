@@ -1,8 +1,7 @@
 from config.settings.base import *  # noqa
-from config.settings.base import INSTALLED_APPS, MIDDLEWARE, env
+from config.settings.base import MIDDLEWARE, env
 
-# https://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
-INSTALLED_APPS += ["whitenoise.runserver_nostatic"]
+
 # SECURITY WARNING: don't run with debug turned on in production!
 MIDDLEWARE += ["whitenoise.middleware.WhiteNoiseMiddleware"]
 # SECURITY
