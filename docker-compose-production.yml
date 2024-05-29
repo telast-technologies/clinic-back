@@ -8,9 +8,7 @@ services:
       - target: 8080
         published: 8080
         protocol: tcp
-
-    networks:
-      - nginx_default
+        mode: host
     depends_on:
       - postgres
     volumes:
@@ -24,8 +22,6 @@ services:
   postgres:
     image: telasttechnologies/clinic_postgres:main
     container_name: postgres-clinic
-    networks:
-      - nginx_default
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
@@ -38,7 +34,3 @@ volumes:
   production_postgres_data_backups: {}
   locale: {}
   media: {}
-
-networks:
-  nginx_default:
-    external: true
