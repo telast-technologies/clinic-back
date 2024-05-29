@@ -4,7 +4,7 @@ USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
 # Security
 INTERNAL_IPS=0.0.0.0
-ALLOWED_HOSTS=0.0.0.0
+ALLOWED_HOSTS=0.0.0.0,41.32.250.108,telast.tech
 SECRET_KEY=eFZFWdNAd4mIjn9Z2zIcsj4vblyoU5HVNtHaBL7CtieDLqU8OngU4B6GgvlA5XCV
 FERNET_KEY=c-wf1MA-43s-jBh9nxe9Wmtyyjt_Nqslhnby5flk9a0=
 # Password Reset
