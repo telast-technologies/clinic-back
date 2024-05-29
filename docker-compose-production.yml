@@ -16,8 +16,6 @@ services:
     env_file:
       - ./docker/.envs/.production/.django
       - ./docker/.envs/.production/.postgres
-    environment:
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     command: /start
 
   postgres:
