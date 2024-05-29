@@ -26,11 +26,12 @@ SECURE_HSTS_PRELOAD = env.bool("DJANGO_SECURE_HSTS_PRELOAD", default=True)
 # https://docs.djangoproject.com/en/dev/ref/middleware/#x-content-type-options-nosniff
 SECURE_CONTENT_TYPE_NOSNIFF = env.bool("DJANGO_SECURE_CONTENT_TYPE_NOSNIFF", default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-browser-xss-filter
-CSRF_TRUSTED_ORIGINS = ["https://*.clinic.telast.tech", "https://*.telast.tech"]
+CSRF_TRUSTED_ORIGINS = ["https://*.clinic.telast.tech"]
+# https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
+CORS_ALLOWED_ORIGINS = ["https://*.clinic.telast.tech"]
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # noqa: F405
-
 # STATIC
 # ------------------------
 STORAGES = {
