@@ -18,8 +18,4 @@ application = get_wsgi_application()
 if DEBUG:
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 else:
-    from whitenoise.django import DjangoWhiteNoise
-
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
-    # serve static files in production
-    application = DjangoWhiteNoise(application)
