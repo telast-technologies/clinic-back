@@ -1,14 +1,12 @@
 from config.settings.base import *  # noqa
-from config.settings.base import MIDDLEWARE, env
+from config.settings.base import INSTALLED_APPS, MIDDLEWARE, env
 
+# https://whitenoise.evans.io/en/stable/django.html#using-whitenoise-in-development
+INSTALLED_APPS += ["whitenoise.runserver_nostatic"]
 # SECURITY WARNING: don't run with debug turned on in production!
 MIDDLEWARE += ["whitenoise.middleware.WhiteNoiseMiddleware"]
 # SECURITY
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-# https://docs.djangoproject.com/en/dev/ref/settings/#secure-ssl-redirect
-SECURE_SSL_REDIRECT = env.bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#session-cookie-secure
 SESSION_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-secure
