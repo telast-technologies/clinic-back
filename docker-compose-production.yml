@@ -11,6 +11,8 @@ services:
     volumes:
      - locale:/app/locale
      - media:/app/media/
+     - static: /app/static
+     - staticfiles: /app/staticfiles
     env_file:
       - ./docker/.envs/.production/.django
       - ./docker/.envs/.production/.postgres
@@ -33,6 +35,8 @@ volumes:
   production_postgres_data_backups: {}
   locale: {}
   media: {}
+  static: {}
+  staticfiles: {}
 
 networks:
   nginx_default:
