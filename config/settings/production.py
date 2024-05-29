@@ -1,7 +1,6 @@
 from config.settings.base import *  # noqa
 from config.settings.base import MIDDLEWARE, env
 
-
 # SECURITY WARNING: don't run with debug turned on in production!
 MIDDLEWARE += ["whitenoise.middleware.WhiteNoiseMiddleware"]
 # SECURITY
