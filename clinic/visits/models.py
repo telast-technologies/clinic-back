@@ -1,7 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator
 from django.db import models
-from django_fsm import FSMField, transition
 
 from clinic.utils.models import TimestampMixin, UUIDMixin
 from clinic.utils.validators import RangeValidator
@@ -36,32 +35,15 @@ class Visit(UUIDMixin, TimestampMixin):
         max_length=20,
         choices=VisitType.choices,
     )
-    status = FSMField(
+    status = models.CharField(
         max_length=20,
         choices=VisitStatus.choices,
         default=VisitStatus.BOOKED,
-        protected=True,
     )
 
     class Meta:
         ordering = ("-created_at",)
         unique_together = ("patient", "date")
-
-    @transition(field=status, source=[VisitStatus.BOOKED], target=VisitStatus.CHECKED_IN)
-    def check_in(self):  # pragma: no cover
-        pass
-
-    @transition(field=status, source=[VisitStatus.CHECKED_IN], target=VisitStatus.FINANCIALLY_CLEARED)
-    def financially_clear(self):  # pragma: no cover
-        pass
-
-    @transition(field=status, source=[VisitStatus.FINANCIALLY_CLEARED], target=VisitStatus.CHECKED_OUT)
-    def check_out(self):  # pragma: no cover
-        pass
-
-    @transition(field=status, source=[VisitStatus.BOOKED, VisitStatus.CHECKED_IN], target=VisitStatus.CANCELLED)
-    def cancel(self, reason):  # pragma: no cover
-        pass
 
 
 class ChargeService(UUIDMixin, TimestampMixin):

@@ -22,9 +22,9 @@ env = environ.Env(
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent / "clinic"
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 
-
+APP_DIR = BASE_DIR / "clinic"
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -63,8 +63,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "notifications",
     "anymail",
-    "django_fsm",
-    "fsm_admin2",
+    "viewflow",
 ]
 
 CONTROLLED_LOCAL_APPS = [
@@ -194,13 +193,17 @@ LANGUAGE_CODE = "en-us"
 # https://docs.djangoproject.com/en/dev/ref/settings/#locale-paths
 LOCALE_PATH = BASE_DIR / "locale"
 LOCALE_PATHS = [str(LOCALE_PATH)]
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 # Add STATIC_ROOT setting
-STATIC_ROOT = os.path.join("staticfiles")
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 STATIC_URL = "static/"
+
+# https://docs.djangoproject.com/en/5.0/topics/files/#std:setting-MEDIA_ROOT
+# Add MEDIA_ROOT setting
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_URL = "/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

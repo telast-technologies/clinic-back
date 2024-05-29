@@ -2,7 +2,6 @@ from typing import Any
 
 from django.contrib import admin
 from django.http import HttpRequest
-from fsm_admin2.admin import FSMTransitionMixin
 
 from clinic.visits.models import ChargeItem, ChargeService, Visit
 
@@ -48,17 +47,12 @@ class ChargeServiceInline(admin.TabularInline):
 
 
 @admin.register(Visit)
-class VisitAdmin(FSMTransitionMixin, admin.ModelAdmin):
-    list_display = ["uid", "patient", "date", "time", "status"]
-    list_filter = ["status", "date", "visit_type"]
+class VisitAdmin(admin.ModelAdmin):
+    list_display = ["uid", "status", "patient", "date", "time"]
+    list_filter = ["date", "visit_type", "status"]
     search_fields = ["uid"]
-    fsm_fields = [
-        "status",
-    ]  # list your fsm fields
     inlines = [ChargeItemInline, ChargeServiceInline]
-    # you can override templates for transition arguments form view and transition buttons row
-    fsm_transition_form_template = "fsm_admin2/fsm_transition_form.html"  # default value
-    fsm_transition_buttons_template = "fsm_admin2/fsm_transition_buttons.html"  # default value
+
 
     def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
         return False

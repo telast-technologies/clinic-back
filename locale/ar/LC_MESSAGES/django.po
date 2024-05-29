@@ -1,0 +1,217 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-05-29 02:49+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: clinic/approvals/admin.py:91
+msgid "Join Request Approved"
+msgstr ""
+
+#: clinic/approvals/admin.py:106
+msgid "Join Request Rejected"
+msgstr ""
+
+#: clinic/approvals/choices.py:6
+msgid "Pending"
+msgstr ""
+
+#: clinic/approvals/choices.py:7
+msgid "Approved"
+msgstr ""
+
+#: clinic/approvals/choices.py:8
+msgid "Rejected"
+msgstr ""
+
+#: clinic/patients/api/v1/validators.py:10
+msgid "Invalid patient"
+msgstr ""
+
+#: clinic/staff/models.py:19
+msgid "Client Admin"
+msgstr ""
+
+#: clinic/system_management/admin_actions.py:12
+msgid "the status change to Active"
+msgstr ""
+
+#: clinic/system_management/admin_actions.py:17
+msgid "the status change to Deactive"
+msgstr ""
+
+#: clinic/system_management/choices.py:6
+msgid "Free Trial"
+msgstr ""
+
+#: clinic/system_management/choices.py:7
+msgid "Basic"
+msgstr ""
+
+#: clinic/system_management/choices.py:8
+msgid "Premium"
+msgstr ""
+
+#: clinic/system_management/choices.py:9
+msgid "One Time Payment"
+msgstr ""
+
+#: clinic/system_management/models.py:33
+msgid "Patient Count Capacity/Hours"
+msgstr ""
+
+#: clinic/system_management/tests/test_validators.py:19
+#: clinic/system_management/validators.py:10
+msgid "Package is not active"
+msgstr ""
+
+#: clinic/users/admin.py:16
+msgid "Personal info"
+msgstr ""
+
+#: clinic/users/admin.py:18
+msgid "Permissions"
+msgstr ""
+
+#: clinic/users/admin.py:29
+msgid "Important dates"
+msgstr ""
+
+#: clinic/users/api/v1/serializers.py:52
+msgid "Password"
+msgstr ""
+
+#: clinic/users/api/v1/serializers.py:53
+msgid "Password must be at least 8 characters long."
+msgstr ""
+
+#: clinic/users/api/v1/serializers.py:58
+msgid "Password confirmation"
+msgstr ""
+
+#: clinic/users/api/v1/serializers.py:59
+msgid "Enter the same password as before, for verification."
+msgstr ""
+
+#: clinic/users/api/v1/validators.py:22
+msgid "invalid or missing password"
+msgstr ""
+
+#: clinic/users/choices.py:6
+msgid "Staff"
+msgstr ""
+
+#: clinic/users/choices.py:7
+msgid "Other"
+msgstr ""
+
+#: clinic/utils/validators.py:14
+msgid "invalid range"
+msgstr ""
+
+#: clinic/visits/api/v1/validators.py:22
+msgid "Patient does not belong to the same clinic."
+msgstr ""
+
+#: clinic/visits/api/v1/validators.py:27
+msgid "Selected time slot is not available."
+msgstr ""
+
+#: clinic/visits/api/v1/validators.py:41 clinic/visits/api/v1/validators.py:55
+msgid "Invalid visit data"
+msgstr ""
+
+#: clinic/visits/choices.py:6
+msgid "Monday"
+msgstr ""
+
+#: clinic/visits/choices.py:7
+msgid "Tuesday"
+msgstr ""
+
+#: clinic/visits/choices.py:8
+msgid "Wednesday"
+msgstr ""
+
+#: clinic/visits/choices.py:9
+msgid "Thursday"
+msgstr ""
+
+#: clinic/visits/choices.py:10
+msgid "Friday"
+msgstr ""
+
+#: clinic/visits/choices.py:11
+msgid "Saturday"
+msgstr ""
+
+#: clinic/visits/choices.py:12
+msgid "Sunday"
+msgstr ""
+
+#: clinic/visits/choices.py:16
+msgid "Booked"
+msgstr ""
+
+#: clinic/visits/choices.py:17
+msgid "Checked In"
+msgstr ""
+
+#: clinic/visits/choices.py:18
+msgid "Financially Cleared"
+msgstr ""
+
+#: clinic/visits/choices.py:19
+msgid "Checked Out"
+msgstr ""
+
+#: clinic/visits/choices.py:20
+msgid "Cancelled"
+msgstr ""
+
+#: clinic/visits/choices.py:24
+msgid "Scheduled"
+msgstr ""
+
+#: clinic/visits/choices.py:25
+msgid "Walk In"
+msgstr ""
+
+#: clinic/visits/choices.py:29
+msgid "Up Coming"
+msgstr ""
+
+#: clinic/visits/choices.py:30
+msgid "Pasr"
+msgstr ""
+
+#: clinic/visits/choices.py:31
+msgid "All"
+msgstr ""
+
+#: config/middleware.py:19
+msgid "Unable to determine your clinic or access is restricted."
+msgstr ""
+
+#: config/settings/base.py:180
+msgid "English"
+msgstr ""
+
+#: config/settings/base.py:181
+msgid "Arabic"
+msgstr ""

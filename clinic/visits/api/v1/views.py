@@ -1,4 +1,5 @@
 from django.utils import timezone
+from clinic.visits.flows import VisitFlow
 from drf_spectacular.utils import (
     OpenApiExample,
     OpenApiParameter,
@@ -47,9 +48,9 @@ class VisitViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows Visit to be viewed or edited.
     """
-
     queryset = Visit.objects.all()
     serializer_class = CreateVisitSerializer
+    flow_class = VisitFlow
     filterset_class = VisitFilter
     permission_classes = [IsStaff]
 

@@ -5,6 +5,8 @@ set -o pipefail
 set -o nounset
 # Apply database migrations
 python manage.py migrate
+python manage.py makemessages -l ar
+python manage.py makemessages -l en
 # Collect static files
 python manage.py collectstatic --noinput
 # Start server

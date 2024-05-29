@@ -5,17 +5,17 @@ volumes:
   production_postgres_data_backups: {}
   locale: {}
   media: {}
+
 services:
   django: &django
-    image: telasttechnologies/clinic_django:latest
+    image: telasttechnologies/clinic_django:main
     ports:
       - target: 8000
         published: 8000
         protocol: tcp
-        mode: host # only accessible form localhost, access through 443 port on reverse proxy
+        mode: host # only accessible from localhost, access through 443 port on reverse proxy
     depends_on:
       - postgres
-      - redis
     volumes:
      - locale:/app/locale
      - media:/app/media/
