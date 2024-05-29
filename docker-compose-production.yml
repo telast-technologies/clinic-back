@@ -9,10 +9,10 @@ services:
     depends_on:
       - postgres
     volumes:
-     - locale:/app/locale
+     - locale:/app/locale/
      - media:/app/media/
-     - static: /app/static
-     - staticfiles: /app/staticfiles
+     - static:/app/static/
+     - staticfiles:/app/staticfiles/
     env_file:
       - ./docker/.envs/.production/.django
       - ./docker/.envs/.production/.postgres
@@ -28,7 +28,6 @@ services:
       - production_postgres_data_backups:/backups
     env_file:
       - ./docker/.envs/.production/.postgres
-
 
 volumes:
   production_postgres_data: {}
