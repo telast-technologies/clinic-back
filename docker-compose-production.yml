@@ -1,19 +1,11 @@
 version: '3.8'
 
-volumes:
-  production_postgres_data: {}
-  production_postgres_data_backups: {}
-  locale: {}
-  media: {}
-
 services:
   django: &django
     image: telasttechnologies/clinic_django:main
-    ports:
-      - target: 8080
-        published: 8080
-        protocol: tcp
-        mode: host # only accessible from localhost, access through 443 port on reverse proxy
+    container_name: django-clinic
+    networks:
+      - nginx_default
     depends_on:
       - postgres
     volumes:
@@ -26,8 +18,22 @@ services:
 
   postgres:
     image: telasttechnologies/clinic_postgres:main
+    container_name: postgres-clinic
+    networks:
+      - nginx_default
     volumes:
       - production_postgres_data:/var/lib/postgresql/data
       - production_postgres_data_backups:/backups
     env_file:
       - ./docker/.envs/.production/.postgres
+
+
+volumes:
+  production_postgres_data: {}
+  production_postgres_data_backups: {}
+  locale: {}
+  media: {}
+
+networks:
+  nginx_default:
+    external: true
