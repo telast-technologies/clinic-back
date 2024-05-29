@@ -10,8 +10,8 @@ services:
   django: &django
     image: telasttechnologies/clinic_django:main
     ports:
-      - target: 8000
-        published: 8000
+      - target: 8080
+        published: 8080
         protocol: tcp
         mode: host # only accessible from localhost, access through 443 port on reverse proxy
     depends_on:
