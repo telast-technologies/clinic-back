@@ -6,8 +6,12 @@ volumes:
   locale: {}
   media: {}
 
+networks:
+  nginx_default:
+    external: true
+
 services:
-  django: &django
+  django:
     image: telasttechnologies/clinic_django:main
     ports:
       - target: 8080
@@ -17,12 +21,14 @@ services:
     depends_on:
       - postgres
     volumes:
-     - locale:/app/locale
-     - media:/app/media/
+      - locale:/app/locale
+      - media:/app/media/
     env_file:
       - ./docker/.envs/.production/.django
       - ./docker/.envs/.production/.postgres
     command: /start
+    networks:
+      - nginx_default
 
   postgres:
     image: telasttechnologies/clinic_postgres:main
@@ -31,3 +37,5 @@ services:
       - production_postgres_data_backups:/backups
     env_file:
       - ./docker/.envs/.production/.postgres
+    networks:
+      - nginx_default
