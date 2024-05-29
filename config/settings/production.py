@@ -5,8 +5,6 @@ from config.settings.base import INSTALLED_APPS, MIDDLEWARE, env
 INSTALLED_APPS += ["whitenoise.runserver_nostatic"]
 # SECURITY WARNING: don't run with debug turned on in production!
 MIDDLEWARE += ["whitenoise.middleware.WhiteNoiseMiddleware"]
-
-
 # SECURITY
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-proxy-ssl-header
