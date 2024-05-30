@@ -1,4 +1,4 @@
 -r base.txt
 
 whiteNoise==6.6.0 # https://whitenoise.readthedocs.io/en/latest/#
-django-storages==1.14.2  # https://github.com/jschneier/django-storages
+django-storages==1.14.3  # https://github.com/jschneier/django-storages
