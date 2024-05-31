@@ -33,7 +33,7 @@ class PatientReport(UUIDMixin, TimestampMixin):
         related_name="reports",
         db_index=True,
     )
-    document = models.FileField(upload_to="media/patients/reports")
+    document = models.FileField(upload_to="patients/reports")
 
     class Meta:
         ordering = ("-created_at",)

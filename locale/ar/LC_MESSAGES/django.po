@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-05-29 02:49+0000\n"
+"POT-Creation-Date: 2024-05-31 05:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -208,10 +208,10 @@ msgstr ""
 msgid "Unable to determine your clinic or access is restricted."
 msgstr ""
 
-#: config/settings/base.py:180
+#: config/settings/base.py:179
 msgid "English"
 msgstr ""
 
-#: config/settings/base.py:181
+#: config/settings/base.py:180
 msgid "Arabic"
 msgstr ""

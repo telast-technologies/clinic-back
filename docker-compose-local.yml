@@ -21,7 +21,7 @@ services:
     environment:
       - OPENBLAS_NUM_THREADS=1
     ports:
-      - "8080:8080"
+      - "8000:8000"
     command: /start
 
   postgres:
