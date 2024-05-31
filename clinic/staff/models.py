@@ -2,10 +2,10 @@ from django.conf import settings
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from clinic.utils.models import TimestampMixin, UUIDMixin
+from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
-class Staff(UUIDMixin, TimestampMixin):
+class Staff(UUIDAutoFieldMixin, TimestampMixin):
     clinic = models.ForeignKey(
         "system_management.Clinic", on_delete=models.CASCADE, related_name="staffs", db_index=True, editable=False
     )

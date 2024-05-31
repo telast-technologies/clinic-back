@@ -114,16 +114,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "clinic.wsgi.application"
-
-
 # corsheaders
 # https://github.com/adamchainz/django-cors-headers
 CORS_ALLOW_ALL_ORIGINS = True
-
 # Authentication
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
-
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -140,8 +136,6 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
-
-
 # JWT Token - https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timezone.timedelta(minutes=540),
@@ -161,15 +155,12 @@ REST_AUTH = {
     "OLD_PASSWORD_FIELD_ENABLED": True,
     "JWT_AUTH_HTTPONLY": False,
 }
-
 # allowed permissions apps
 ALLOWED_PERMISSIONS_APPS = [app.split(".")[-1] for app in EXPOSED_LOCAL_APPS]
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {"default": env.db("DATABASE_URL")}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 DATABASES["default"]["ENGINE"] = "django.db.backends.postgresql"
-
 # Internationalization
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -196,18 +187,14 @@ LOCALE_PATHS = [str(LOCALE_PATH)]
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 # Add STATIC_ROOT setting
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
 STATIC_URL = "static/"
-
 # https://docs.djangoproject.com/en/5.0/topics/files/#std:setting-MEDIA_ROOT
 # Add MEDIA_ROOT setting
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
 # rest_framework
 # https://www.django-rest-framework.org/
 REST_FRAMEWORK = {
@@ -223,12 +210,10 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ),
 }
-
 # django-phonenumber-field
 PHONENUMBER_DEFAULT_REGION = "EG"
 # password reset
 PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL = env.str("PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL", "http://localhost:3000")
-
 # drf-spectacular
 # https://github.com/tfranzel/drf-spectacular
 SPECTACULAR_SETTINGS = {
@@ -263,7 +248,6 @@ CSP_IMG_SRC = ("'self'", "data:")
 # Option: CDN
 CSP_DEFAULT_SRC = ("'self'", "'unsafe-inline'", "cdn.jsdelivr.net")
 CSP_IMG_SRC = ("'self'", "data:", "cdn.jsdelivr.net")
-
 # drf-nested-multipart-parser
 # https://github.com/tfranzel/drf-nested-multipart-parser
 DRF_NESTED_MULTIPART_PARSER = {
@@ -274,7 +258,6 @@ DRF_NESTED_MULTIPART_PARSER = {
     # # if is set to False, dict python is returned
     "querydict": False,
 }
-
 # Email
 EMAIL_BACKEND = "anymail.backends.brevo.EmailBackend"  # or sendgrid.EmailBackend, or...
 ANYMAIL = {

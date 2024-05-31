@@ -8,16 +8,24 @@ MIDDLEWARE += ["whitenoise.middleware.WhiteNoiseMiddleware"]
 # SECURITY
 # ------------------------------------------------------------------------------
 CSRF_TRUSTED_ORIGINS = ["https://*.clinic.telast.tech"]
-# https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
-CORS_ALLOWED_ORIGINS = ["https://*.clinic.telast.tech"]
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # noqa: F405
 # STATIC
 # ------------------------
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/3.2/howto/static-files/
+AWS_ACCESS_KEY_ID = env.str("AWS_ACCESS_KEY_ID", default="")
+AWS_SECRET_ACCESS_KEY = env.str("AWS_SECRET_ACCESS_KEY", default="")
+AWS_STORAGE_BUCKET_NAME = env.str("AWS_STORAGE_BUCKET_NAME", default="")
+AWS_S3_REGION_NAME = env.str("AWS_S3_REGION_NAME", default="")
+AWS_S3_OBJECT_PARAMETERS = {
+    "CacheControl": "max-age=86400",
+}
+# https://docs.djangoproject.com/en/4.0/ref/settings/#storage-backends
 STORAGES = {
     "default": {
-        "BACKEND": "django.core.files.storage.FileSystemStorage",
+        "BACKEND": "config.storages.MediaS3Storage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",

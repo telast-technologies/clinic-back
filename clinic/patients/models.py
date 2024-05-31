@@ -2,10 +2,10 @@ from django.conf import settings
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
-from clinic.utils.models import TimestampMixin, UUIDMixin
+from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
-class Patient(UUIDMixin, TimestampMixin):
+class Patient(UUIDAutoFieldMixin, TimestampMixin):
     clinic = models.ForeignKey(
         "system_management.Clinic", on_delete=models.CASCADE, related_name="patients", db_index=True, editable=False
     )
@@ -26,7 +26,7 @@ class Patient(UUIDMixin, TimestampMixin):
         return f"{self.get_full_name()}"
 
 
-class PatientReport(UUIDMixin, TimestampMixin):
+class PatientReport(UUIDAutoFieldMixin, TimestampMixin):
     patient = models.ForeignKey(
         "patients.Patient",
         on_delete=models.CASCADE,

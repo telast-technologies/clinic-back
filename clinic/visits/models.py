@@ -2,7 +2,7 @@ from django.contrib.postgres.fields import ArrayField
 from django.core.validators import MinValueValidator
 from django.db import models
 
-from clinic.utils.models import TimestampMixin, UUIDMixin
+from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 from clinic.utils.validators import RangeValidator
 from clinic.visits.choices import DaysOfWeek, VisitStatus, VisitType
 
@@ -27,7 +27,7 @@ class TimeSlot(models.Model):
         return f"Days: [{', '.join(self.days)}] | {self.start_time} - {self.end_time}"
 
 
-class Visit(UUIDMixin, TimestampMixin):
+class Visit(UUIDAutoFieldMixin, TimestampMixin):
     patient = models.ForeignKey("patients.Patient", on_delete=models.CASCADE, related_name="visits")
     date = models.DateField()
     time = models.TimeField()
@@ -46,7 +46,7 @@ class Visit(UUIDMixin, TimestampMixin):
         unique_together = ("patient", "date")
 
 
-class ChargeService(UUIDMixin, TimestampMixin):
+class ChargeService(UUIDAutoFieldMixin, TimestampMixin):
     visit = models.ForeignKey(Visit, on_delete=models.CASCADE, related_name="charge_services")
     service = models.ForeignKey("healthcare.Service", on_delete=models.CASCADE, related_name="charge_services")
 
@@ -59,7 +59,7 @@ class ChargeService(UUIDMixin, TimestampMixin):
         return self.service.charge
 
 
-class ChargeItem(UUIDMixin, TimestampMixin):
+class ChargeItem(UUIDAutoFieldMixin, TimestampMixin):
     visit = models.ForeignKey(Visit, on_delete=models.CASCADE, related_name="charge_items")
     supply = models.ForeignKey("inventory.Supply", on_delete=models.CASCADE, related_name="charge_items")
     quantity = models.FloatField(validators=[MinValueValidator(0.0)])

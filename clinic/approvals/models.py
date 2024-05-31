@@ -5,10 +5,10 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from clinic.approvals.choices import JoinRequestStatusChoices
 from clinic.system_management.validators import PackageActiveStatusValidator
-from clinic.utils.models import TimestampMixin, UUIDMixin
+from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
-class JoinRequest(UUIDMixin, TimestampMixin):
+class JoinRequest(UUIDAutoFieldMixin, TimestampMixin):
     administrator_first_name = models.CharField(max_length=100)
     administrator_last_name = models.CharField(max_length=100)
     administrator_email = models.EmailField()

@@ -6,10 +6,10 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from clinic.system_management.choices import PackageChoices
-from clinic.utils.models import TimestampMixin, UUIDMixin
+from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
-class Package(UUIDMixin, TimestampMixin):
+class Package(UUIDAutoFieldMixin, TimestampMixin):
     name = models.CharField(max_length=100, unique=True, choices=PackageChoices.choices)
     description = models.TextField(null=True, blank=True)
     price = models.PositiveIntegerField()
@@ -22,7 +22,7 @@ class Package(UUIDMixin, TimestampMixin):
         return self.name
 
 
-class Clinic(UUIDMixin, TimestampMixin):
+class Clinic(UUIDAutoFieldMixin, TimestampMixin):
     package = models.ForeignKey("Package", on_delete=models.RESTRICT, related_name="clinics")
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
@@ -63,7 +63,7 @@ class Clinic(UUIDMixin, TimestampMixin):
         return slot_dict
 
 
-class ExposedPermission(UUIDMixin, TimestampMixin):
+class ExposedPermission(UUIDAutoFieldMixin, TimestampMixin):
     permission = models.OneToOneField(Permission, on_delete=models.CASCADE)
 
     class Meta:

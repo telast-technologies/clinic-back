@@ -5,10 +5,10 @@ from django.db.models.functions import Coalesce
 from django_extensions.db.fields import RandomCharField
 
 from clinic.inventory.managers import SupplyManager
-from clinic.utils.models import TimestampMixin, UUIDMixin
+from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
-class Supply(TimestampMixin, UUIDMixin):
+class Supply(TimestampMixin, UUIDAutoFieldMixin):
     clinic = models.ForeignKey(
         "system_management.Clinic", on_delete=models.CASCADE, related_name="supplies", editable=False
     )

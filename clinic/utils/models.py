@@ -11,7 +11,7 @@ class TimestampMixin(models.Model):
         abstract = True
 
 
-class UUIDMixin(models.Model):
+class UUIDAutoFieldMixin(models.Model):
     uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
 
     class Meta:
