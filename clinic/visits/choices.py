@@ -27,5 +27,5 @@ class VisitType(models.TextChoices):
 
 class TimeChoices(models.TextChoices):
     UPCOMING = "upcoming", _("Up Coming")
-    PAST = "past", _("Pasr")
+    PAST = "past", _("Past")
     ALL = "all", _("All")
