@@ -5,6 +5,20 @@ from clinic.system_management.services.clinic_service import ClinicService
 from clinic.visits.choices import VisitType
 
 
+class TimeSlotValidator:
+    requires_context = True
+
+    def __call__(self, attrs: dict, serializer: serializers.ModelSerializer) -> None:
+        start_time = attrs.get("start_time", getattr(serializer.instance, "start_time", None))
+        end_time = attrs.get("end_time", getattr(serializer.instance, "end_time", None))
+
+        if not start_time or not end_time:
+            raise serializers.ValidationError({"time_slot": _("Invalid missing time slot.")})
+
+        if start_time and end_time and end_time < start_time:
+            raise serializers.ValidationError({"time_slot": _("Invalid range of time slot.")})
+
+
 class VisitValidator:
     requires_context = True
 
@@ -29,6 +43,7 @@ class VisitValidator:
 
 class ChargeItemValidator:
     requires_context = True
+    messge = _("Invalid visit data")
 
     def __call__(self, attrs: dict, serializer: serializers.ModelSerializer) -> None:
         if any(
@@ -38,11 +53,12 @@ class ChargeItemValidator:
                 attrs["quantity"] > attrs["supply"].remains,
             ]
         ):
-            raise serializers.ValidationError({"visit": _("Invalid visit data")})
+            raise serializers.ValidationError({"visit": self.messge})
 
 
 class ChargeServiceValidator:
     requires_context = True
+    message = _("Invalid visit data")
 
     def __call__(self, attrs: dict, serializer: serializers.ModelSerializer) -> None:
         if any(
@@ -52,4 +68,4 @@ class ChargeServiceValidator:
                 not attrs["service"].active,
             ]
         ):
-            raise serializers.ValidationError({"visit": _("Invalid visit data")})
+            raise serializers.ValidationError({"visit": self.message})

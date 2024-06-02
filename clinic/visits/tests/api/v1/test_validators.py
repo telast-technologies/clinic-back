@@ -13,10 +13,109 @@ from clinic.visits.api.v1.serializers import (
     ChargeServiceModifySerializer,
     CreateChargeItemSerializer,
     CreateVisitSerializer,
+    TimeSlotSerializer,
 )
-from clinic.visits.api.v1.validators import ChargeItemValidator, ChargeServiceValidator, VisitValidator
+from clinic.visits.api.v1.validators import (
+    ChargeItemValidator,
+    ChargeServiceValidator,
+    TimeSlotValidator,
+    VisitValidator,
+)
 from clinic.visits.choices import VisitStatus, VisitType
-from clinic.visits.factories import VisitFactory
+from clinic.visits.factories import TimeSlotFactory, VisitFactory
+
+
+class TimeSlotValidatorTest(TestCase):
+    def setUp(self):
+        self.staff = StaffFactory.create(is_client_admin=True)
+        self.factory = RequestFactory()
+
+        self.request = RequestFactory().get("/")
+        self.request.user = self.staff.user
+
+        self.slot = TimeSlotFactory.create(
+            start_time=timezone.now(), end_time=timezone.now() + timezone.timedelta(hours=1)
+        )
+        self.validator = TimeSlotValidator()
+
+    def test_valid_time_slot(self):
+        """Test that a valid time slot passes validation."""
+        valid_data = {"start_time": timezone.now(), "end_time": timezone.now() + timezone.timedelta(hours=1)}
+        serializer = TimeSlotSerializer(data=valid_data, context={"request": self.request})
+
+        self.validator(valid_data, serializer)
+
+    def test_invalid_time_slot(self):
+        """Test that a valid time slot passes validation."""
+        valid_data = {"start_time": timezone.now(), "end_time": timezone.now() - timezone.timedelta(hours=1)}
+        serializer = TimeSlotSerializer(data=valid_data, context={"request": self.request})
+
+        with self.assertRaises(serializers.ValidationError) as context:
+            self.validator(valid_data, serializer)
+
+        self.assertIn("time_slot", context.exception.detail)
+        self.assertIn("Invalid range of time slot.", context.exception.detail["time_slot"])
+
+    def test_invalid_missing_start_time(self):
+        """Test that an invalid time slot raises a ValidationError."""
+        invalid_data = {
+            "start_time": timezone.now(),
+        }
+        serializer = TimeSlotSerializer(data=invalid_data, context={"request": self.request})
+        with self.assertRaises(serializers.ValidationError) as context:
+            self.validator(invalid_data, serializer)
+
+        self.assertIn("time_slot", context.exception.detail)
+        self.assertIn("Invalid missing time slot.", context.exception.detail["time_slot"])
+
+    def test_invalid_missing_end_time(self):
+        """Test that an invalid time slot raises a ValidationError."""
+        invalid_data = {
+            "end_time": timezone.now(),
+        }
+        serializer = TimeSlotSerializer(data=invalid_data, context={"request": self.request})
+        with self.assertRaises(serializers.ValidationError) as context:
+            self.validator(invalid_data, serializer)
+
+        self.assertIn("time_slot", context.exception.detail)
+        self.assertIn("Invalid missing time slot.", context.exception.detail["time_slot"])
+
+    def tests_missing_time_slot(self):
+        """Test that a missing time slot raises a ValidationError."""
+        missing_time_slot_data = {"start_time": None, "end_time": None}
+        serializer = TimeSlotSerializer(data=missing_time_slot_data, context={"request": self.request})
+
+        with self.assertRaises(serializers.ValidationError) as context:
+            self.validator(missing_time_slot_data, serializer)
+
+        self.assertIn("time_slot", context.exception.detail)
+        self.assertIn("Invalid missing time slot.", context.exception.detail["time_slot"])
+
+    def test_invalid_update_end_time(self):
+        """Test that a missing end_time does not raise a ValidationError."""
+        missing_end_time_data = {
+            "start_time": timezone.now() + timezone.timedelta(hours=2),
+        }
+        serializer = TimeSlotSerializer(instance=self.slot, data=missing_end_time_data)
+
+        with self.assertRaises(serializers.ValidationError) as context:
+            self.validator(missing_end_time_data, serializer)
+
+        self.assertIn("time_slot", context.exception.detail)
+        self.assertIn("Invalid range of time slot.", context.exception.detail["time_slot"])
+
+    def test_invalid_update_start_time(self):
+        """Test that a missing start_time does not raise a ValidationError."""
+        missing_start_time_data = {
+            "end_time": timezone.now() - timezone.timedelta(hours=2),
+        }
+        serializer = TimeSlotSerializer(instance=self.slot, data=missing_start_time_data)
+
+        with self.assertRaises(serializers.ValidationError) as context:
+            self.validator(missing_start_time_data, serializer)
+
+        self.assertIn("time_slot", context.exception.detail)
+        self.assertIn("Invalid range of time slot.", context.exception.detail["time_slot"])
 
 
 class VisitValidatorTest(TestCase):
