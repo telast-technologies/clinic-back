@@ -2,7 +2,7 @@ from django.test import RequestFactory, TestCase
 from rest_framework import serializers
 
 from clinic.patients.api.v1.serializers import PatientReportSerializer
-from clinic.patients.api.v1.validators import PatientReportValidator
+from clinic.patients.api.validators import PatientReportValidator
 from clinic.patients.factories import PatientFactory
 from clinic.staff.factories import StaffFactory
 from clinic.system_management.factories import ClinicFactory

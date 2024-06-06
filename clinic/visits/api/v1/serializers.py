@@ -5,12 +5,7 @@ from clinic.healthcare.api.v1.serializers import ServiceDetailSerializer
 from clinic.inventory.api.v1.serializers import SupplyDetailSerializer
 from clinic.patients.api.v1.serializers import PatientSerializer
 from clinic.users.api.defaults import CurrentClinicDefault
-from clinic.visits.api.v1.validators import (
-    ChargeItemValidator,
-    ChargeServiceValidator,
-    TimeSlotValidator,
-    VisitValidator,
-)
+from clinic.visits.api.validators import ChargeItemValidator, ChargeServiceValidator, TimeSlotValidator, VisitValidator
 from clinic.visits.choices import VisitType
 from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
 
@@ -93,7 +88,7 @@ class ChargeItemDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChargeItem
-        fields = "__all__"
+        exclude = ["visit"]
 
 
 class ChargeServiceModifySerializer(serializers.ModelSerializer):
@@ -109,7 +104,7 @@ class ChargeServiceDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChargeService
-        fields = "__all__"
+        exclude = ["visit"]
 
 
 class AvailableSlotListSerializer(serializers.Serializer):

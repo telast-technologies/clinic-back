@@ -77,6 +77,7 @@ EXPOSED_LOCAL_APPS = [
     "clinic.healthcare",
     "clinic.inventory",
     "clinic.visits",
+    "clinic.invoices",
 ]
 
 LOCAL_APPS = CONTROLLED_LOCAL_APPS + EXPOSED_LOCAL_APPS

@@ -14,6 +14,7 @@ from rest_framework.response import Response
 from clinic.system_management.services.clinic_service import ClinicService
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsAdminStaff, IsStaff
+from clinic.visits.api.mixins import VisitFlowViewMixin
 from clinic.visits.api.v1.serializers import (
     AvailableDateListSerializer,
     AvailableSlotListSerializer,
@@ -29,7 +30,6 @@ from clinic.visits.api.v1.serializers import (
     VisitDetailSerializer,
 )
 from clinic.visits.filters import ChargeItemFilter, ChargeServiceFilter, SelectVisitFilter, TimeSlotFilter, VisitFilter
-from clinic.visits.flows import VisitFlow
 from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
 
 
@@ -44,14 +44,13 @@ class TimeSlotViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     permission_classes = [IsAdminStaff]
 
 
-class VisitViewSet(viewsets.ModelViewSet):
+class VisitViewSet(VisitFlowViewMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows Visit to be viewed or edited.
     """
 
     queryset = Visit.objects.all()
     serializer_class = CreateVisitSerializer
-    flow_class = VisitFlow
     filterset_class = VisitFilter
     permission_classes = [IsStaff]
 

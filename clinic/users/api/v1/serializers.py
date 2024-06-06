@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
 from clinic.system_management.api.v1.serializers import ClinicSerializer
-from clinic.users.api.v1.validators import PasswordValidator
+from clinic.users.api.validators import PasswordValidator
 from clinic.users.models import User
 
 

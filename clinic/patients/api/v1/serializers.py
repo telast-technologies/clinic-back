@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from clinic.patients.api.v1.validators import PatientReportValidator
+from clinic.patients.api.validators import PatientReportValidator
 from clinic.patients.models import Patient, PatientReport
 from clinic.users.api.defaults import CurrentClinicDefault
 

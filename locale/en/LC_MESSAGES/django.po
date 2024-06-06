@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-01 00:47+0000\n"
+"POT-Creation-Date: 2024-06-06 11:14+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 msgid "Rejected"
 msgstr ""
 
-#: clinic/patients/api/v1/validators.py:10
+#: clinic/patients/api/validators.py:10
 msgid "Invalid patient"
 msgstr ""
 
@@ -107,7 +107,7 @@ msgstr ""
 msgid "Enter the same password as before, for verification."
 msgstr ""
 
-#: clinic/users/api/v1/validators.py:22
+#: clinic/users/api/validators.py:22
 msgid "invalid or missing password"
 msgstr ""
 
@@ -119,19 +119,23 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: clinic/utils/validators.py:14
-msgid "invalid range"
+#: clinic/visits/api/validators.py:16
+msgid "Invalid missing time slot."
 msgstr ""
 
-#: clinic/visits/api/v1/validators.py:22
+#: clinic/visits/api/validators.py:19
+msgid "Invalid range of time slot."
+msgstr ""
+
+#: clinic/visits/api/validators.py:36
 msgid "Patient does not belong to the same clinic."
 msgstr ""
 
-#: clinic/visits/api/v1/validators.py:27
+#: clinic/visits/api/validators.py:41
 msgid "Selected time slot is not available."
 msgstr ""
 
-#: clinic/visits/api/v1/validators.py:41 clinic/visits/api/v1/validators.py:55
+#: clinic/visits/api/validators.py:46 clinic/visits/api/validators.py:61
 msgid "Invalid visit data"
 msgstr ""
 
@@ -207,10 +211,10 @@ msgstr ""
 msgid "Unable to determine your clinic or access is restricted."
 msgstr ""
 
-#: config/settings/base.py:170
+#: config/settings/base.py:171
 msgid "English"
 msgstr ""
 
-#: config/settings/base.py:171
+#: config/settings/base.py:172
 msgid "Arabic"
 msgstr ""

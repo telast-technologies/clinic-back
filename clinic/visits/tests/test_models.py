@@ -21,6 +21,12 @@ class VisitModelTest(TestCase):
         assert isinstance(self.visit, Visit)
         assert isinstance(self.visit.__str__(), str)
 
+    def test_display_charges(self):
+        item = ChargeItemFactory.create(visit=self.visit)
+        service = ChargeServiceFactory.create(visit=self.visit)
+
+        self.assertEqual(self.visit.charges, item.charge + service.charge)
+
 
 class ChargeItemModelTest(TestCase):
     def setUp(self):

@@ -15,12 +15,7 @@ from clinic.visits.api.v1.serializers import (
     CreateVisitSerializer,
     TimeSlotSerializer,
 )
-from clinic.visits.api.v1.validators import (
-    ChargeItemValidator,
-    ChargeServiceValidator,
-    TimeSlotValidator,
-    VisitValidator,
-)
+from clinic.visits.api.validators import ChargeItemValidator, ChargeServiceValidator, TimeSlotValidator, VisitValidator
 from clinic.visits.choices import VisitStatus, VisitType
 from clinic.visits.factories import TimeSlotFactory, VisitFactory
 
@@ -140,7 +135,7 @@ class VisitValidatorTest(TestCase):
 
         self.validator = VisitValidator()
 
-    @patch("clinic.visits.api.v1.validators.ClinicService.get_available_slots")
+    @patch("clinic.visits.api.validators.ClinicService.get_available_slots")
     def test_patient_clinic_mismatch(self, mock_get_available_slots):
         serializer = CreateVisitSerializer(instance=self.visit, context={"request": self.request})
         attrs = {"patient": self.other_patient}
@@ -150,7 +145,7 @@ class VisitValidatorTest(TestCase):
         self.assertIn("patient", context.exception.detail)
         self.assertIn("Patient does not belong to the same clinic.", context.exception.detail["patient"])
 
-    @patch("clinic.visits.api.v1.validators.ClinicService.get_available_slots")
+    @patch("clinic.visits.api.validators.ClinicService.get_available_slots")
     def test_time_slot_unavailable(self, mock_get_available_slots):
         mock_get_available_slots.return_value = []  # Mock no available slots
         serializer = CreateVisitSerializer(instance=self.visit, context={"request": self.request})
@@ -161,7 +156,7 @@ class VisitValidatorTest(TestCase):
         self.assertIn("time", context.exception.detail)
         self.assertIn("Selected time slot is not available.", context.exception.detail["time"])
 
-    @patch("clinic.visits.api.v1.validators.ClinicService.get_available_slots")
+    @patch("clinic.visits.api.validators.ClinicService.get_available_slots")
     def test_valid_data(self, mock_get_available_slots):
         # Mock available slots to include the visit time
         mock_get_available_slots.return_value = [self.visit.time]

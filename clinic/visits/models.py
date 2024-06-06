@@ -31,6 +31,13 @@ class Visit(UUIDAutoFieldMixin, TimestampMixin):
         choices=VisitStatus.choices,
         default=VisitStatus.BOOKED,
     )
+    comment = models.TextField(null=True, blank=True)
+
+    @property
+    def charges(self):
+        item_charges = sum([item.charge for item in self.charge_items.all()])
+        service_charges = sum([service.charge for service in self.charge_services.all()])
+        return item_charges + service_charges
 
     class Meta:
         ordering = ("-created_at",)

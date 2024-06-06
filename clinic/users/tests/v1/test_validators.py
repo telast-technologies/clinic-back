@@ -2,7 +2,7 @@ from django.test import RequestFactory, TestCase
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from clinic.users.api.v1.validators import PasswordValidator
+from clinic.users.api.validators import PasswordValidator
 
 
 class PasswordValidatorTest(TestCase):
