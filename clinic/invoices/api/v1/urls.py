@@ -10,6 +10,6 @@ router.register("invoice", InvoiceViewSet, basename="invoice")
 app_name = "invoices"
 
 urlpatterns = [
-    path("invoice_select", SelectInvoiceView.as_view(), name="invoice_select"),
+    path("invoice_select/", SelectInvoiceView.as_view(), name="invoice_select"),
     path("", include(router.urls)),
 ]
