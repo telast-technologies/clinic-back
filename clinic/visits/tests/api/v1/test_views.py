@@ -24,19 +24,20 @@ class VisitViewSetTest(TestCase):
 
     def test_retrieve_visit_list(self):
         # Test retrieving visit list
-        VisitFactory.create(
-            patient=PatientFactory.create(clinic=self.staff.clinic),
-        )
+        VisitFactory.create()
 
         url = reverse("api:v1:visits:visit-list")
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 1)
 
     def test_invalid_retrieve_visit_detail(self):
         visit = VisitFactory.create()
         # Test retrieving visit detail
         url = reverse("api:v1:visits:visit-detail", kwargs={"pk": visit.pk})
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_valid_retrieve_visit_detail(self):
@@ -46,6 +47,7 @@ class VisitViewSetTest(TestCase):
         )
         url = reverse("api:v1:visits:visit-detail", kwargs={"pk": visit.pk})
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_create_visit_invalid_missing_data(self):
@@ -53,6 +55,7 @@ class VisitViewSetTest(TestCase):
         url = reverse("api:v1:visits:visit-list")
         invalid_data = {}
         response = self.client.post(url, invalid_data, format="json")
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_update_visit_missing_instance(self):
@@ -60,12 +63,14 @@ class VisitViewSetTest(TestCase):
         url = reverse("api:v1:visits:visit-detail", kwargs={"pk": 9999})  # Non-existing visit pk
         data = {}
         response = self.client.put(url, data, format="json")
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_visit_missing_instance(self):
         # Test deleting non-existing visit instance
         url = reverse("api:v1:visits:visit-detail", kwargs={"pk": 9999})  # Non-existing visit pk
         response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_other_delete_visit_invalid_data(self):
@@ -74,6 +79,7 @@ class VisitViewSetTest(TestCase):
         url = reverse("api:v1:visits:visit-detail", kwargs={"pk": visit.pk})
         data = {}
         response = self.client.delete(url, data, format="json")
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_other_update_visit_invalid_data(self):
@@ -82,6 +88,7 @@ class VisitViewSetTest(TestCase):
         url = reverse("api:v1:visits:visit-detail", kwargs={"pk": visit.pk})
         data = {}
         response = self.client.patch(url, data, format="json")
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_create_visit_valid_data(self):
@@ -99,6 +106,7 @@ class VisitViewSetTest(TestCase):
         }
 
         response = self.client.post(url, data, format="json")
+
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_update_visit_valid_data(self):
@@ -113,6 +121,7 @@ class VisitViewSetTest(TestCase):
         data = {"date": monday, "time": "10:00:00"}
 
         response = self.client.patch(url, data, format="json")
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_check_in_visit_valid_data(self):
@@ -257,12 +266,14 @@ class ChargeItemViewSetTest(TestCase):
         visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
         url = reverse("api:v1:visits:charge_items-list") + f"?visit={visit.pk}"
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_invalid_retrieve_charge_items(self):
         # Test retrieving charge items
         url = reverse("api:v1:visits:charge_items-list")
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_delete_charge_items_missing_visit(self):
@@ -272,6 +283,7 @@ class ChargeItemViewSetTest(TestCase):
 
         url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": item.pk})
         response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_delete_charge_items_not_found(self):
@@ -280,6 +292,7 @@ class ChargeItemViewSetTest(TestCase):
 
         url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": "99999"}) + f"?visit={visit.pk}"
         response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_valid_delete_charge_items(self):
@@ -289,6 +302,7 @@ class ChargeItemViewSetTest(TestCase):
 
         url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": item.pk}) + f"?visit={visit.pk}"
         response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_invalid_update_charge_items_missing_visit(self):
@@ -297,6 +311,7 @@ class ChargeItemViewSetTest(TestCase):
         item = ChargeItemFactory.create(visit=visit)
         url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": item.pk})
         response = self.client.patch(url, {})
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_update_charge_items_not_found(self):
@@ -305,6 +320,7 @@ class ChargeItemViewSetTest(TestCase):
 
         url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": "99999"}) + f"?visit={visit.pk}"
         response = self.client.patch(url, {})
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_valid_update_charge_items(self):
@@ -323,6 +339,7 @@ class ChargeItemViewSetTest(TestCase):
         # Test retrieving charge items
         url = reverse("api:v1:visits:charge_items-list")
         response = self.client.post(url, {})
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_valid_create_charge_items(self):
@@ -348,12 +365,14 @@ class ChargeServiceViewSetTest(TestCase):
         visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
         url = reverse("api:v1:visits:charge_services-list") + f"?visit={visit.pk}"
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
     def test_invalid_retrieve_charge_services(self):
         # Test retrieving charge services
         url = reverse("api:v1:visits:charge_services-list")
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_delete_charge_services_missing_visit(self):
@@ -363,6 +382,7 @@ class ChargeServiceViewSetTest(TestCase):
 
         url = reverse("api:v1:visits:charge_services-detail", kwargs={"pk": service.pk})
         response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_invalid_delete_charge_services_not_found(self):
@@ -371,6 +391,7 @@ class ChargeServiceViewSetTest(TestCase):
 
         url = reverse("api:v1:visits:charge_services-detail", kwargs={"pk": "99999"}) + f"?visit={visit.pk}"
         response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_valid_delete_charge_services(self):
@@ -380,12 +401,14 @@ class ChargeServiceViewSetTest(TestCase):
 
         url = reverse("api:v1:visits:charge_services-detail", kwargs={"pk": service.pk}) + f"?visit={visit.pk}"
         response = self.client.delete(url)
+
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_invalid_create_charge_services(self):
         # Test retrieving charge services
         url = reverse("api:v1:visits:charge_services-list")
         response = self.client.post(url, {})
+
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_valid_create_charge_services(self):
@@ -411,6 +434,7 @@ class VisitAvailableDatesViewTest(TestCase):
         patient = PatientFactory.create(clinic=self.staff.clinic)
         url = reverse("api:v1:visits:slots_date_available", kwargs={"patient": f"{patient.pk}"})
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
 
@@ -425,4 +449,25 @@ class VisitAvailableSlotsViewTest(TestCase):
         # Test retrieving visit available slots
         url = reverse("api:v1:visits:slots_time_available", kwargs={"date": date(2024, 5, 27)})
         response = self.client.get(url)
+
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class SelectVisitViewSetTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.staff = StaffFactory.create()
+        self.visit = VisitFactory.create(
+            patient=PatientFactory.create(clinic=self.staff.clinic),
+        )
+        self.client.force_authenticate(user=self.staff.user)
+
+    def test_retrieve_select_visit_list(self):
+        # Test retrieving visit list
+        VisitFactory.create()
+
+        url = reverse("api:v1:visits:visit_select")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 1)

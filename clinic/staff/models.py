@@ -20,6 +20,7 @@ class Staff(UUIDAutoFieldMixin, TimestampMixin):
 
     class Meta:
         ordering = ("-created_at",)
+        verbose_name_plural = _("Staff")
         permissions = (("change_clinic", "Can Change Clinic"),)
 
     def __str__(self) -> str:

@@ -72,6 +72,9 @@ class SelectVisitView(generics.ListAPIView):
     filterset_class = SelectVisitFilter
     permission_classes = [IsStaff]
 
+    def get_queryset(self):
+        return self.queryset.filter(patient__clinic=self.request.user.staff.clinic)
+
 
 @extend_schema_view(
     update=extend_schema(

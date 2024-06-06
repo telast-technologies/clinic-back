@@ -14,3 +14,12 @@ class InvoiceSerializer(serializers.ModelSerializer):
         model = Invoice
         fields = "__all__"
         read_only_fields = ("visit",)
+
+
+class SelectVisitSerializer(serializers.ModelSerializer):
+    label = serializers.CharField(source="visit.uid", read_only=True)
+    value = serializers.CharField(source="uid", read_only=True)
+
+    class Meta:
+        model = Invoice
+        fields = ("label", "value")

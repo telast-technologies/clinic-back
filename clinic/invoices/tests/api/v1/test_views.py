@@ -71,3 +71,25 @@ class InvoiceViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(self.invoice.tax, 20)
+
+
+class SelectInvoiceViewSetTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.staff = StaffFactory.create()
+        self.visit = VisitFactory.create(
+            patient=PatientFactory.create(clinic=self.staff.clinic),
+        )
+        self.invoice = InvoiceFactory.create(visit=self.visit)
+
+        self.client.force_authenticate(user=self.staff.user)
+
+    def test_valid_retrieve_select_invoice_list(self):
+        # Test retrieving invoice list
+        InvoiceFactory.create()
+
+        url = reverse("api:v1:invoices:invoice_select")
+        response = self.client.get(url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(response.data["results"]), 1)
