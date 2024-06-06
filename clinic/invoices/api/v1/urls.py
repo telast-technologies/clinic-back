@@ -1,6 +1,7 @@
 from django.urls import include, path
-from clinic.invoices.api.v1.views import InvoiceViewSet
 from rest_framework.routers import DefaultRouter
+
+from clinic.invoices.api.v1.views import InvoiceViewSet
 
 router = DefaultRouter()
 

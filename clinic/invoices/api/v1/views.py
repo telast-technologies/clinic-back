@@ -1,5 +1,3 @@
-
-
 from rest_framework import mixins, viewsets
 
 from clinic.invoices.api.v1.serializers import InvoiceSerializer
@@ -22,6 +20,6 @@ class InvoiceViewSet(
     serializer_class = InvoiceSerializer
     filterset_class = InvoiceFilter
     permission_classes = [IsStaff]
-    
+
     def get_queryset(self):
         return self.queryset.filter(visit__patient__clinic=self.request.user.staff.clinic)

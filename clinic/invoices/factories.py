@@ -1,6 +1,6 @@
-
 from factory import Faker, SubFactory
 from factory.django import DjangoModelFactory
+
 
 class InvoiceFactory(DjangoModelFactory):
     class Meta:
