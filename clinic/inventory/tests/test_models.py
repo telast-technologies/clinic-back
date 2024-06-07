@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from clinic.inventory.factories import SupplyFactory
 from clinic.inventory.models import Supply
-from clinic.visits.factories import ChargeItemFactory
+from clinic.invoices.factories import ChargeItemFactory
 
 
 class SupplyModelTest(TestCase):

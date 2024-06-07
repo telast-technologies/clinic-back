@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-06 11:14+0000\n"
+"POT-Creation-Date: 2024-06-07 00:43+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,12 +38,20 @@ msgstr ""
 msgid "Rejected"
 msgstr ""
 
+#: clinic/invoices/api/validators.py:6 clinic/invoices/api/validators.py:21
+msgid "Invalid invoice data"
+msgstr ""
+
 #: clinic/patients/api/validators.py:10
 msgid "Invalid patient"
 msgstr ""
 
 #: clinic/staff/models.py:19
 msgid "Client Admin"
+msgstr ""
+
+#: clinic/staff/models.py:23 clinic/users/choices.py:6
+msgid "Staff"
 msgstr ""
 
 #: clinic/system_management/admin_actions.py:12
@@ -111,10 +119,6 @@ msgstr ""
 msgid "invalid or missing password"
 msgstr ""
 
-#: clinic/users/choices.py:6
-msgid "Staff"
-msgstr ""
-
 #: clinic/users/choices.py:7
 msgid "Other"
 msgstr ""
@@ -133,10 +137,6 @@ msgstr ""
 
 #: clinic/visits/api/validators.py:41
 msgid "Selected time slot is not available."
-msgstr ""
-
-#: clinic/visits/api/validators.py:46 clinic/visits/api/validators.py:61
-msgid "Invalid visit data"
 msgstr ""
 
 #: clinic/visits/choices.py:6

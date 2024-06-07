@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.utils import timezone
 
 from clinic.visits.choices import DaysOfWeek, TimeChoices
-from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
+from clinic.visits.models import TimeSlot, Visit
 
 
 class TimeSlotFilter(django_filters.FilterSet):
@@ -37,19 +37,3 @@ class SelectVisitFilter(django_filters.FilterSet):
     class Meta:
         model = Visit
         fields = ("uid", "status")
-
-
-class ChargeItemFilter(django_filters.FilterSet):
-    visit = django_filters.ModelChoiceFilter(queryset=Visit.objects.all(), field_name="visit", required=True)
-
-    class Meta:
-        model = ChargeItem
-        fields = ("uid", "visit", "supply")
-
-
-class ChargeServiceFilter(django_filters.FilterSet):
-    visit = django_filters.ModelChoiceFilter(queryset=Visit.objects.all(), field_name="visit", required=True)
-
-    class Meta:
-        model = ChargeService
-        fields = ("uid", "visit", "service")

@@ -5,12 +5,10 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
-from clinic.healthcare.factories import ServiceFactory
-from clinic.inventory.factories import SupplyFactory
 from clinic.patients.factories import PatientFactory
 from clinic.staff.factories import StaffFactory
 from clinic.visits.choices import VisitStatus, VisitType
-from clinic.visits.factories import ChargeItemFactory, ChargeServiceFactory, TimeSlotFactory, VisitFactory
+from clinic.visits.factories import TimeSlotFactory, VisitFactory
 
 
 class VisitViewSetTest(TestCase):
@@ -134,6 +132,7 @@ class VisitViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(visit.status, VisitStatus.CHECKED_IN)
+        self.assertTrue(hasattr(visit, "invoice"))
 
     def test_check_in_invalid_data(self):
         # Test updating visit with valid data
@@ -147,6 +146,7 @@ class VisitViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(visit.status, VisitStatus.CHECKED_OUT)
+        self.assertFalse(hasattr(visit, "invoice"))
 
     def test_financial_check_in_visit_valid_data(self):
         # Test updating visit with valid data
@@ -252,174 +252,6 @@ class VisitViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(visit.status, VisitStatus.CHECKED_OUT)
-
-
-class ChargeItemViewSetTest(TestCase):
-    def setUp(self):
-        self.staff = StaffFactory.create()
-
-        self.client = APIClient()
-        self.client.force_authenticate(user=self.staff.user)
-
-    def test_valid_retrieve_charge_items(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        url = reverse("api:v1:visits:charge_items-list") + f"?visit={visit.pk}"
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_invalid_retrieve_charge_items(self):
-        # Test retrieving charge items
-        url = reverse("api:v1:visits:charge_items-list")
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_delete_charge_items_missing_visit(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        item = ChargeItemFactory.create(visit=visit)
-
-        url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": item.pk})
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_delete_charge_items_not_found(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-
-        url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": "99999"}) + f"?visit={visit.pk}"
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_valid_delete_charge_items(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        item = ChargeItemFactory.create(visit=visit)
-
-        url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": item.pk}) + f"?visit={visit.pk}"
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-    def test_invalid_update_charge_items_missing_visit(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        item = ChargeItemFactory.create(visit=visit)
-        url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": item.pk})
-        response = self.client.patch(url, {})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_update_charge_items_not_found(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-
-        url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": "99999"}) + f"?visit={visit.pk}"
-        response = self.client.patch(url, {})
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_valid_update_charge_items(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        item = ChargeItemFactory.create(visit=visit)
-        url = reverse("api:v1:visits:charge_items-detail", kwargs={"pk": item.pk}) + f"?visit={visit.pk}"
-        response = self.client.patch(url, {"quantity": 5})
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-        item.refresh_from_db()
-
-        self.assertEqual(item.quantity, 5)
-
-    def test_invalid_create_charge_items(self):
-        # Test retrieving charge items
-        url = reverse("api:v1:visits:charge_items-list")
-        response = self.client.post(url, {})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_valid_create_charge_items(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        url = reverse("api:v1:visits:charge_items-list")
-        response = self.client.post(
-            url, {"quantity": 5, "visit": visit.pk, "supply": SupplyFactory.create(clinic=visit.patient.clinic).pk}
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-
-class ChargeServiceViewSetTest(TestCase):
-    def setUp(self):
-        self.staff = StaffFactory.create()
-
-        self.client = APIClient()
-        self.client.force_authenticate(user=self.staff.user)
-
-    def test_valid_retrieve_charge_services(self):
-        # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        url = reverse("api:v1:visits:charge_services-list") + f"?visit={visit.pk}"
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-    def test_invalid_retrieve_charge_services(self):
-        # Test retrieving charge services
-        url = reverse("api:v1:visits:charge_services-list")
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_delete_charge_services_missing_visit(self):
-        # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        service = ChargeServiceFactory.create(visit=visit)
-
-        url = reverse("api:v1:visits:charge_services-detail", kwargs={"pk": service.pk})
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_delete_charge_services_not_found(self):
-        # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-
-        url = reverse("api:v1:visits:charge_services-detail", kwargs={"pk": "99999"}) + f"?visit={visit.pk}"
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_valid_delete_charge_services(self):
-        # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        service = ChargeServiceFactory.create(visit=visit)
-
-        url = reverse("api:v1:visits:charge_services-detail", kwargs={"pk": service.pk}) + f"?visit={visit.pk}"
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-    def test_invalid_create_charge_services(self):
-        # Test retrieving charge services
-        url = reverse("api:v1:visits:charge_services-list")
-        response = self.client.post(url, {})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_valid_create_charge_services(self):
-        # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        url = reverse("api:v1:visits:charge_services-list")
-        response = self.client.post(
-            url, {"visit": visit.pk, "service": ServiceFactory.create(clinic=visit.patient.clinic).pk}
-        )
-
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
 class VisitAvailableDatesViewTest(TestCase):

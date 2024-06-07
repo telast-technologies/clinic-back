@@ -1,13 +1,6 @@
 from django.utils import timezone
-from drf_spectacular.utils import (
-    OpenApiExample,
-    OpenApiParameter,
-    OpenApiResponse,
-    OpenApiTypes,
-    extend_schema,
-    extend_schema_view,
-)
-from rest_framework import generics, mixins, status, views, viewsets
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
+from rest_framework import generics, status, views, viewsets
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
@@ -18,19 +11,14 @@ from clinic.visits.api.mixins import VisitFlowViewMixin
 from clinic.visits.api.v1.serializers import (
     AvailableDateListSerializer,
     AvailableSlotListSerializer,
-    ChargeItemDetailSerializer,
-    ChargeServiceDetailSerializer,
-    ChargeServiceModifySerializer,
-    CreateChargeItemSerializer,
     CreateVisitSerializer,
     SelectVisitSerializer,
     TimeSlotSerializer,
-    UpdateChargeItemSerializer,
     UpdateVisitSerializer,
     VisitDetailSerializer,
 )
-from clinic.visits.filters import ChargeItemFilter, ChargeServiceFilter, SelectVisitFilter, TimeSlotFilter, VisitFilter
-from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
+from clinic.visits.filters import SelectVisitFilter, TimeSlotFilter, VisitFilter
+from clinic.visits.models import TimeSlot, Visit
 
 
 class TimeSlotViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
@@ -74,79 +62,6 @@ class SelectVisitView(generics.ListAPIView):
 
     def get_queryset(self):
         return self.queryset.filter(patient__clinic=self.request.user.staff.clinic)
-
-
-@extend_schema_view(
-    update=extend_schema(
-        parameters=[
-            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-    partial_update=extend_schema(
-        parameters=[
-            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-    destroy=extend_schema(
-        parameters=[
-            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-)
-class ChargeItemViewSet(
-    mixins.CreateModelMixin,
-    mixins.ListModelMixin,
-    mixins.UpdateModelMixin,
-    mixins.DestroyModelMixin,
-    viewsets.GenericViewSet,
-):
-    """
-    API endpoint that allows ChargeItem to be viewed Created or edited.
-    """
-
-    queryset = ChargeItem.objects.all()
-    serializer_class = CreateChargeItemSerializer
-    filterset_class = ChargeItemFilter
-    permission_classes = [IsStaff]
-
-    def get_queryset(self, *args, **kwargs):
-        return self.queryset.filter(visit__patient__clinic=self.request.user.staff.clinic)
-
-    def get_serializer_class(self, *args, **kwargs):
-        if self.request.method in ["PUT", "PATCH"]:
-            return UpdateChargeItemSerializer
-        if self.request.method in SAFE_METHODS:
-            return ChargeItemDetailSerializer
-
-        return super().get_serializer_class(*args, **kwargs)
-
-
-@extend_schema_view(
-    destroy=extend_schema(
-        parameters=[
-            OpenApiParameter(name="visit", description="Visit ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-)
-class ChargeServiceViewSet(
-    mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet
-):
-    """
-    API endpoint that allows ChargeService to be created or viewed.
-    """
-
-    queryset = ChargeService.objects.all()
-    serializer_class = ChargeServiceModifySerializer
-    filterset_class = ChargeServiceFilter
-    permission_classes = [IsStaff]
-
-    def get_queryset(self):
-        return self.queryset.filter(visit__patient__clinic=self.request.user.staff.clinic)
-
-    def get_serializer_class(self):
-        if self.request.method in SAFE_METHODS:
-            return ChargeServiceDetailSerializer
-        return super().get_serializer_class()
 
 
 class VisitAvailableSlotsView(views.APIView):

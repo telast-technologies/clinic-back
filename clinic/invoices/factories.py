@@ -11,3 +11,20 @@ class InvoiceFactory(DjangoModelFactory):
     tax = Faker("pyint", min_value=0, max_value=100)
     discount = Faker("pyint", min_value=0, max_value=100)
     sub_total = Faker("pyint")
+
+
+class ChargeItemFactory(DjangoModelFactory):
+    class Meta:
+        model = "invoices.ChargeItem"
+
+    invoice = SubFactory("clinic.invoices.factories.InvoiceFactory")
+    supply = SubFactory("clinic.inventory.factories.SupplyFactory")
+    quantity = 1
+
+
+class ChargeServiceFactory(DjangoModelFactory):
+    class Meta:
+        model = "invoices.ChargeService"
+
+    invoice = SubFactory("clinic.invoices.factories.InvoiceFactory")
+    service = SubFactory("clinic.healthcare.factories.ServiceFactory")

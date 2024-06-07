@@ -25,20 +25,3 @@ class VisitFactory(DjangoModelFactory):
     time = datetime.now().time()
     status = VisitStatus.BOOKED
     visit_type = VisitType.SCHEDULED
-
-
-class ChargeItemFactory(DjangoModelFactory):
-    class Meta:
-        model = "visits.ChargeItem"
-
-    visit = SubFactory("clinic.visits.factories.VisitFactory")
-    supply = SubFactory("clinic.inventory.factories.SupplyFactory")
-    quantity = 1
-
-
-class ChargeServiceFactory(DjangoModelFactory):
-    class Meta:
-        model = "visits.ChargeService"
-
-    visit = SubFactory("clinic.visits.factories.VisitFactory")
-    service = SubFactory("clinic.healthcare.factories.ServiceFactory")

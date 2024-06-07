@@ -1,5 +1,4 @@
 from django.contrib.postgres.fields import ArrayField
-from django.core.validators import MinValueValidator
 from django.db import models
 
 from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
@@ -33,39 +32,6 @@ class Visit(UUIDAutoFieldMixin, TimestampMixin):
     )
     comment = models.TextField(null=True, blank=True)
 
-    @property
-    def charges(self):
-        item_charges = sum([item.charge for item in self.charge_items.all()])
-        service_charges = sum([service.charge for service in self.charge_services.all()])
-        return item_charges + service_charges
-
     class Meta:
         ordering = ("-created_at",)
         unique_together = ("patient", "date")
-
-
-class ChargeService(UUIDAutoFieldMixin, TimestampMixin):
-    visit = models.ForeignKey(Visit, on_delete=models.CASCADE, related_name="charge_services")
-    service = models.ForeignKey("healthcare.Service", on_delete=models.CASCADE, related_name="charge_services")
-
-    class Meta:
-        ordering = ("-created_at",)
-        unique_together = ("visit", "service")
-
-    @property
-    def charge(self):
-        return self.service.charge
-
-
-class ChargeItem(UUIDAutoFieldMixin, TimestampMixin):
-    visit = models.ForeignKey(Visit, on_delete=models.CASCADE, related_name="charge_items")
-    supply = models.ForeignKey("inventory.Supply", on_delete=models.CASCADE, related_name="charge_items")
-    quantity = models.FloatField(validators=[MinValueValidator(0.0)])
-
-    class Meta:
-        ordering = ("-created_at",)
-        unique_together = ("visit", "supply")
-
-    @property
-    def charge(self):
-        return self.quantity * self.supply.unit_sales_price

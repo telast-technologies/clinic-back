@@ -3,8 +3,6 @@ from rest_framework.routers import DefaultRouter
 
 from clinic.visits.api.url_converters import DateConverter
 from clinic.visits.api.v1.views import (
-    ChargeItemViewSet,
-    ChargeServiceViewSet,
     SelectVisitView,
     TimeSlotViewSet,
     VisitAvailableDatesView,
@@ -18,8 +16,6 @@ register_converter(DateConverter, "date")
 
 router.register("slot", TimeSlotViewSet, basename="slot")
 router.register("visit", VisitViewSet, basename="visit")
-router.register("charge_items", ChargeItemViewSet, basename="charge_items")
-router.register("charge_services", ChargeServiceViewSet, basename="charge_services")
 
 
 app_name = "visits"

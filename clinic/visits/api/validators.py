@@ -39,33 +39,3 @@ class VisitValidator:
             available_slots = ClinicService(clinic).get_available_slots(date)
             if time and time not in available_slots:
                 raise serializers.ValidationError({"time": _("Selected time slot is not available.")})
-
-
-class ChargeItemValidator:
-    requires_context = True
-    messge = _("Invalid visit data")
-
-    def __call__(self, attrs: dict, serializer: serializers.ModelSerializer) -> None:
-        if any(
-            [
-                attrs["visit"].patient.clinic != serializer.context["request"].user.staff.clinic,
-                attrs["supply"].clinic != serializer.context["request"].user.staff.clinic,
-                attrs["quantity"] > attrs["supply"].remains,
-            ]
-        ):
-            raise serializers.ValidationError({"visit": self.messge})
-
-
-class ChargeServiceValidator:
-    requires_context = True
-    message = _("Invalid visit data")
-
-    def __call__(self, attrs: dict, serializer: serializers.ModelSerializer) -> None:
-        if any(
-            [
-                attrs["visit"].patient.clinic != serializer.context["request"].user.staff.clinic,
-                attrs["service"].clinic != serializer.context["request"].user.staff.clinic,
-                not attrs["service"].active,
-            ]
-        ):
-            raise serializers.ValidationError({"visit": self.message})

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
-from clinic.invoices.factories import InvoiceFactory
-from clinic.invoices.models import Invoice
+from clinic.invoices.factories import ChargeItemFactory, ChargeServiceFactory, InvoiceFactory
+from clinic.invoices.models import ChargeItem, ChargeService, Invoice
 
 
 class InvoiceModelTest(TestCase):
@@ -11,6 +11,12 @@ class InvoiceModelTest(TestCase):
     def test_create_invoice(self):
         assert isinstance(self.invoice, Invoice)
         assert isinstance(self.invoice.__str__(), str)
+
+    def test_display_charges(self):
+        item = ChargeItemFactory.create(invoice=self.invoice)
+        service = ChargeServiceFactory.create(invoice=self.invoice)
+
+        self.assertEqual(self.invoice.charges, item.charge + service.charge)
 
     def test_display_tax_amount(self):
         self.assertEqual(self.invoice.tax_amount, (self.invoice.tax / 100) * self.invoice.sub_total)
@@ -24,4 +30,28 @@ class InvoiceModelTest(TestCase):
         )
 
     def test_display_balance(self):
-        self.assertEqual(self.invoice.balance, self.invoice.total - self.invoice.visit.charges)
+        self.assertEqual(self.invoice.balance, self.invoice.total - self.invoice.charges)
+
+
+class ChargeItemModelTest(TestCase):
+    def setUp(self):
+        self.charge_item = ChargeItemFactory.create()
+
+    def test_create_charge_item(self):
+        assert isinstance(self.charge_item, ChargeItem)
+        assert isinstance(self.charge_item.__str__(), str)
+
+    def test_display_charge(self):
+        self.assertEqual(self.charge_item.charge, self.charge_item.quantity * self.charge_item.supply.unit_sales_price)
+
+
+class ChargeServiceModelTest(TestCase):
+    def setUp(self):
+        self.charge_service = ChargeServiceFactory.create()
+
+    def test_create_charge_service(self):
+        assert isinstance(self.charge_service, ChargeService)
+        assert isinstance(self.charge_service.__str__(), str)
+
+    def test_display_charge(self):
+        self.assertEqual(self.charge_service.charge, self.charge_service.service.charge)

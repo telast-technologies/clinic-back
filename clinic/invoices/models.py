@@ -11,6 +11,12 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
     sub_total = models.PositiveIntegerField(default=0, help_text="Total without tax and discount")
 
     @property
+    def charges(self):
+        item_charges = sum([item.charge for item in self.charge_items.all()])
+        service_charges = sum([service.charge for service in self.charge_services.all()])
+        return item_charges + service_charges
+
+    @property
     def tax_amount(self):
         return self.sub_total * self.tax / 100
 
@@ -24,10 +30,37 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
 
     @property
     def balance(self):
-        return self.total - self.visit.charges
+        return self.total - self.charges
 
     def __str__(self):
         return f"{self.visit} | Tax: {self.tax} | Discount: {self.discount} | Subtotal: {self.sub_total}"
 
     class Meta:
         ordering = ("-created_at",)
+
+
+class ChargeService(UUIDAutoFieldMixin, TimestampMixin):
+    invoice = models.ForeignKey("invoices.Invoice", on_delete=models.CASCADE, related_name="charge_services")
+    service = models.ForeignKey("healthcare.Service", on_delete=models.CASCADE, related_name="charge_services")
+
+    class Meta:
+        ordering = ("-created_at",)
+        unique_together = ("invoice", "service")
+
+    @property
+    def charge(self):
+        return self.service.charge
+
+
+class ChargeItem(UUIDAutoFieldMixin, TimestampMixin):
+    invoice = models.ForeignKey("invoices.Invoice", on_delete=models.CASCADE, related_name="charge_items")
+    supply = models.ForeignKey("inventory.Supply", on_delete=models.CASCADE, related_name="charge_items")
+    quantity = models.FloatField(validators=[MinValueValidator(0.0)])
+
+    class Meta:
+        ordering = ("-created_at",)
+        unique_together = ("invoice", "supply")
+
+    @property
+    def charge(self):
+        return self.quantity * self.supply.unit_sales_price

@@ -1,13 +1,11 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from clinic.healthcare.api.v1.serializers import ServiceDetailSerializer
-from clinic.inventory.api.v1.serializers import SupplyDetailSerializer
 from clinic.patients.api.v1.serializers import PatientSerializer
 from clinic.users.api.defaults import CurrentClinicDefault
-from clinic.visits.api.validators import ChargeItemValidator, ChargeServiceValidator, TimeSlotValidator, VisitValidator
+from clinic.visits.api.validators import TimeSlotValidator, VisitValidator
 from clinic.visits.choices import VisitType
-from clinic.visits.models import ChargeItem, ChargeService, TimeSlot, Visit
+from clinic.visits.models import TimeSlot, Visit
 
 
 class TimeSlotSerializer(serializers.ModelSerializer):
@@ -54,6 +52,7 @@ class UpdateVisitSerializer(serializers.ModelSerializer):
 
 class VisitDetailSerializer(serializers.ModelSerializer):
     patient = PatientSerializer(read_only=True)
+    invoice = serializers.CharField(source="invoice.uid", read_only=True)
 
     class Meta:
         model = Visit
@@ -67,44 +66,6 @@ class SelectVisitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visit
         fields = ("label", "value")
-
-
-class CreateChargeItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChargeItem
-        fields = "__all__"
-        validators = [ChargeItemValidator()]
-
-
-class UpdateChargeItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChargeItem
-        fields = ("quantity",)
-
-
-class ChargeItemDetailSerializer(serializers.ModelSerializer):
-    supply = SupplyDetailSerializer(read_only=True)
-    charge = serializers.FloatField(read_only=True)
-
-    class Meta:
-        model = ChargeItem
-        exclude = ["visit"]
-
-
-class ChargeServiceModifySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ChargeService
-        fields = "__all__"
-        validators = [ChargeServiceValidator()]
-
-
-class ChargeServiceDetailSerializer(serializers.ModelSerializer):
-    service = ServiceDetailSerializer(read_only=True)
-    charge = serializers.FloatField(read_only=True)
-
-    class Meta:
-        model = ChargeService
-        exclude = ["visit"]
 
 
 class AvailableSlotListSerializer(serializers.Serializer):
