@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-07 00:43+0000\n"
+"POT-Creation-Date: 2024-06-07 00:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 msgid "Rejected"
 msgstr ""
 
-#: clinic/invoices/api/validators.py:6 clinic/invoices/api/validators.py:21
+#: clinic/invoices/api/validators.py:7 clinic/invoices/api/validators.py:22
 msgid "Invalid invoice data"
 msgstr ""
 

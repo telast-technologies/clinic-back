@@ -25,7 +25,7 @@ class ChargeItemDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChargeItem
-        exclude = ["invoice"]
+        exclude = ("invoice",)
 
 
 class ChargeServiceModifySerializer(serializers.ModelSerializer):
@@ -41,14 +41,12 @@ class ChargeServiceDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChargeService
-        exclude = ["invoice"]
+        exclude = ("invoice",)
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
     balance = serializers.IntegerField(read_only=True)
     total = serializers.IntegerField(read_only=True)
-    charge_items = ChargeItemDetailSerializer(many=True, read_only=True)
-    charge_services = ChargeServiceDetailSerializer(many=True, read_only=True)
 
     class Meta:
         model = Invoice
@@ -56,7 +54,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
         read_only_fields = ("visit",)
 
 
-class SelectVisitSerializer(serializers.ModelSerializer):
+class SelectInvoiceSerializer(serializers.ModelSerializer):
     label = serializers.CharField(source="visit.uid", read_only=True)
     value = serializers.CharField(source="uid", read_only=True)
 

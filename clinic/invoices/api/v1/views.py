@@ -9,7 +9,7 @@ from clinic.invoices.api.v1.serializers import (
     ChargeServiceModifySerializer,
     CreateChargeItemSerializer,
     InvoiceSerializer,
-    SelectVisitSerializer,
+    SelectInvoiceSerializer,
     UpdateChargeItemSerializer,
 )
 from clinic.invoices.filters import ChargeItemFilter, ChargeServiceFilter, InvoiceFilter
@@ -38,7 +38,7 @@ class InvoiceViewSet(
 
 class SelectInvoiceView(generics.ListAPIView):
     queryset = Invoice.objects.get_queryset().filter(created_at__date__gte=timezone.now().date())
-    serializer_class = SelectVisitSerializer
+    serializer_class = SelectInvoiceSerializer
     filterset_class = InvoiceFilter
     permission_classes = [IsStaff]
 
