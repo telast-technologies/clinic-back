@@ -1,11 +1,11 @@
 from django.test import RequestFactory, TestCase
-from clinic.healthcare.factories import ServiceFactory
-from clinic.invoices.factories import InvoiceFactory
 from rest_framework import serializers
 
+from clinic.healthcare.factories import ServiceFactory
 from clinic.inventory.factories import SupplyFactory
 from clinic.invoices.api.v1.serializers import ChargeServiceModifySerializer, CreateChargeItemSerializer
 from clinic.invoices.api.validators import ChargeItemValidator, ChargeServiceValidator
+from clinic.invoices.factories import InvoiceFactory
 from clinic.patients.factories import PatientFactory
 from clinic.staff.factories import StaffFactory
 from clinic.system_management.factories import ClinicFactory
@@ -26,7 +26,7 @@ class ChargeItemValidatorTest(TestCase):
 
         self.invoice = InvoiceFactory.create(visit=self.visit)
         self.other_invoice = InvoiceFactory.create(visit=self.other_visit)
-        
+
         self.supply = SupplyFactory.create(clinic=self.clinic, quantity=10)
         self.other_supply = SupplyFactory.create(clinic=self.other_clinic, quantity=10)
 
@@ -88,7 +88,7 @@ class ChargeServiceValidatorTest(TestCase):
 
         self.invoice = InvoiceFactory.create(visit=self.visit)
         self.other_invoice = InvoiceFactory.create(visit=self.other_visit)
-        
+
         self.service = ServiceFactory.create(clinic=self.clinic, active=True)
         self.inactive_service = ServiceFactory.create(clinic=self.clinic, active=False)
         self.other_clinic_service = ServiceFactory.create(clinic=self.other_clinic, active=True)
