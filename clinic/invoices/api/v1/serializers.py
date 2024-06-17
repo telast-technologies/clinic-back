@@ -16,7 +16,7 @@ class CreateChargeItemSerializer(serializers.ModelSerializer):
 class UpdateChargeItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChargeItem
-        fields = ("quantity",)
+        fields = ("uid", "quantity")
 
 
 class ChargeItemDetailSerializer(serializers.ModelSerializer):

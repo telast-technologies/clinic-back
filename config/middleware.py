@@ -57,6 +57,6 @@ class ClinicWhiteListMiddleware:
         else:
             clinic: Clinic | None = getattr(request.user.staff, "clinic", None)
             allowed: bool = clinic and getattr(request.user.staff.clinic, "active", False)
-            # Caching the result for 10 seconds
-            cache.set(cache_key, allowed, 10)
+            # Caching the result for 1 hour or 3600 seconds
+            cache.set(cache_key, allowed, 3600)
             return allowed

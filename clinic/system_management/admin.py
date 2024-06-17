@@ -3,14 +3,15 @@ from typing import Any
 from django.contrib import admin
 from django.http import HttpRequest
 
-from clinic.system_management.admin_actions import ActivationAdminAction
+from clinic.system_management.admin_actions import ClinicActivationAdminAction, PackageActivationAdminAction
 from clinic.system_management.forms import ExposedPermissionForm
 from clinic.system_management.models import Clinic, ExposedPermission, Package
 from clinic.visits.models import TimeSlot
 
 
 @admin.register(Package)
-class PackageAdmin(admin.ModelAdmin):
+class PackageAdmin(PackageActivationAdminAction, admin.ModelAdmin):
+    actions = ["activate", "deactivate"]
     list_display = ("uid", "name", "description", "price", "active")
     list_filter = ("active",)
     search_fields = ("name", "uid")
@@ -31,7 +32,7 @@ class TimeSlotInline(admin.TabularInline):
 
 
 @admin.register(Clinic)
-class ClinicAdmin(ActivationAdminAction, admin.ModelAdmin):
+class ClinicAdmin(ClinicActivationAdminAction, admin.ModelAdmin):
     list_display = (
         "uid",
         "name",

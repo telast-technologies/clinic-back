@@ -10,6 +10,7 @@ class PackageFactory(DjangoModelFactory):
     name = "free_trial"
     description = Faker("sentence")
     price = Faker("pyint")
+    active = True
 
     class Meta:
         model = "system_management.Package"
