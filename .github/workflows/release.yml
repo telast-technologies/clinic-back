@@ -80,7 +80,7 @@ jobs:
 
       - name: Build and push main Django image
         id: build-and-push-main
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: "./docker/production/django/Dockerfile"
@@ -93,7 +93,7 @@ jobs:
 
       - name: Build and push DB image
         id: build-and-push-postgres
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: "./docker/production/postgres/Dockerfile"
