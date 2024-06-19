@@ -59,15 +59,6 @@ class VisitDetailSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class SelectVisitSerializer(serializers.ModelSerializer):
-    label = serializers.CharField(source="uid", read_only=True)
-    value = serializers.CharField(source="uid", read_only=True)
-
-    class Meta:
-        model = Visit
-        fields = ("label", "value")
-
-
 class AvailableSlotListSerializer(serializers.Serializer):
     slots = serializers.ListField(child=serializers.TimeField())
 

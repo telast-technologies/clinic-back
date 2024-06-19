@@ -1,6 +1,5 @@
-from django.utils import timezone
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
-from rest_framework import generics, status, views, viewsets
+from rest_framework import status, views, viewsets
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
@@ -12,12 +11,11 @@ from clinic.visits.api.v1.serializers import (
     AvailableDateListSerializer,
     AvailableSlotListSerializer,
     CreateVisitSerializer,
-    SelectVisitSerializer,
     TimeSlotSerializer,
     UpdateVisitSerializer,
     VisitDetailSerializer,
 )
-from clinic.visits.filters import SelectVisitFilter, TimeSlotFilter, VisitFilter
+from clinic.visits.filters import TimeSlotFilter, VisitFilter
 from clinic.visits.models import TimeSlot, Visit
 
 
@@ -52,16 +50,6 @@ class VisitViewSet(VisitFlowViewMixin, viewsets.ModelViewSet):
             return UpdateVisitSerializer
 
         return super().get_serializer_class()
-
-
-class SelectVisitView(generics.ListAPIView):
-    queryset = Visit.objects.get_queryset().filter(date__gte=timezone.now().date())
-    serializer_class = SelectVisitSerializer
-    filterset_class = SelectVisitFilter
-    permission_classes = [IsStaff]
-
-    def get_queryset(self):
-        return self.queryset.filter(patient__clinic=self.request.user.staff.clinic)
 
 
 class VisitAvailableSlotsView(views.APIView):

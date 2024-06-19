@@ -283,23 +283,3 @@ class VisitAvailableSlotsViewTest(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-
-
-class SelectVisitViewSetTest(TestCase):
-    def setUp(self):
-        self.client = APIClient()
-        self.staff = StaffFactory.create()
-        self.visit = VisitFactory.create(
-            patient=PatientFactory.create(clinic=self.staff.clinic),
-        )
-        self.client.force_authenticate(user=self.staff.user)
-
-    def test_retrieve_select_visit_list(self):
-        # Test retrieving visit list
-        VisitFactory.create()
-
-        url = reverse("api:v1:visits:visit_select")
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data["results"]), 1)

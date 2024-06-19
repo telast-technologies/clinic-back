@@ -46,7 +46,10 @@ class ClinicServiceTests(TestCase):
 
         available_dates = self.service.get_available_dates(patient_id=patient.pk)
         expected_dates = [
-            today + timedelta(days=i) for i in range(31) if (today + timedelta(days=i)) not in visit_dates
+            today + timedelta(days=i)
+            for i in range(31)
+            if (today + timedelta(days=i)) not in visit_dates
+            and (today + timedelta(days=i)).strftime("%A").lower() in self.clinic.days
         ]
 
         self.assertEqual(available_dates, expected_dates)

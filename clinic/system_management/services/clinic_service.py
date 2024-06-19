@@ -31,14 +31,17 @@ class ClinicService:
         """
         # Get today's date
         today: date = date.today()
-
         # Generate a list of the next 31 days
-        available_dates: list[date] = [today + timedelta(days=i) for i in range(31)]
+        available_dates: list[date] = [
+            today + timedelta(days=i)
+            for i in range(31)
+            if (today + timedelta(days=i)).strftime("%A").lower() in self.clinic.days
+        ]
         # Query the Visit model for visits of the specified patient that are scheduled within
         # the next 31 days and belong to the current clinic
         booked_dates: list[date] = (
             Visit.objects.filter(
-                patient_id=patient_id,  # Filter by patient ID
+                patient=patient_id,  # Filter by patient ID
                 patient__clinic=self.clinic,  # Filter by current clinic
                 date__in=available_dates,  # Filter by date within the next 31 days
             )

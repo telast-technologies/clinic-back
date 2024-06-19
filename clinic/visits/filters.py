@@ -31,9 +31,3 @@ class VisitFilter(django_filters.FilterSet):
             queryset = queryset.filter(date__lte=now.date(), time__lt=now.time())
 
         return queryset
-
-
-class SelectVisitFilter(django_filters.FilterSet):
-    class Meta:
-        model = Visit
-        fields = ("uid", "status")
