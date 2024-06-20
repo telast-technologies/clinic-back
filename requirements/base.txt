@@ -12,7 +12,7 @@ nested-multipart-parser==1.5.0 # https://pypi.org/project/nested-multipart-parse
 django-viewflow==2.0.2 # https://docs.viewflow.io/fsm/admin.html
 cryptography==42.0.8 # https://pypi.org/project/cryptography/
 djangorestframework-simplejwt==5.3.1 # https://pypi.org/project/djangorestframework-simplejwt/
-django-cors-headers==4.3.1 # https://pypi.org/project/django-cors-headers/
+django-cors-headers==4.4.0 # https://pypi.org/project/django-cors-headers/
 django-notifications-hq==1.8.3 # https://pypi.org/project/django-notifications-hq/
 django-anymail==10.3 # https://pypi.org/project/django-anymail/
 django-model-utils==4.5.1 # https://django-model-utils.readthedocs.io/en/latest/
