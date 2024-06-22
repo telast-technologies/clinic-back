@@ -1,4 +1,3 @@
-from django.utils import timezone
 from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema, extend_schema_view
 from rest_framework import generics, mixins, viewsets
 from rest_framework.permissions import SAFE_METHODS
