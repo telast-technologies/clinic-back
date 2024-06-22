@@ -37,7 +37,7 @@ class InvoiceViewSet(
 
 
 class SelectInvoiceView(generics.ListAPIView):
-    queryset = Invoice.objects.get_queryset().filter(created_at__date__gte=timezone.now().date())
+    queryset = Invoice.objects.get_queryset()
     serializer_class = SelectInvoiceSerializer
     filterset_class = InvoiceFilter
     permission_classes = [IsStaff]
