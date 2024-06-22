@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-07 00:53+0000\n"
+"POT-Creation-Date: 2024-06-19 20:01+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,11 +56,13 @@ msgid "Staff"
 msgstr ""
 
 #: clinic/system_management/admin_actions.py:12
+#: clinic/system_management/admin_actions.py:24
 msgid "the status change to Active"
 msgstr ""
 
 #: clinic/system_management/admin_actions.py:17
-msgid "the status change to Deactive"
+#: clinic/system_management/admin_actions.py:29
+msgid "the status change to Inactive"
 msgstr ""
 
 #: clinic/system_management/choices.py:6
@@ -212,10 +214,10 @@ msgstr ""
 msgid "Unable to determine your clinic or access is restricted."
 msgstr ""
 
-#: config/settings/base.py:171
+#: config/settings/base.py:172
 msgid "English"
 msgstr ""
 
-#: config/settings/base.py:172
+#: config/settings/base.py:173
 msgid "Arabic"
 msgstr ""

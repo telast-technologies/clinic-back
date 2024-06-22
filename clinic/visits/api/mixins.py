@@ -63,21 +63,3 @@ class VisitFlowViewMixin:
         except viewflow.fsm.TransitionNotAllowed as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
-    @extend_schema(
-        request=None,
-        responses=None,
-        examples=[
-            OpenApiExample("Financially Clear Response", summary="Example of a financially clear response", value={})
-        ],
-    )
-    @action(detail=True, methods=["patch"])
-    def financially_clear(self, request, pk, *args, **kwargs):
-        flow = self.flow_class(self.get_object())
-
-        try:
-            flow.financially_clear()
-            return Response(status=status.HTTP_200_OK)
-        except viewflow.fsm.TransitionNotAllowed as e:
-            logger.error(e)
-            return Response(status=status.HTTP_400_BAD_REQUEST)

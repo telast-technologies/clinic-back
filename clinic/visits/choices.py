@@ -15,7 +15,6 @@ class DaysOfWeek(models.TextChoices):
 class VisitStatus(models.TextChoices):
     BOOKED = "booked", _("Booked")
     CHECKED_IN = "checked_in", _("Checked In")
-    FINANCIALLY_CLEARED = "financially_cleared", _("Financially Cleared")
     CHECKED_OUT = "checked_out", _("Checked Out")
     CANCELLED = "cancelled", _("Cancelled")
 

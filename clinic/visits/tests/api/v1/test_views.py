@@ -148,36 +148,10 @@ class VisitViewSetTest(TestCase):
         self.assertEqual(visit.status, VisitStatus.CHECKED_OUT)
         self.assertFalse(hasattr(visit, "invoice"))
 
-    def test_financial_check_in_visit_valid_data(self):
-        # Test updating visit with valid data
-        visit = VisitFactory.create(
-            patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.CHECKED_IN
-        )
-        url = reverse("api:v1:visits:visit-financially-clear", kwargs={"pk": visit.pk})
-        response = self.client.patch(url, format="json")
-
-        visit.refresh_from_db()
-
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(visit.status, VisitStatus.FINANCIALLY_CLEARED)
-
-    def test_financial_check_in_invalid_data(self):
-        # Test updating visit with valid data
-        visit = VisitFactory.create(
-            patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.CHECKED_OUT
-        )
-        url = reverse("api:v1:visits:visit-financially-clear", kwargs={"pk": visit.pk})
-        response = self.client.patch(url, format="json")
-
-        visit.refresh_from_db()
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(visit.status, VisitStatus.CHECKED_OUT)
-
     def test_check_out_valid_data(self):
         # Test updating visit with valid data
         visit = VisitFactory.create(
-            patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.FINANCIALLY_CLEARED
+            patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.CHECKED_IN
         )
         url = reverse("api:v1:visits:visit-check-out", kwargs={"pk": visit.pk})
         response = self.client.patch(url, format="json")
@@ -189,16 +163,14 @@ class VisitViewSetTest(TestCase):
 
     def test_check_out_invalid_data(self):
         # Test updating visit with valid data
-        visit = VisitFactory.create(
-            patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.CHECKED_IN
-        )
+        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.BOOKED)
         url = reverse("api:v1:visits:visit-check-out", kwargs={"pk": visit.pk})
         response = self.client.patch(url, format="json")
 
         visit.refresh_from_db()
 
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertEqual(visit.status, VisitStatus.CHECKED_IN)
+        self.assertEqual(visit.status, VisitStatus.BOOKED)
 
     def test_cancel_book_visit_valid_data(self):
         # Test updating visit with valid data

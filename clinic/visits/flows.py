@@ -31,11 +31,7 @@ class VisitFlow:
         Invoice.objects.get_or_create(visit=self.visit)
         logger.info(f"Checking in {self.visit}")
 
-    @status.transition(source=[VisitStatus.CHECKED_IN], target=VisitStatus.FINANCIALLY_CLEARED)
-    def financially_clear(self):
-        logger.info(f"Finanicially clearing {self.visit}")
-
-    @status.transition(source=[VisitStatus.FINANCIALLY_CLEARED], target=VisitStatus.CHECKED_OUT)
+    @status.transition(source=[VisitStatus.CHECKED_IN], target=VisitStatus.CHECKED_OUT)
     def check_out(self):
         logger.info(f"Checking out {self.visit}")
 
