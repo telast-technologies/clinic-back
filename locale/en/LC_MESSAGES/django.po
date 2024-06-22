@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-19 20:01+0000\n"
+"POT-Creation-Date: 2024-06-22 22:35+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -178,34 +178,30 @@ msgid "Checked In"
 msgstr ""
 
 #: clinic/visits/choices.py:18
-msgid "Financially Cleared"
-msgstr ""
-
-#: clinic/visits/choices.py:19
 msgid "Checked Out"
 msgstr ""
 
-#: clinic/visits/choices.py:20
+#: clinic/visits/choices.py:19
 msgid "Cancelled"
 msgstr ""
 
-#: clinic/visits/choices.py:24
+#: clinic/visits/choices.py:23
 msgid "Scheduled"
 msgstr ""
 
-#: clinic/visits/choices.py:25
+#: clinic/visits/choices.py:24
 msgid "Walk In"
 msgstr ""
 
-#: clinic/visits/choices.py:29
+#: clinic/visits/choices.py:28
 msgid "Up Coming"
 msgstr ""
 
-#: clinic/visits/choices.py:30
+#: clinic/visits/choices.py:29
 msgid "Past"
 msgstr ""
 
-#: clinic/visits/choices.py:31
+#: clinic/visits/choices.py:30
 msgid "All"
 msgstr ""
 

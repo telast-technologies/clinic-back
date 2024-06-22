@@ -1,12 +1,12 @@
 import logging
 
-from clinic.visits.api.v1.serializers import VisitDetailSerializer
 import viewflow
 from drf_spectacular.utils import OpenApiExample, OpenApiTypes, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
+from clinic.visits.api.v1.serializers import VisitDetailSerializer
 from clinic.visits.flows import VisitFlow
 
 logger = logging.getLogger(__name__)
