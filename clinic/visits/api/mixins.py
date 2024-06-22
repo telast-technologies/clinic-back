@@ -1,5 +1,6 @@
 import logging
 
+from clinic.visits.api.v1.serializers import VisitDetailSerializer
 import viewflow
 from drf_spectacular.utils import OpenApiExample, OpenApiTypes, extend_schema
 from rest_framework import status
@@ -16,7 +17,7 @@ class VisitFlowViewMixin:
 
     @extend_schema(
         request=OpenApiTypes.OBJECT,
-        responses=None,
+        responses={200: VisitDetailSerializer},
         examples=[
             OpenApiExample("Cancel Request", summary="Example of a cancel request", value={"reason": "string"}),
         ],
@@ -27,14 +28,15 @@ class VisitFlowViewMixin:
 
         try:
             flow.cancel(reason=request.data.get("reason"))
-            return Response(status=status.HTTP_200_OK)
+            serializer = VisitDetailSerializer(self.get_object(), context={"request": request}, read_only=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
         except viewflow.fsm.TransitionNotAllowed as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
         request=None,
-        responses=None,
+        responses={200: VisitDetailSerializer},
         examples=[OpenApiExample("Check-in Response", summary="Example of a check-in response", value={})],
     )
     @action(detail=True, methods=["patch"])
@@ -43,14 +45,15 @@ class VisitFlowViewMixin:
 
         try:
             flow.check_in()
-            return Response(status=status.HTTP_200_OK)
+            serializer = VisitDetailSerializer(self.get_object(), context={"request": request}, read_only=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
         except viewflow.fsm.TransitionNotAllowed as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @extend_schema(
         request=None,
-        responses=None,
+        responses={200: VisitDetailSerializer},
         examples=[OpenApiExample("Check-out Response", summary="Example of a check-out response", value={})],
     )
     @action(detail=True, methods=["patch"])
@@ -59,7 +62,8 @@ class VisitFlowViewMixin:
 
         try:
             flow.check_out()
-            return Response(status=status.HTTP_200_OK)
+            serializer = VisitDetailSerializer(self.get_object(), context={"request": request}, read_only=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
         except viewflow.fsm.TransitionNotAllowed as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
