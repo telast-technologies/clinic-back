@@ -13,9 +13,10 @@ from clinic.visits.api.v1.serializers import (
     CreateVisitSerializer,
     TimeSlotSerializer,
     UpdateVisitSerializer,
+    VisitCalendarSerializer,
     VisitDetailSerializer,
 )
-from clinic.visits.filters import TimeSlotFilter, VisitFilter
+from clinic.visits.filters import TimeSlotFilter, VisitCalendarFilter, VisitFilter
 from clinic.visits.models import TimeSlot, Visit
 
 
@@ -115,9 +116,9 @@ class VisitAvailableDatesView(views.APIView):
 
 
 class VisitCalendarView(generics.ListAPIView):
-    serializer_class = VisitDetailSerializer
+    serializer_class = VisitCalendarSerializer
     queryset = Visit.objects.all()
-    filterset_class = VisitFilter
+    filterset_class = VisitCalendarFilter
     permission_classes = [IsStaff]
     pagination_class = None
 
