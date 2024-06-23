@@ -19,18 +19,18 @@ class InvoiceModelTest(TestCase):
         self.assertEqual(self.invoice.charges, item.charge + service.charge)
 
     def test_display_tax_amount(self):
-        self.assertEqual(self.invoice.tax_amount, (self.invoice.tax / 100) * self.invoice.sub_total)
+        self.assertEqual(self.invoice.tax_amount, (self.invoice.tax / 100) * self.invoice.charges)
 
     def test_display_discount_amount(self):
-        self.assertEqual(self.invoice.discount_amount, (self.invoice.discount / 100) * self.invoice.sub_total)
+        self.assertEqual(self.invoice.discount_amount, (self.invoice.discount / 100) * self.invoice.charges)
 
     def test_display_total(self):
         self.assertEqual(
-            self.invoice.total, self.invoice.sub_total + self.invoice.tax_amount - self.invoice.discount_amount
+            self.invoice.total, self.invoice.charges + self.invoice.tax_amount - self.invoice.discount_amount
         )
 
     def test_display_balance(self):
-        self.assertEqual(self.invoice.balance, self.invoice.total - self.invoice.charges)
+        self.assertEqual(self.invoice.balance, self.invoice.total - self.invoice.sub_total)
 
 
 class ChargeItemModelTest(TestCase):
