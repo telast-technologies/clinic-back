@@ -65,3 +65,9 @@ class AvailableSlotListSerializer(serializers.Serializer):
 
 class AvailableDateListSerializer(serializers.Serializer):
     dates = serializers.ListField(child=serializers.DateField())
+
+
+class VisitCalendarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Visit
+        fields = ("uid", "date", "time", "status")

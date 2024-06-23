@@ -1,5 +1,5 @@
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
-from rest_framework import status, views, viewsets
+from rest_framework import generics, status, views, viewsets
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
@@ -13,6 +13,7 @@ from clinic.visits.api.v1.serializers import (
     CreateVisitSerializer,
     TimeSlotSerializer,
     UpdateVisitSerializer,
+    VisitCalendarSerializer,
     VisitDetailSerializer,
 )
 from clinic.visits.filters import TimeSlotFilter, VisitFilter
@@ -112,3 +113,14 @@ class VisitAvailableDatesView(views.APIView):
         return Response(
             AvailableDateListSerializer({"dates": available_dates}, read_only=True).data, status=status.HTTP_200_OK
         )
+
+
+class VisitCalendarView(generics.ListAPIView):
+    serializer_class = VisitCalendarSerializer
+    queryset = Visit.objects.all()
+    filterset_class = VisitFilter
+    permission_classes = [IsStaff]
+    pagination_class = None
+
+    def get_queryset(self):
+        return self.queryset.filter(patient__clinic=self.request.user.staff.clinic)
