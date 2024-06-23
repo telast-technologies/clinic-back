@@ -18,19 +18,19 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
 
     @property
     def tax_amount(self):
-        return self.sub_total * self.tax / 100
+        return self.charges * self.tax / 100
 
     @property
     def discount_amount(self):
-        return self.sub_total * self.discount / 100
+        return self.charges * self.discount / 100
 
     @property
     def total(self):
-        return self.sub_total + self.tax_amount - self.discount_amount
+        return self.charges + self.tax_amount - self.discount_amount
 
     @property
     def balance(self):
-        return self.total - self.charges
+        return self.total - self.sub_total
 
     def __str__(self):
         return f"{self.visit} | Tax: {self.tax} | Discount: {self.discount} | Subtotal: {self.sub_total}"
