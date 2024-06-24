@@ -27,7 +27,7 @@ urlpatterns = [
         name="slots_time_available",
     ),
     path(
-        "slot/date/available/<uuid:patient>/",
+        "slot/date/available/<str:patient>/",
         VisitAvailableDatesView.as_view(),
         name="slots_date_available",
     ),
