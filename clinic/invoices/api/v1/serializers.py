@@ -55,7 +55,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 
 class SelectInvoiceSerializer(serializers.ModelSerializer):
-    label = serializers.CharField(source="visit.uid", read_only=True)
+    label = serializers.CharField(read_only=True)
     value = serializers.CharField(source="uid", read_only=True)
 
     class Meta:

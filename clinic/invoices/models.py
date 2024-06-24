@@ -32,6 +32,10 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
     def balance(self):
         return self.total - self.sub_total
 
+    @property
+    def label(self):
+        return f"invoice#{self.uid.split('-')[-1]} | {self.visit.patient.get_full_name()}"
+
     def __str__(self):
         return f"{self.visit} | Tax: {self.tax} | Discount: {self.discount} | Subtotal: {self.sub_total}"
 
