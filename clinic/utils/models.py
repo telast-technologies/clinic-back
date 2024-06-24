@@ -1,6 +1,5 @@
-import uuid
-
 from django.db import models
+from django_extensions.db.fields import ShortUUIDField
 
 
 class TimestampMixin(models.Model):
@@ -12,7 +11,7 @@ class TimestampMixin(models.Model):
 
 
 class UUIDAutoFieldMixin(models.Model):
-    uid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    uid = ShortUUIDField(primary_key=True, editable=False)
 
     class Meta:
         abstract = True
