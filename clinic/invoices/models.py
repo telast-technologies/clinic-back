@@ -30,7 +30,7 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
 
     @property
     def balance(self):
-        return self.total - self.sub_total
+        return self.sub_total - self.total
 
     @property
     def label(self):

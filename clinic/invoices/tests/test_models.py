@@ -30,7 +30,7 @@ class InvoiceModelTest(TestCase):
         )
 
     def test_display_balance(self):
-        self.assertEqual(self.invoice.balance, self.invoice.total - self.invoice.sub_total)
+        self.assertEqual(self.invoice.balance, self.invoice.sub_total - self.invoice.total)
 
     def test_display_label(self):
         self.assertEqual(
