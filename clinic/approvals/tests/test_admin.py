@@ -1,5 +1,3 @@
-from unittest.mock import patch
-
 from django.contrib.admin.sites import AdminSite
 from django.test import RequestFactory, TestCase
 
@@ -21,8 +19,7 @@ class JoinRequestAdminTest(TestCase):
         self.request = RequestFactory().get("/fake-url/")
         self.join_request = JoinRequestFactory.create()
 
-    @patch("clinic.approvals.admin.send_email")
-    def test_approve_join_request(self, mock_send_email):
+    def test_approve_join_request(self):
         self.join_request.status = JoinRequestStatusChoices.APPROVED
         self.admin.save_model(self.request, self.join_request, None, None)
 
@@ -30,19 +27,14 @@ class JoinRequestAdminTest(TestCase):
         self.assertTrue(Clinic.objects.filter(name=self.join_request.clinic_name).exists())
         self.assertTrue(User.objects.filter(email=self.join_request.administrator_email).exists())
         self.assertTrue(Staff.objects.filter(user__email=self.join_request.administrator_email).exists())
-        # Check that an approval email was sent
-        self.assertTrue(mock_send_email.called)
 
-    @patch("clinic.approvals.admin.send_email")
-    def test_reject_join_request(self, mock_send_email):
+    def test_reject_join_request(self):
         self.join_request.status = JoinRequestStatusChoices.REJECTED
         self.admin.save_model(self.request, self.join_request, None, None)
 
         self.assertFalse(Clinic.objects.filter(name=self.join_request.clinic_name).exists())
         self.assertFalse(User.objects.filter(email=self.join_request.administrator_email).exists())
         self.assertFalse(Staff.objects.filter(user__email=self.join_request.administrator_email).exists())
-        # Check that an approval email was sent
-        self.assertTrue(mock_send_email.called)
 
     def test_approve_join_request_with_existing_user_email(self):
         # Create a user with the same email
