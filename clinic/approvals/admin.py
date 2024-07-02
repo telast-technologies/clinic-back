@@ -12,7 +12,8 @@ from clinic.approvals.models import JoinRequest
 from clinic.staff.models import Staff
 from clinic.system_management.models import Clinic
 from clinic.users.models import User
-from clinic.utils.notifications import send_email
+
+# from clinic.utils.notifications import send_email
 
 
 @admin.register(JoinRequest)
@@ -98,7 +99,8 @@ class JoinRequestAdmin(admin.ModelAdmin):
                 Best regards,
                 Clinic Team
             """
-            send_email(recipient_list=[staff.user.email], subject=subject, message=message)
+            print(subject, message)
+            # send_email(recipient_list=[staff.user.email], subject=subject, message=message)
 
         elif (obj.tracker.previous("status") == JoinRequestStatusChoices.PENDING) and (
             obj.status == JoinRequestStatusChoices.REJECTED
@@ -110,7 +112,8 @@ class JoinRequestAdmin(admin.ModelAdmin):
                 Best regards,
                 Clinic Team
             """
-            send_email(recipient_list=[obj.administrator_email], subject=subject, message=message)
+            print(subject, message)
+            # send_email(recipient_list=[obj.administrator_email], subject=subject, message=message)
 
         return super().save_model(request, obj, form, change)
 
