@@ -12,6 +12,8 @@ class PatientFactory(factory.django.DjangoModelFactory):
     phone = factory.Faker("phone_number")
     birthdate = factory.Faker("date")
     address = factory.Faker("address")
+    nid = factory.Faker("ean8")
+    channel = "facebook"
 
 
 class PatientReportFactory(factory.django.DjangoModelFactory):

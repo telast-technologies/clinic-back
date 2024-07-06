@@ -11,7 +11,7 @@ class PatientFilter(django_filters.FilterSet):
 
     class Meta:
         model = Patient
-        fields = ("uid", "fullname", "phone", "email", "created_at")
+        fields = ("uid", "fullname", "phone", "email", "created_at", "channel", "nid")
 
     def filter_fullname(self, queryset, name, value):
         return queryset.filter(first_name__icontains=value) | queryset.filter(last_name__icontains=value)

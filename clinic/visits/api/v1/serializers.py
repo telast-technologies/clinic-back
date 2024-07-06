@@ -68,6 +68,8 @@ class AvailableDateListSerializer(serializers.Serializer):
 
 
 class VisitCalendarSerializer(serializers.ModelSerializer):
+    patient = serializers.CharField(source="patient.get_full_name", read_only=True)
+
     class Meta:
         model = Visit
-        fields = ("uid", "date", "time", "status")
+        fields = ("uid", "date", "time", "status", "visit_type", "patient")
