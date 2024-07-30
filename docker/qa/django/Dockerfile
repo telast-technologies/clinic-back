@@ -1,5 +1,5 @@
 # define an alias for the specific python version used in this file.
-FROM python:3.10.6 as python
+FROM python:3.10.14 as python
 # Python build stage
 FROM python as python-build-stage
 
