@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-22 22:35+0000\n"
+"POT-Creation-Date: 2024-07-30 10:36+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: clinic/approvals/admin.py:91
+#: clinic/approvals/admin.py:92
 msgid "Join Request Approved"
 msgstr ""
 
-#: clinic/approvals/admin.py:106
+#: clinic/approvals/admin.py:108
 msgid "Join Request Rejected"
 msgstr ""
 
@@ -44,6 +44,30 @@ msgstr ""
 
 #: clinic/patients/api/validators.py:10
 msgid "Invalid patient"
+msgstr ""
+
+#: clinic/patients/choices.py:6
+msgid "Facebook"
+msgstr ""
+
+#: clinic/patients/choices.py:7
+msgid "Telegram"
+msgstr ""
+
+#: clinic/patients/choices.py:8
+msgid "Whatsapp"
+msgstr ""
+
+#: clinic/patients/choices.py:9
+msgid "SMS"
+msgstr ""
+
+#: clinic/patients/choices.py:10
+msgid "Email"
+msgstr ""
+
+#: clinic/patients/choices.py:11 clinic/users/choices.py:7
+msgid "Other"
 msgstr ""
 
 #: clinic/staff/models.py:19
@@ -119,10 +143,6 @@ msgstr ""
 
 #: clinic/users/api/validators.py:22
 msgid "invalid or missing password"
-msgstr ""
-
-#: clinic/users/choices.py:7
-msgid "Other"
 msgstr ""
 
 #: clinic/visits/api/validators.py:16

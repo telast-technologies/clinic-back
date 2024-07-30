@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  django: &django
+    image: telasttechnologies/clinic_django:main
+    container_name: django-clinic
+    networks:
+      - nginx_default
+    depends_on:
+      - postgres
+    volumes:
+     - locale:/app/locale/
+     - media:/app/media/
+     - static:/app/static/
+     - staticfiles:/app/staticfiles/
+    env_file:
+      - ./docker/.envs/.qa/.django
+      - ./docker/.envs/.qa/.postgres
+    command: /start
+
+  postgres:
+    image: telasttechnologies/clinic_postgres:main
+    container_name: postgres-clinic
+    networks:
+      - nginx_default
+    volumes:
+      - qa_postgres_data:/var/lib/postgresql/data
+      - qa_postgres_data_backups:/backups
+    env_file:
+      - ./docker/.envs/.qa/.postgres
+
+volumes:
+  qa_postgres_data: {}
+  qa_postgres_data_backups: {}
+  locale: {}
+  media: {}
+  static: {}
+  staticfiles: {}
+
+networks:
+  nginx_default:
+    external: true
