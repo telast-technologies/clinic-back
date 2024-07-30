@@ -3,13 +3,15 @@
 import os
 import sys
 
-from config.settings.base import DEBUG
+from config.settings.base import ENV
 
 
 def main():
     """Run administrative tasks."""
-    if DEBUG:
+    if ENV == "local":
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
+    elif ENV == "qa":
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.qa")
     else:
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
 

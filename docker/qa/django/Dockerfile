@@ -3,7 +3,7 @@ FROM python:3.10.6 as python
 # Python build stage
 FROM python as python-build-stage
 
-ARG BUILD_ENVIRONMENT=local
+ARG BUILD_ENVIRONMENT=qa
 
 RUN pip install --upgrade pip
 # Install apt packages
@@ -24,7 +24,7 @@ RUN pip wheel --wheel-dir /usr/src/app/wheels  \
 # Python 'run' stage
 FROM python as python-run-stage
 
-ARG BUILD_ENVIRONMENT=local
+ARG BUILD_ENVIRONMENT=qa
 ARG APP_HOME=/app
 
 ENV PYTHONUNBUFFERED 1

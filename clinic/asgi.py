@@ -11,10 +11,12 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-from config.settings.base import DEBUG
+from config.settings.base import ENV
 
-if DEBUG:
+if ENV == "local":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
+elif ENV == "qa":
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.qa")
 else:
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.production")
 

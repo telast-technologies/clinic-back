@@ -1,5 +1,5 @@
 # generals
-DEBUG=True
+ENV=local
 USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
 # Security

@@ -33,7 +33,8 @@ SECRET_KEY = env("SECRET_KEY", default="")
 FERNET_KEY = env("FERNET_KEY", default="")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG", default=False)
+ENV = env.str("ENV", default="production")
+DEBUG = ENV in ("local", "qa")
 
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
