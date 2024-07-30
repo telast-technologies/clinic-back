@@ -7,7 +7,7 @@ INSTALLED_APPS += ["whitenoise.runserver_nostatic"]
 MIDDLEWARE += ["whitenoise.middleware.WhiteNoiseMiddleware"]
 # SECURITY
 # ------------------------------------------------------------------------------
-CSRF_TRUSTED_ORIGINS = ["https://*.clinic.telast.tech"]
+CSRF_TRUSTED_ORIGINS = ["https://*.clinics.telast.tech"]
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 DATABASES["default"]["CONN_MAX_AGE"] = env.int("CONN_MAX_AGE", default=60)  # noqa: F405
