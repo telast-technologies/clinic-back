@@ -15,4 +15,4 @@ BREVO_API_URL=https://api.brevo.com/v3/emailCampaigns
 BREVO_API_KEY=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
 
 # Database
-DATABASE_URL=postgres://p9TkJrNsV4QzHwXcUfYgL2BmD6RyOwPq:x3SwHlYcQ2MvPnT9VgLbKzF0OtNjDrJ7CqXwRyW1UfPoK8G5ZbVmEiXsL4YtOr6Jd@postgres:5432/talk
+DATABASE_URL=postgres://p9TkJrNsV4QzHwXcUfYgL2BmD6RyOwPq:x3SwHlYcQ2MvPnT9VgLbKzF0OtNjDrJ7CqXwRyW1UfPoK8G5ZbVmEiXsL4YtOr6Jd@postgres:5432/clinic
