@@ -1,6 +1,6 @@
 # PostgreSQL
 # ------------------------------------------------------------------------------
-POSTGRES_HOST=postgres
+POSTGRES_HOST=postgres-clinic
 POSTGRES_PORT=5432
 POSTGRES_DB=clinic
 POSTGRES_USER=b8DkJmNtP4RzQwVxUfYhL3GsH2AzXcWq

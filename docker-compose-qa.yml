@@ -23,6 +23,8 @@ services:
     container_name: postgres-clinic
     networks:
       - nginx_default
+    ports:
+      - "5433:5432"  # Host port:Container port
     volumes:
       - clinic_postgres_data:/var/lib/postgresql/data
       - clinic_postgres_data_backups:/backups
