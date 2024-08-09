@@ -4,7 +4,7 @@ USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
 # Security
 INTERNAL_IPS=127.0.0.1
-ALLOWED_HOSTS=clinic.telast.tech,0.0.0.0
+ALLOWED_HOSTS=talk.telast.tech,0.0.0.0
 SECRET_KEY=eFZFWdNAd4mIjn9Z2zIcsj4vblyoU5HVNtHaBL7CtieDLqU8OngU4B6GgvlA5XCV
 FERNET_KEY=c-wf1MA-43s-jBh9nxe9Wmtyyjt_Nqslhnby5flk9a0=
 # Password Reset
@@ -15,4 +15,4 @@ BREVO_API_URL=https://api.brevo.com/v3/emailCampaigns
 BREVO_API_KEY=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
 
 # Database
-DATABASE_URL=postgres://m7KtNjRoX1HyQxVwZoYpL9AsJ5CyUeTs:h3BrM4uNqHyJLrC9oYpBcRfZ9nT6W2TpMnA2Qq1SeNgLiDjX4iXwYkT4GyPw3UvM@postgres:5432/clinic
+DATABASE_URL=postgres://p9TkJrNsV4QzHwXcUfYgL2BmD6RyOwPq:x3SwHlYcQ2MvPnT9VgLbKzF0OtNjDrJ7CqXwRyW1UfPoK8G5ZbVmEiXsL4YtOr6Jd@postgres:5432/talk
