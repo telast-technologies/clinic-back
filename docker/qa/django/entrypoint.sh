@@ -6,11 +6,11 @@ set -o nounset
 
 
 
-if [ -z "${CLINIC_POSTGRES_USER}" ]; then
+if [ -z "${POSTGRES_USER}" ]; then
     base_postgres_image_default_user='postgres'
-    export CLINIC_POSTGRES_USER="${base_postgres_image_default_user}"
+    export POSTGRES_USER="${base_postgres_image_default_user}"
 fi
-export DATABASE_URL="postgres://${CLINIC_POSTGRES_USER}:${CLINIC_POSTGRES_PASSWORD}@${CLINIC_POSTGRES_HOST}:${CLINIC_POSTGRES_PORT}/${CLINIC_POSTGRES_DB}"
+export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
 
 python << END
 
@@ -25,11 +25,11 @@ start = time.time()
 while True:
     try:
         psycopg2.connect(
-            dbname="${CLINIC_POSTGRES_DB}",
-            user="${CLINIC_POSTGRES_USER}",
-            password="${CLINIC_POSTGRES_PASSWORD}",
-            host="${CLINIC_POSTGRES_HOST}",
-            port="${CLINIC_POSTGRES_PORT}",
+            dbname="${POSTGRES_DB}",
+            user="${POSTGRES_USER}",
+            password="${POSTGRES_PASSWORD}",
+            host="${POSTGRES_HOST}",
+            port="${POSTGRES_PORT}",
         )
         break
     except psycopg2.OperationalError as error:
