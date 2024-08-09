@@ -10,4 +10,4 @@ python manage.py makemessages -l en
 # Collect static files
 python manage.py collectstatic --noinput
 # Start server
-exec python manage.py runserver 0.0.0.0:8080
+exec python manage.py runserver 0.0.0.0:8081

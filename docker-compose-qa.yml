@@ -13,25 +13,9 @@ services:
      - media:/app/media/
      - static:/app/static/
      - staticfiles:/app/staticfiles/
-    environment:
-      - ENV=qa
-      - USE_DOCKER=yes
-      - IPYTHONDIR=${IPYTHONDIR}
-      - INTERNAL_IPS=${INTERNAL_IPS}
-      - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - SECRET_KEY=${SECRET_KEY}
-      - FERNET_KEY=${FERNET_KEY}
-      - PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL=${PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL}
-      - DEFAULT_FROM_EMAIL=${DEFAULT_FROM_EMAIL}
-      - BREVO_API_URL=${BREVO_API_URL}
-      - BREVO_API_KEY=${BREVO_API_KEY}
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
-
+    env_file:
+      - ./docker/.envs/.qa/.django
+      - ./docker/.envs/.qa/.postgres
     command: /start
 
   postgres:

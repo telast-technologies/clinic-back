@@ -30,26 +30,26 @@ if [[ ! -f "${backup_filename}" ]]; then
     exit 1
 fi
 
-message_welcome "Restoring the '${POSTGRES_DB}' database from the '${backup_filename}' backup..."
+message_welcome "Restoring the '${CLINIC_POSTGRES_DB}' database from the '${backup_filename}' backup..."
 
-if [[ "${POSTGRES_USER}" == "postgres" ]]; then
-    message_error "Restoring as 'postgres' user is not supported. Assign 'POSTGRES_USER' env with another one and try again."
+if [[ "${CLINIC_POSTGRES_USER}" == "postgres" ]]; then
+    message_error "Restoring as 'postgres' user is not supported. Assign 'CLINIC_POSTGRES_USER' env with another one and try again."
     exit 1
 fi
 
-export PGHOST="${POSTGRES_HOST}"
-export PGPORT="${POSTGRES_PORT}"
-export PGUSER="${POSTGRES_USER}"
-export PGPASSWORD="${POSTGRES_PASSWORD}"
-export PGDATABASE="${POSTGRES_DB}"
+export PGHOST="${CLINIC_POSTGRES_HOST}"
+export PGPORT="${CLINIC_POSTGRES_PORT}"
+export PGUSER="${CLINIC_POSTGRES_USER}"
+export PGPASSWORD="${CLINIC_POSTGRES_PASSWORD}"
+export PGDATABASE="${CLINIC_POSTGRES_DB}"
 
 message_info "Dropping the database..."
 dropdb "${PGDATABASE}"
 
 message_info "Creating a new database..."
-createdb --owner="${POSTGRES_USER}"
+createdb --owner="${CLINIC_POSTGRES_USER}"
 
 message_info "Applying the backup to the new database..."
-gunzip -c "${backup_filename}" | psql "${POSTGRES_DB}"
+gunzip -c "${backup_filename}" | psql "${CLINIC_POSTGRES_DB}"
 
-message_success "The '${POSTGRES_DB}' database has been restored from the '${backup_filename}' backup."
+message_success "The '${CLINIC_POSTGRES_DB}' database has been restored from the '${backup_filename}' backup."
