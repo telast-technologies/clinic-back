@@ -14,8 +14,8 @@ services:
      - clinic_static:/app/static/
      - clinic_staticfiles:/app/staticfiles/
     env_file:
-      - ./docker/.envs/.qa/.django_clinic
-      - ./docker/.envs/.qa/.postgres_clinic
+      - ./docker/.envs/.qa/.django
+      - ./docker/.envs/.qa/.postgres
     command: /start
 
   postgres:
@@ -27,7 +27,7 @@ services:
       - clinic_postgres_data:/var/lib/postgresql/data
       - clinic_postgres_data_backups:/backups
     env_file:
-      - ./docker/.envs/.qa/.postgres_clinic
+      - ./docker/.envs/.qa/.postgres
 
 volumes:
   clinic_postgres_data: {}
