@@ -26,12 +26,8 @@ services:
     volumes:
       - qa_postgres_data:/var/lib/postgresql/data
       - qa_postgres_data_backups:/backups
-    environment:
-      - POSTGRES_HOST=${POSTGRES_HOST}
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    env_file:
+      - ./docker/.envs/.qa/.postgres
 
 volumes:
   qa_postgres_data: {}
