@@ -5,11 +5,11 @@ set -o pipefail
 set -o nounset
 
 
-if [ -z "${POSTGRES_USER}" ]; then
+if [ -z "${CLINIC_POSTGRES_USER}" ]; then
     base_postgres_image_default_user='postgres'
-    export POSTGRES_USER="${base_postgres_image_default_user}"
+    export CLINIC_POSTGRES_USER="${base_postgres_image_default_user}"
 fi
-export DATABASE_URL="postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}"
+export DATABASE_URL="postgres://${CLINIC_POSTGRES_USER}:${CLINIC_POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${CLINIC_POSTGRES_DB}"
 
 python << END
 import sys
@@ -23,9 +23,9 @@ start = time.time()
 while True:
     try:
         psycopg2.connect(
-            dbname="${POSTGRES_DB}",
-            user="${POSTGRES_USER}",
-            password="${POSTGRES_PASSWORD}",
+            dbname="${CLINIC_POSTGRES_DB}",
+            user="${CLINIC_POSTGRES_USER}",
+            password="${CLINIC_POSTGRES_PASSWORD}",
             host="${POSTGRES_HOST}",
             port="${POSTGRES_PORT}",
         )
