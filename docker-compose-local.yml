@@ -1,9 +1,3 @@
-version: "3"
-
-volumes:
-  clinic_local_postgres_data: {}
-  clinic_local_postgres_data_backups: {}
-
 services:
   django: &django
     build:
@@ -34,3 +28,7 @@ services:
       - clinic_local_postgres_data_backups:/backups
     env_file:
       - ./docker/.envs/.local/.postgres
+
+volumes:
+  clinic_local_postgres_data: {}
+  clinic_local_postgres_data_backups: {}
