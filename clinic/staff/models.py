@@ -7,7 +7,7 @@ from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 class Staff(UUIDAutoFieldMixin, TimestampMixin):
     clinic = models.ForeignKey(
-        "system_management.Clinic", on_delete=models.CASCADE, related_name="staffs", db_index=True, editable=False
+        "system_management.Clinic", on_delete=models.CASCADE, related_name="staff", db_index=True, editable=False
     )
     user = models.OneToOneField(
         settings.AUTH_USER_MODEL,
