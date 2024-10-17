@@ -12,15 +12,18 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
     )
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(null=True, blank=True)
     phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION, unique=True)
     birthdate = models.DateTimeField(null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
-    nid = models.CharField(max_length=100)
+    nid = models.CharField(max_length=100, help_text="National/Passport ID")
     channel = models.CharField(max_length=100, choices=Channels.choices)
 
     class Meta:
         ordering = ("-created_at",)
+        constraints = [
+            models.UniqueConstraint(fields=["email"], name="unique_patient_email", nulls_distinct=True),
+        ]
 
     def get_full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
