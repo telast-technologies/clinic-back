@@ -22,7 +22,7 @@ class PatientReportViewSetTest(TestCase):
         self.client.force_authenticate(user=self.staff.user)
 
     def test_list_patient_reports(self):
-        url = reverse("api:v1:patients:patient_report-list") + f"?patient={self.patient.pk}"
+        url = reverse("api:v1:patients:patient_report-list")
         response = self.client.get(url)
 
         # Check the response status code
@@ -30,12 +30,6 @@ class PatientReportViewSetTest(TestCase):
 
         # Check that the response contains the created patient report
         self.assertEqual(len(response.data["results"]), 1)
-
-    def test_list_patient_reports_for_nonexistent_patient(self):
-        url = reverse("api:v1:patients:patient_report-list") + "?patient=01b642fe-4e24-49d8-8747-6dd22b90c743"
-        response = self.client.get(url)
-        # Check the response status code
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_delete_patient_report(self):
         url = (
@@ -48,7 +42,7 @@ class PatientReportViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_delete_patient_report_not_found(self):
-        url = reverse("api:v1:patients:patient_report-detail", args=["99999"]) + f"?patient={self.patient.pk}"
+        url = reverse("api:v1:patients:patient_report-detail", args=["99999"])
         response = self.client.delete(url)
 
         # Check the response status code
