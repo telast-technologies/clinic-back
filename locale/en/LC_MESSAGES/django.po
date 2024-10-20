@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-30 10:36+0000\n"
+"POT-Creation-Date: 2024-10-20 21:26+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -42,7 +42,7 @@ msgstr ""
 msgid "Invalid invoice data"
 msgstr ""
 
-#: clinic/patients/api/validators.py:10
+#: clinic/patients/api/validators.py:7
 msgid "Invalid patient"
 msgstr ""
 
@@ -70,11 +70,11 @@ msgstr ""
 msgid "Other"
 msgstr ""
 
-#: clinic/staff/models.py:19
+#: clinic/staff/models.py:28
 msgid "Client Admin"
 msgstr ""
 
-#: clinic/staff/models.py:23 clinic/users/choices.py:6
+#: clinic/staff/models.py:32 clinic/users/choices.py:6
 msgid "Staff"
 msgstr ""
 
@@ -229,10 +229,10 @@ msgstr ""
 msgid "Unable to determine your clinic or access is restricted."
 msgstr ""
 
-#: config/settings/base.py:172
+#: config/settings/base.py:173
 msgid "English"
 msgstr ""
 
-#: config/settings/base.py:173
+#: config/settings/base.py:174
 msgid "Arabic"
 msgstr ""

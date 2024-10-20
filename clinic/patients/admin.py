@@ -13,6 +13,7 @@ class PatientReportInline(admin.TabularInline):
 class PatientAdmin(admin.ModelAdmin):
     list_display = [
         "uid",
+        "medical_number",
         "first_name",
         "last_name",
         "email",

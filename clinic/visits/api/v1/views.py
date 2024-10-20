@@ -29,9 +29,10 @@ class TimeSlotViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     serializer_class = TimeSlotSerializer
     filterset_class = TimeSlotFilter
     permission_classes = [IsAdminStaff]
+    filter_field = "clinic"
 
 
-class VisitViewSet(VisitFlowViewMixin, viewsets.ModelViewSet):
+class VisitViewSet(QuerysetFilteredMixin, VisitFlowViewMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows Visit to be viewed or edited.
     """
@@ -40,9 +41,7 @@ class VisitViewSet(VisitFlowViewMixin, viewsets.ModelViewSet):
     serializer_class = CreateVisitSerializer
     filterset_class = VisitFilter
     permission_classes = [IsStaff]
-
-    def get_queryset(self):
-        return self.queryset.filter(patient__clinic=self.request.user.staff.clinic)
+    filter_field = "patient__clinic"
 
     def get_serializer_class(self):
         if self.request.method in SAFE_METHODS:
@@ -115,12 +114,10 @@ class VisitAvailableDatesView(views.APIView):
         )
 
 
-class VisitCalendarView(generics.ListAPIView):
+class VisitCalendarView(QuerysetFilteredMixin, generics.ListAPIView):
     serializer_class = VisitCalendarSerializer
     queryset = Visit.objects.all()
     filterset_class = VisitCalendarFilter
     permission_classes = [IsStaff]
     pagination_class = None
-
-    def get_queryset(self):
-        return self.queryset.filter(patient__clinic=self.request.user.staff.clinic)
+    filter_field = "patient__clinic"

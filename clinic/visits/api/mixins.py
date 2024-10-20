@@ -27,7 +27,7 @@ class VisitFlowViewMixin:
         flow = self.flow_class(self.get_object())
 
         try:
-            flow.cancel(reason=request.data.get("reason"))
+            flow.cancel(reason=request.data.get("reason", ""))
             serializer = VisitDetailSerializer(self.get_object(), context={"request": request}, read_only=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except viewflow.fsm.TransitionNotAllowed as e:

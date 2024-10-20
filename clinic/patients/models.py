@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django_extensions.db.fields import RandomCharField
 from phonenumber_field.modelfields import PhoneNumberField
 
 from clinic.patients.choices import Channels
@@ -9,6 +10,14 @@ from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 class Patient(UUIDAutoFieldMixin, TimestampMixin):
     clinic = models.ForeignKey(
         "system_management.Clinic", on_delete=models.CASCADE, related_name="patients", db_index=True, editable=False
+    )
+    medical_number = RandomCharField(
+        length=16,
+        help_text="medical number",
+        unique=True,
+        include_alpha=False,
+        include_punctuation=False,
+        include_digits=True,
     )
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

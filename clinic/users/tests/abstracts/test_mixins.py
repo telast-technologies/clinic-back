@@ -12,6 +12,7 @@ from clinic.visits.models import TimeSlot
 
 class QuerysetFilteredMixinTest(TestCase):
     class MockAPIView(QuerysetFilteredMixin, viewsets.GenericViewSet):
+        filter_field = "clinic"
         queryset = TimeSlot.objects.all()
         serializer_class = None
 

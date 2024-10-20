@@ -16,6 +16,7 @@ class ServiceViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     serializer_class = ServiceSerializer
     filterset_class = ServiceFilter
     permission_classes = [IsAdminStaff]
+    filter_field = "clinic"
 
 
 class SelectServiceView(QuerysetFilteredMixin, generics.ListAPIView):
@@ -27,3 +28,4 @@ class SelectServiceView(QuerysetFilteredMixin, generics.ListAPIView):
     serializer_class = SelectServiceSerializer
     filterset_class = SelectServiceFilter
     permission_classes = [IsStaff]
+    filter_field = "clinic"

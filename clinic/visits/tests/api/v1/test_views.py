@@ -182,7 +182,7 @@ class VisitViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(visit.status, VisitStatus.CANCELLED)
-        self.assertEqual(visit.comment, None)
+        self.assertEqual(visit.comment, "")
 
     def test_cancel_checked_in_visit_valid_data(self):
         # Test updating visit with valid data
@@ -196,7 +196,7 @@ class VisitViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(visit.status, VisitStatus.CANCELLED)
-        self.assertEqual(visit.comment, None)
+        self.assertEqual(visit.comment, "")
 
     def test_cancel_checked_in_visit_valid_data_with_reason(self):
         # Test updating visit with valid data
