@@ -42,6 +42,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
             "last_name",
             "email",
             "phone",
+            "username",
             "is_active",
         )
 
