@@ -48,8 +48,8 @@ class SelectPatientSerializer(serializers.ModelSerializer):
 
 
 class PatientReportSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source="document.name", read_only=True)
-    size = serializers.CharField(source="document.size", read_only=True)
+    filename = serializers.CharField(read_only=True)
+    size = serializers.CharField(read_only=True)
 
     class Meta:
         model = PatientReport

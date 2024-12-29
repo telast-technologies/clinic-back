@@ -1,3 +1,4 @@
+import humanize
 from django.conf import settings
 from django.db import models
 from django_countries.fields import CountryField
@@ -53,6 +54,14 @@ class PatientReport(UUIDAutoFieldMixin, TimestampMixin):
         db_index=True,
     )
     document = models.FileField(upload_to="patients/reports")
+
+    @property
+    def filename(self):
+        return self.document.name.split("/")[-1] if self.document else ""
+
+    @property
+    def size(self):
+        return humanize.naturalsize(self.document.size) if self.document else ""
 
     class Meta:
         ordering = ("-created_at",)
