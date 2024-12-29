@@ -1,7 +1,8 @@
 from django.conf import settings
 from django.contrib.auth.models import Permission
+from django.core.cache import cache
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
-from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -31,6 +32,9 @@ class Clinic(UUIDAutoFieldMixin, TimestampMixin):
     email = models.EmailField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     capacity = models.PositiveIntegerField(_("Patient Count Capacity/Hours"), default=5)
+    profit_share = models.PositiveIntegerField(
+        _("Clinic Profit Share"), default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]
+    )
     active = models.BooleanField(default=True)
 
     class Meta:
@@ -39,26 +43,36 @@ class Clinic(UUIDAutoFieldMixin, TimestampMixin):
     def __str__(self) -> str:
         return self.name
 
-    @cached_property
+    @property
     def days(self):
-        slots = self.time_slots.values_list("days", flat=True)
-        dow_set = {day for sublist in slots for day in sublist}
+        cache_key = f"clinic_days_{self.uid}"
+        dow_set = cache.get(cache_key)
+        if not dow_set:
+            slots = self.time_slots.values_list("days", flat=True)
+            dow_set = {day for sublist in slots for day in sublist}
+            cache.set(cache_key, dow_set, settings.CACHE_TIMEOUT)
+
         return dow_set
 
-    @cached_property
+    @property
     def slots(self):
-        slot_dict = dict({})
+        cache_key = f"clinic_slots_{self.uid}"
+        slot_dict = cache.get(cache_key)
 
-        for day in self.days:
-            available_hours_set = set()
-            # Retrieve all time slots for the given weekday
-            slots = self.time_slots.filter(days__icontains=day)
+        if not slot_dict:
+            slot_dict = dict({})
+            for day in self.days:
+                available_hours_set = set()
+                # Retrieve all time slots for the given weekday
+                slots = self.time_slots.filter(days__icontains=day)
 
-            # Generate all possible times for the slots
-            available_hours_set.update(
-                slot_hour for slot in slots for slot_hour in range(slot.start_time.hour, slot.end_time.hour + 1)
-            )
-            slot_dict[day] = available_hours_set
+                # Generate all possible times for the slots
+                available_hours_set.update(
+                    slot_hour for slot in slots for slot_hour in range(slot.start_time.hour, slot.end_time.hour + 1)
+                )
+                slot_dict[day] = available_hours_set
+
+            cache.set(cache_key, slot_dict, settings.CACHE_TIMEOUT)
 
         return slot_dict
 

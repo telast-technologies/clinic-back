@@ -271,3 +271,5 @@ ANYMAIL = {
 # if you don't already have this in settings
 BREVO_API_URL = env.str("BREVO_API_URL", default="")  # default from-email for Django errors
 DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", default="")
+
+CACHE_TIMEOUT = 60

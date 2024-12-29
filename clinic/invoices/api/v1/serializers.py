@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from clinic.healthcare.api.v1.serializers import ServiceDetailSerializer
+from clinic.healthcare.api.v1.serializers import ServiceSerializer
 from clinic.inventory.api.v1.serializers import SupplyDetailSerializer
 from clinic.invoices.api.validators import ChargeItemValidator, ChargeServiceValidator
 from clinic.invoices.models import ChargeItem, ChargeService, Invoice
@@ -36,7 +36,7 @@ class ChargeServiceModifySerializer(serializers.ModelSerializer):
 
 
 class ChargeServiceDetailSerializer(serializers.ModelSerializer):
-    service = ServiceDetailSerializer(read_only=True)
+    service = ServiceSerializer(read_only=True)
     charge = serializers.FloatField(read_only=True)
 
     class Meta:

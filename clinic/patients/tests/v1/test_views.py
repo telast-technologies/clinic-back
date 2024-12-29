@@ -15,7 +15,7 @@ class PatientReportViewSetTest(TestCase):
         self.patient = PatientFactory.create(clinic=self.clinic)
 
         # Create a PatientReport for the clinic
-        self.patient_report = PatientReportFactory.create(patient=self.patient)
+        self.obj = PatientReportFactory.create(patient=self.patient)
 
         # Set up the API client and authenticate the user
         self.client = APIClient()
@@ -32,10 +32,7 @@ class PatientReportViewSetTest(TestCase):
         self.assertEqual(len(response.data["results"]), 1)
 
     def test_delete_patient_report(self):
-        url = (
-            reverse("api:v1:patients:patient_report-detail", args=[self.patient_report.pk])
-            + f"?patient={self.patient.pk}"
-        )
+        url = reverse("api:v1:patients:patient_report-detail", args=[self.obj.pk])
         response = self.client.delete(url)
 
         # Check the response status code

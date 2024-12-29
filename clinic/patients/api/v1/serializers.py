@@ -1,3 +1,6 @@
+from django.core.validators import RegexValidator
+from django.utils.translation import gettext_lazy as _
+from django_countries.serializers import CountryFieldMixin
 from rest_framework import serializers
 
 from clinic.patients.api.validators import PatientReportValidator
@@ -5,8 +8,28 @@ from clinic.patients.models import Patient, PatientReport
 from clinic.users.api.defaults import CurrentClinicDefault
 
 
-class PatientSerializer(serializers.ModelSerializer):
+class PatientSerializer(CountryFieldMixin, serializers.ModelSerializer):
     clinic = serializers.HiddenField(default=CurrentClinicDefault())
+    nid = serializers.CharField(
+        max_length=14,
+        validators=[
+            RegexValidator(
+                regex=r"^\d{14}$",  # Matches exactly 14 digits
+                message=_("National ID must be exactly 14 digits long."),
+                code="invalid_nid_length",
+            ),
+        ],
+    )
+    passport = serializers.CharField(
+        max_length=10,
+        validators=[
+            RegexValidator(
+                regex=r"^.{10}$",  # Matches exactly 10 characters
+                message=_("National ID must be exactly 10 digits long."),
+                code="invalid_nid_length",
+            ),
+        ],
+    )
 
     class Meta:
         model = Patient

@@ -8,7 +8,7 @@ class PatientFilter(django_filters.FilterSet):
 
     class Meta:
         model = Patient
-        fields = ("created_at", "channel")
+        fields = ("created_at", "channel", "country", "gender")
 
 
 class PatientReportFilter(django_filters.FilterSet):

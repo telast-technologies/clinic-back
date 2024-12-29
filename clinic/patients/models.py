@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.db import models
+from django_countries.fields import CountryField
 from django_extensions.db.fields import RandomCharField
 from phonenumber_field.modelfields import PhoneNumberField
 
-from clinic.patients.choices import Channels
+from clinic.patients.choices import Channels, GenderChoices
 from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
@@ -12,7 +13,7 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
         "system_management.Clinic", on_delete=models.CASCADE, related_name="patients", db_index=True, editable=False
     )
     medical_number = RandomCharField(
-        length=16,
+        length=6,
         help_text="medical number",
         unique=True,
         include_alpha=False,
@@ -21,11 +22,14 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
     )
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
+    gender = models.CharField(max_length=10, choices=GenderChoices.choices)
     email = models.EmailField(null=True, blank=True)
     phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION, unique=True)
     birthdate = models.DateTimeField(null=True, blank=True)
-    address = models.CharField(max_length=100, null=True, blank=True)
-    nid = models.CharField(max_length=100, help_text="National/Passport ID")
+    country = CountryField(default="EG")
+    address = models.CharField(max_length=100, default="")
+    nid = models.CharField(max_length=14, help_text="National ID", default="")
+    passport = models.CharField(max_length=10, help_text="Passport ID", default="")
     channel = models.CharField(max_length=100, choices=Channels.choices)
 
     class Meta:

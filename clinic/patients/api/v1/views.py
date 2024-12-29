@@ -15,7 +15,7 @@ class PatientViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     permission_classes = [IsStaff]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_class = PatientFilter
-    search_fields = ["medical_number", "first_name", "last_name", "email", "phone", "nid"]
+    search_fields = ["medical_number", "first_name", "last_name", "email", "phone", "nid", "passport"]
     ordering_fields = ["created_at"]
     filter_field = "clinic"
 
@@ -25,7 +25,7 @@ class SelectPatientView(QuerysetFilteredMixin, generics.ListAPIView):
     queryset = Patient.objects.all()
     permission_classes = [IsStaff]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
-    search_fields = ["medical_number", "first_name", "last_name", "email", "phone", "nid"]
+    search_fields = ["medical_number", "first_name", "last_name", "email", "phone", "nid", "passport"]
     filter_field = "clinic"
 
 
