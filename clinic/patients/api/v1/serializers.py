@@ -11,6 +11,7 @@ from clinic.users.api.defaults import CurrentClinicDefault
 class PatientSerializer(CountryFieldMixin, serializers.ModelSerializer):
     clinic = serializers.HiddenField(default=CurrentClinicDefault())
     nid = serializers.CharField(
+        required=False,
         max_length=14,
         validators=[
             RegexValidator(
@@ -21,6 +22,7 @@ class PatientSerializer(CountryFieldMixin, serializers.ModelSerializer):
         ],
     )
     passport = serializers.CharField(
+        required=False,
         max_length=10,
         validators=[
             RegexValidator(
