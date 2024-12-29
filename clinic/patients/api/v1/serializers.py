@@ -13,6 +13,7 @@ class PatientSerializer(CountryFieldMixin, serializers.ModelSerializer):
     nid = serializers.CharField(
         required=False,
         max_length=14,
+        help_text=_("National ID must be exactly 14 digits long."),
         validators=[
             RegexValidator(
                 regex=r"^\d{14}$",  # Matches exactly 14 digits
@@ -24,6 +25,7 @@ class PatientSerializer(CountryFieldMixin, serializers.ModelSerializer):
     passport = serializers.CharField(
         required=False,
         max_length=10,
+        help_text=_("Passport ID must be exactly 10 chars long."),
         validators=[
             RegexValidator(
                 regex=r"^.{10}$",  # Matches exactly 10 characters
