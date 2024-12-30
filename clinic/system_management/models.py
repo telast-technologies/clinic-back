@@ -25,6 +25,7 @@ class Package(UUIDAutoFieldMixin, TimestampMixin):
 
 class Clinic(UUIDAutoFieldMixin, TimestampMixin):
     package = models.ForeignKey("Package", on_delete=models.RESTRICT, related_name="clinics")
+    logo = models.ImageField(upload_to="clinics/logos", null=True, blank=True)
     name = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
     address = models.CharField(max_length=100, null=True, blank=True)
