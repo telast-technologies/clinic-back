@@ -7,6 +7,7 @@ from clinic.users.api.defaults import CurrentClinicDefault
 class SupplySerializer(serializers.ModelSerializer):
     clinic = serializers.HiddenField(default=CurrentClinicDefault())
     remains = serializers.FloatField(read_only=True)
+    unit_sales_price = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Supply
@@ -22,7 +23,8 @@ class SupplyDetailSerializer(serializers.ModelSerializer):
 class SelectSupplySerializer(serializers.ModelSerializer):
     label = serializers.CharField(read_only=True)
     value = serializers.CharField(source="uid", read_only=True)
+    unit_sales_price = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Supply
-        fields = ("label", "value")
+        fields = ("label", "value", "description", "unit_sales_price")

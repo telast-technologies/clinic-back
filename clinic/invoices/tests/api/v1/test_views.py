@@ -106,38 +106,13 @@ class ChargeItemViewSetTest(TestCase):
 
     def test_valid_retrieve_charge_items(self):
         # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-
-        url = reverse("api:v1:invoices:charge_items-list") + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_items-list")
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_invalid_retrieve_charge_items(self):
-        # Test retrieving charge items
-        url = reverse("api:v1:invoices:charge_items-list")
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_delete_charge_items_missing_visit(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-        item = ChargeItemFactory.create(invoice=invoice)
-
-        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": item.pk})
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_invalid_delete_charge_items_not_found(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-
-        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": "99999"}) + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": "99999"})
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -148,27 +123,13 @@ class ChargeItemViewSetTest(TestCase):
         invoice = InvoiceFactory.create(visit=visit)
         item = ChargeItemFactory.create(invoice=invoice)
 
-        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": item.pk}) + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": item.pk})
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
-    def test_invalid_update_charge_items_missing_visit(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-        item = ChargeItemFactory.create(invoice=invoice)
-        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": item.pk})
-        response = self.client.patch(url, {})
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_invalid_update_charge_items_not_found(self):
-        # Test retrieving charge items
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-
-        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": "99999"}) + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": "99999"})
         response = self.client.patch(url, {})
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -178,7 +139,7 @@ class ChargeItemViewSetTest(TestCase):
         visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
         invoice = InvoiceFactory.create(visit=visit)
         item = ChargeItemFactory.create(invoice=invoice)
-        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": item.pk}) + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_items-detail", kwargs={"pk": item.pk})
         response = self.client.patch(url, {"quantity": 5})
 
         item.refresh_from_db()
@@ -215,38 +176,13 @@ class ChargeServiceViewSetTest(TestCase):
 
     def test_valid_retrieve_charge_services(self):
         # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-
-        url = reverse("api:v1:invoices:charge_services-list") + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_services-list")
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_invalid_retrieve_charge_services(self):
-        # Test retrieving charge services
-        url = reverse("api:v1:invoices:charge_services-list")
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-    def test_invalid_delete_charge_services_missing_visit(self):
-        # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-        service = ChargeServiceFactory.create(invoice=invoice)
-
-        url = reverse("api:v1:invoices:charge_services-detail", kwargs={"pk": service.pk})
-        response = self.client.delete(url)
-
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
     def test_invalid_delete_charge_services_not_found(self):
-        # Test retrieving charge services
-        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic))
-        invoice = InvoiceFactory.create(visit=visit)
-
-        url = reverse("api:v1:invoices:charge_services-detail", kwargs={"pk": "99999"}) + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_services-detail", kwargs={"pk": "99999"})
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
@@ -257,7 +193,7 @@ class ChargeServiceViewSetTest(TestCase):
         invoice = InvoiceFactory.create(visit=visit)
         service = ChargeServiceFactory.create(invoice=invoice)
 
-        url = reverse("api:v1:invoices:charge_services-detail", kwargs={"pk": service.pk}) + f"?invoice={invoice.pk}"
+        url = reverse("api:v1:invoices:charge_services-detail", kwargs={"pk": service.pk})
         response = self.client.delete(url)
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

@@ -18,4 +18,4 @@ class SelectServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ("label", "value")
+        fields = ("label", "value", "description", "charge")

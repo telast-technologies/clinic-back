@@ -1,4 +1,3 @@
-from drf_spectacular.utils import OpenApiParameter, OpenApiTypes, extend_schema, extend_schema_view
 from rest_framework import generics, mixins, viewsets
 from rest_framework.permissions import SAFE_METHODS
 
@@ -45,23 +44,6 @@ class SelectInvoiceView(generics.ListAPIView):
         return self.queryset.filter(visit__patient__clinic=self.request.user.staff.clinic)
 
 
-@extend_schema_view(
-    update=extend_schema(
-        parameters=[
-            OpenApiParameter(name="invoice", description="Invoice ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-    partial_update=extend_schema(
-        parameters=[
-            OpenApiParameter(name="invoice", description="Invoice ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-    destroy=extend_schema(
-        parameters=[
-            OpenApiParameter(name="invoice", description="Invoice ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-)
 class ChargeItemViewSet(
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
@@ -90,13 +72,6 @@ class ChargeItemViewSet(
         return super().get_serializer_class(*args, **kwargs)
 
 
-@extend_schema_view(
-    destroy=extend_schema(
-        parameters=[
-            OpenApiParameter(name="invoice", description="Invoice ID", required=True, type=OpenApiTypes.UUID),
-        ]
-    ),
-)
 class ChargeServiceViewSet(
     mixins.CreateModelMixin, mixins.ListModelMixin, mixins.DestroyModelMixin, viewsets.GenericViewSet
 ):

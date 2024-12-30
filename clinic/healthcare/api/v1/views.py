@@ -6,7 +6,7 @@ from clinic.healthcare.api.v1.serializers import SelectServiceSerializer, Servic
 from clinic.healthcare.filters import ServiceFilter
 from clinic.healthcare.models import Service
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
-from clinic.users.api.permissions import IsAdminStaff, IsStaff
+from clinic.users.api.permissions import IsAdminStaff
 
 
 class ServiceViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
@@ -19,7 +19,7 @@ class ServiceViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     permission_classes = [IsAdminStaff]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_class = ServiceFilter
-    search_fields = ["name"]
+    search_fields = ["name", "description"]
     ordering_fields = ["created_at"]
     filter_field = "clinic"
 
@@ -31,7 +31,8 @@ class SelectServiceView(QuerysetFilteredMixin, generics.ListAPIView):
 
     queryset = Service.objects.get_queryset().filter(active=True)
     serializer_class = SelectServiceSerializer
-    permission_classes = [IsStaff]
+    permission_classes = [IsAdminStaff]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
-    search_fields = ["name"]
+    search_fields = ["name", "description"]
+    ordering_fields = ["created_at"]
     filter_field = "clinic"
