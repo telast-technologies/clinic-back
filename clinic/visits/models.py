@@ -1,5 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django_extensions.db.fields import RandomCharField
 
 from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 from clinic.visits.choices import DaysOfWeek, VisitStatus, VisitType
@@ -18,6 +19,14 @@ class TimeSlot(models.Model):
 
 
 class Visit(UUIDAutoFieldMixin, TimestampMixin):
+    no = RandomCharField(
+        length=6,
+        help_text="Visit number",
+        unique=True,
+        include_alpha=False,
+        include_punctuation=False,
+        include_digits=True,
+    )
     patient = models.ForeignKey("patients.Patient", on_delete=models.CASCADE, related_name="visits")
     date = models.DateField()
     time = models.TimeField()

@@ -1,7 +1,4 @@
-from typing import Any
-
 from django.contrib import admin
-from django.http import HttpRequest
 
 from clinic.system_management.admin_actions import ClinicActivationAdminAction, PackageActivationAdminAction
 from clinic.system_management.forms import ExposedPermissionForm
@@ -22,13 +19,6 @@ class TimeSlotInline(admin.TabularInline):
     model = TimeSlot
     extra = 0
     fields = ("start_time", "end_time", "days")
-    can_delete = False
-
-    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
-
-    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
 
 
 @admin.register(Clinic)
@@ -45,12 +35,6 @@ class ClinicAdmin(ClinicActivationAdminAction, admin.ModelAdmin):
     search_fields = ("name", "uid", "address", "phone", "email", "website")
     inlines = [TimeSlotInline]
     ordering = ("name",)
-
-    def has_add_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
-
-    def has_change_permission(self, request: HttpRequest, obj: Any = None) -> bool:
-        return False
 
 
 @admin.register(ExposedPermission)

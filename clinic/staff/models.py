@@ -24,7 +24,7 @@ class Staff(UUIDAutoFieldMixin, TimestampMixin):
         include_punctuation=False,
         include_digits=True,
     )
-    permissions = models.ManyToManyField("system_management.ExposedPermission", related_name="staff")
+    permissions = models.ManyToManyField("system_management.ExposedPermission", related_name="staff", blank=True)
     is_client_admin = models.BooleanField(_("Client Admin"), default=False)
 
     class Meta:

@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from clinic.visits.api.v1.serializers import VisitDetailSerializer
+from clinic.visits.api.v1.serializers import VisitCalendarSerializer, VisitDetailSerializer
 from clinic.visits.flows import VisitFlow
 
 logger = logging.getLogger(__name__)
@@ -67,3 +67,15 @@ class VisitFlowViewMixin:
         except viewflow.fsm.TransitionNotAllowed as e:
             logger.error(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class VisitViewMixin:
+    @extend_schema(
+            request=None,
+            responses={200: VisitCalendarSerializer(many=True)},
+        )
+    @action(detail=False, methods=["get"])
+    def calendar(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        serializer = VisitCalendarSerializer(queryset, many=True, context=self.get_serializer_context())
+        return Response(data=serializer.data, status=status.HTTP_200_OK)

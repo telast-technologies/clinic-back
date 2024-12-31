@@ -270,7 +270,7 @@ class VisitCalendarViewSetTest(TestCase):
         # Test retrieving visit list
         VisitFactory.create()
 
-        url = reverse("api:v1:visits:visit_calendar")
+        url = reverse("api:v1:visits:visit-calendar")
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)

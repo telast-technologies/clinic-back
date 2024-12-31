@@ -2,13 +2,7 @@ from django.urls import include, path, register_converter
 from rest_framework.routers import DefaultRouter
 
 from clinic.visits.api.url_converters import DateConverter
-from clinic.visits.api.v1.views import (
-    TimeSlotViewSet,
-    VisitAvailableDatesView,
-    VisitAvailableSlotsView,
-    VisitCalendarView,
-    VisitViewSet,
-)
+from clinic.visits.api.v1.views import TimeSlotViewSet, VisitAvailableDatesView, VisitAvailableSlotsView, VisitViewSet
 
 router = DefaultRouter()
 
@@ -30,11 +24,6 @@ urlpatterns = [
         "slot/date/available/<str:patient>/",
         VisitAvailableDatesView.as_view(),
         name="slots_date_available",
-    ),
-    path(
-        "calendar/",
-        VisitCalendarView.as_view(),
-        name="visit_calendar",
     ),
     path("", include(router.urls)),
 ]

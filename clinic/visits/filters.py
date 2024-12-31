@@ -31,11 +31,3 @@ class VisitFilter(django_filters.FilterSet):
             queryset = queryset.filter(date__lte=now.date(), time__lt=now.time())
 
         return queryset
-
-
-class VisitCalendarFilter(django_filters.FilterSet):
-    date = django_filters.DateFromToRangeFilter(field_name="date")
-
-    class Meta:
-        model = Visit
-        fields = ("uid", "date", "status")

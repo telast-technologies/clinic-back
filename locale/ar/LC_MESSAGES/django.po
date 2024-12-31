@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-20 21:26+0000\n"
+"POT-Creation-Date: 2024-12-31 04:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -39,8 +39,29 @@ msgstr ""
 msgid "Rejected"
 msgstr ""
 
+#: clinic/inventory/choices.py:6
+msgid "Drug"
+msgstr ""
+
+#: clinic/inventory/choices.py:7
+msgid "Supplement"
+msgstr ""
+
 #: clinic/invoices/api/validators.py:7 clinic/invoices/api/validators.py:22
 msgid "Invalid invoice data"
+msgstr ""
+
+#: clinic/patients/api/v1/serializers.py:16
+#: clinic/patients/api/v1/serializers.py:20
+msgid "National ID must be exactly 14 digits long."
+msgstr ""
+
+#: clinic/patients/api/v1/serializers.py:28
+msgid "Passport ID must be exactly 10 chars long."
+msgstr ""
+
+#: clinic/patients/api/v1/serializers.py:32
+msgid "National ID must be exactly 10 digits long."
 msgstr ""
 
 #: clinic/patients/api/validators.py:7
@@ -52,23 +73,55 @@ msgid "Facebook"
 msgstr ""
 
 #: clinic/patients/choices.py:7
-msgid "Telegram"
+msgid "Instagram"
 msgstr ""
 
 #: clinic/patients/choices.py:8
-msgid "Whatsapp"
+msgid "Twitter"
 msgstr ""
 
 #: clinic/patients/choices.py:9
-msgid "SMS"
+msgid "Linkedin"
 msgstr ""
 
 #: clinic/patients/choices.py:10
+msgid "Youtube"
+msgstr ""
+
+#: clinic/patients/choices.py:11
+msgid "Tiktok"
+msgstr ""
+
+#: clinic/patients/choices.py:12
+msgid "Snapchat"
+msgstr ""
+
+#: clinic/patients/choices.py:13
+msgid "Telegram"
+msgstr ""
+
+#: clinic/patients/choices.py:14
+msgid "Whatsapp"
+msgstr ""
+
+#: clinic/patients/choices.py:15
+msgid "SMS"
+msgstr ""
+
+#: clinic/patients/choices.py:16
 msgid "Email"
 msgstr ""
 
-#: clinic/patients/choices.py:11 clinic/users/choices.py:7
+#: clinic/patients/choices.py:17 clinic/users/choices.py:7
 msgid "Other"
+msgstr ""
+
+#: clinic/patients/choices.py:21
+msgid "Male"
+msgstr ""
+
+#: clinic/patients/choices.py:22
+msgid "Female"
 msgstr ""
 
 #: clinic/staff/models.py:28
@@ -105,8 +158,12 @@ msgstr ""
 msgid "One Time Payment"
 msgstr ""
 
-#: clinic/system_management/models.py:33
+#: clinic/system_management/models.py:35
 msgid "Patient Count Capacity/Hours"
+msgstr ""
+
+#: clinic/system_management/models.py:37
+msgid "Clinic Profit Share"
 msgstr ""
 
 #: clinic/system_management/tests/test_validators.py:19
@@ -126,19 +183,19 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:52
+#: clinic/users/api/v1/serializers.py:53
 msgid "Password"
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:53
+#: clinic/users/api/v1/serializers.py:54
 msgid "Password must be at least 8 characters long."
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:58
+#: clinic/users/api/v1/serializers.py:59
 msgid "Password confirmation"
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:59
+#: clinic/users/api/v1/serializers.py:60
 msgid "Enter the same password as before, for verification."
 msgstr ""
 

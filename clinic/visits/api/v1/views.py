@@ -1,22 +1,21 @@
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
-from rest_framework import generics, status, views, viewsets
+from rest_framework import status, views, viewsets
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from clinic.system_management.services.clinic_service import ClinicService
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsAdminStaff, IsStaff
-from clinic.visits.api.mixins import VisitFlowViewMixin
 from clinic.visits.api.v1.serializers import (
     AvailableDateListSerializer,
     AvailableSlotListSerializer,
     CreateVisitSerializer,
     TimeSlotSerializer,
     UpdateVisitSerializer,
-    VisitCalendarSerializer,
     VisitDetailSerializer,
 )
-from clinic.visits.filters import TimeSlotFilter, VisitCalendarFilter, VisitFilter
+from clinic.visits.filters import TimeSlotFilter, VisitFilter
+from clinic.visits.mixins.v1.views import VisitFlowViewMixin, VisitViewMixin
 from clinic.visits.models import TimeSlot, Visit
 
 
@@ -32,7 +31,7 @@ class TimeSlotViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
     filter_field = "clinic"
 
 
-class VisitViewSet(QuerysetFilteredMixin, VisitFlowViewMixin, viewsets.ModelViewSet):
+class VisitViewSet(QuerysetFilteredMixin, VisitViewMixin, VisitFlowViewMixin, viewsets.ModelViewSet):
     """
     API endpoint that allows Visit to be viewed or edited.
     """
@@ -112,12 +111,3 @@ class VisitAvailableDatesView(views.APIView):
         return Response(
             AvailableDateListSerializer({"dates": available_dates}, read_only=True).data, status=status.HTTP_200_OK
         )
-
-
-class VisitCalendarView(QuerysetFilteredMixin, generics.ListAPIView):
-    serializer_class = VisitCalendarSerializer
-    queryset = Visit.objects.all()
-    filterset_class = VisitCalendarFilter
-    permission_classes = [IsStaff]
-    pagination_class = None
-    filter_field = "patient__clinic"
