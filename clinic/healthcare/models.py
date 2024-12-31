@@ -18,7 +18,7 @@ class Service(TimestampMixin, UUIDAutoFieldMixin):
         include_digits=True,
     )
     name = models.CharField(max_length=255)
-    description = models.TextField(default="")
+    description = models.TextField(default="", blank=True)
     charge = models.FloatField(validators=[MinValueValidator(0.0)])
     active = models.BooleanField(default=True)
 

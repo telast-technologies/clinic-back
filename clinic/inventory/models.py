@@ -23,7 +23,7 @@ class Supply(TimestampMixin, UUIDAutoFieldMixin):
     )
     invoice = models.SmallIntegerField(validators=[MinValueValidator(0)])
     item = models.CharField(max_length=255)
-    description = models.TextField(default="")
+    description = models.TextField(default="", blank=True)
     supply_type = models.CharField(max_length=10, choices=SupplyType.choices)
     unit_cost = models.FloatField(validators=[MinValueValidator(0.0)])
     quantity = models.FloatField(validators=[MinValueValidator(0.0)])

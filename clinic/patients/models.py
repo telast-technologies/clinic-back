@@ -28,9 +28,9 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
     phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION, unique=True)
     birthdate = models.DateTimeField(null=True, blank=True)
     country = CountryField(default="EG")
-    address = models.CharField(max_length=100, default="")
-    nid = models.CharField(max_length=14, help_text="National ID", default="")
-    passport = models.CharField(max_length=10, help_text="Passport ID", default="")
+    address = models.CharField(max_length=100, default="", blank=True)
+    nid = models.CharField(max_length=14, help_text="National ID", default="", blank=True)
+    passport = models.CharField(max_length=10, help_text="Passport ID", default="", blank=True)
     channel = models.CharField(max_length=100, choices=Channels.choices)
 
     class Meta:

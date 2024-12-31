@@ -30,7 +30,7 @@ class Visit(UUIDAutoFieldMixin, TimestampMixin):
         choices=VisitStatus.choices,
         default=VisitStatus.BOOKED,
     )
-    comment = models.TextField(default="")
+    comment = models.TextField(default="", blank=True)
 
     class Meta:
         ordering = ("-created_at",)
