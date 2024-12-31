@@ -71,9 +71,9 @@ class VisitFlowViewMixin:
 
 class VisitViewMixin:
     @extend_schema(
-            request=None,
-            responses={200: VisitCalendarSerializer(many=True)},
-        )
+        request=None,
+        responses={200: VisitCalendarSerializer(many=True)},
+    )
     @action(detail=False, methods=["get"])
     def calendar(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
