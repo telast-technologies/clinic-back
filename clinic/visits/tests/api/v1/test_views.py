@@ -14,7 +14,7 @@ from clinic.visits.factories import TimeSlotFactory, VisitFactory
 class VisitViewSetTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
         self.visit = VisitFactory.create(
             patient=PatientFactory.create(clinic=self.staff.clinic),
         )
@@ -228,7 +228,7 @@ class VisitViewSetTest(TestCase):
 
 class VisitAvailableDatesViewTest(TestCase):
     def setUp(self):
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
 
         self.client = APIClient()
         self.client.force_authenticate(user=self.staff.user)
@@ -244,7 +244,7 @@ class VisitAvailableDatesViewTest(TestCase):
 
 class VisitAvailableSlotsViewTest(TestCase):
     def setUp(self):
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
 
         self.client = APIClient()
         self.client.force_authenticate(user=self.staff.user)
@@ -260,7 +260,7 @@ class VisitAvailableSlotsViewTest(TestCase):
 class VisitCalendarViewSetTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
         self.visit = VisitFactory.create(
             patient=PatientFactory.create(clinic=self.staff.clinic),
         )

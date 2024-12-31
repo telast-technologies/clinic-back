@@ -8,16 +8,16 @@ class InvoiceFilter(django_filters.FilterSet):
 
     class Meta:
         model = Invoice
-        fields = ("visit", "uid", "created_at")
+        fields = ("visit", "created_at")
 
 
 class ChargeItemFilter(django_filters.FilterSet):
     class Meta:
         model = ChargeItem
-        fields = ("uid", "invoice", "supply")
+        fields = ("invoice", "supply")
 
 
 class ChargeServiceFilter(django_filters.FilterSet):
     class Meta:
         model = ChargeService
-        fields = ("uid", "invoice", "service")
+        fields = ("invoice", "service")

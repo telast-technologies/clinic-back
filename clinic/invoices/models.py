@@ -1,10 +1,19 @@
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django_extensions.db.fields import RandomCharField
 
 from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
 class Invoice(UUIDAutoFieldMixin, TimestampMixin):
+    no = RandomCharField(
+        length=6,
+        help_text="Invoice number",
+        unique=True,
+        include_alpha=False,
+        include_punctuation=False,
+        include_digits=True,
+    )
     visit = models.OneToOneField("visits.Visit", on_delete=models.CASCADE)
     tax = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     discount = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])

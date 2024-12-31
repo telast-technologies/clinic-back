@@ -68,6 +68,3 @@ class JoinRequestAdminTest(TestCase):
             self.admin.save_model(self.request, join_request, None, None)
 
         self.assertEqual(str(context.exception), "data already exists")
-
-    def test_has_add_permission(self):
-        self.assertFalse(self.admin.has_add_permission(self.request))

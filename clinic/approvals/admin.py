@@ -2,7 +2,6 @@ from typing import Any
 
 from django.contrib import admin
 from django.db import transaction
-from django.http import HttpRequest
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
@@ -12,8 +11,6 @@ from clinic.approvals.models import JoinRequest
 from clinic.staff.models import Staff
 from clinic.system_management.models import Clinic
 from clinic.users.models import User
-
-# from clinic.utils.notifications import send_email
 
 
 @admin.register(JoinRequest)
@@ -116,6 +113,3 @@ class JoinRequestAdmin(admin.ModelAdmin):
             # send_email(recipient_list=[obj.administrator_email], subject=subject, message=message)
 
         return super().save_model(request, obj, form, change)
-
-    def has_add_permission(self, request: HttpRequest) -> bool:
-        return False

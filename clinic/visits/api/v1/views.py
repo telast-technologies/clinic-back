@@ -1,11 +1,13 @@
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
 from rest_framework import status, views, viewsets
+from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from clinic.system_management.services.clinic_service import ClinicService
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
-from clinic.users.api.permissions import IsAdminStaff, IsStaff
+from clinic.users.api.permissions import IsAdminStaff
 from clinic.visits.api.v1.serializers import (
     AvailableDateListSerializer,
     AvailableSlotListSerializer,
@@ -26,8 +28,11 @@ class TimeSlotViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
 
     queryset = TimeSlot.objects.all()
     serializer_class = TimeSlotSerializer
-    filterset_class = TimeSlotFilter
     permission_classes = [IsAdminStaff]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
+    filterset_class = TimeSlotFilter
+    search_fields = ["uid"]
+    ordering_fields = ["created_at"]
     filter_field = "clinic"
 
 
@@ -38,8 +43,11 @@ class VisitViewSet(QuerysetFilteredMixin, VisitViewMixin, VisitFlowViewMixin, vi
 
     queryset = Visit.objects.all()
     serializer_class = CreateVisitSerializer
+    permission_classes = [IsAdminStaff]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_class = VisitFilter
-    permission_classes = [IsStaff]
+    search_fields = ["uid", "no", "patient__medical_number", "patient__first_name", "patient__last_name"]
+    ordering_fields = ["created_at"]
     filter_field = "patient__clinic"
 
     def get_serializer_class(self):
@@ -55,7 +63,7 @@ class VisitAvailableSlotsView(views.APIView):
     """View for getting available slots for a given date."""
 
     serializer_class = None
-    permission_classes = [IsStaff]
+    permission_classes = [IsAdminStaff]
 
     @extend_schema(
         responses={
@@ -86,7 +94,7 @@ class VisitAvailableDatesView(views.APIView):
     """View for getting available dates for a patient for next 31 days including today."""
 
     serializer_class = None
-    permission_classes = [IsStaff]
+    permission_classes = [IsAdminStaff]
 
     @extend_schema(
         responses={

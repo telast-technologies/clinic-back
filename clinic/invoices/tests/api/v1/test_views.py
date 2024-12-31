@@ -14,7 +14,7 @@ from clinic.visits.factories import VisitFactory
 class InvoiceViewSetTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
         self.visit = VisitFactory.create(
             patient=PatientFactory.create(clinic=self.staff.clinic),
         )
@@ -78,7 +78,7 @@ class InvoiceViewSetTest(TestCase):
 class SelectInvoiceViewSetTest(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
         self.visit = VisitFactory.create(
             patient=PatientFactory.create(clinic=self.staff.clinic),
         )
@@ -99,7 +99,7 @@ class SelectInvoiceViewSetTest(TestCase):
 
 class ChargeItemViewSetTest(TestCase):
     def setUp(self):
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
 
         self.client = APIClient()
         self.client.force_authenticate(user=self.staff.user)
@@ -169,7 +169,7 @@ class ChargeItemViewSetTest(TestCase):
 
 class ChargeServiceViewSetTest(TestCase):
     def setUp(self):
-        self.staff = StaffFactory.create()
+        self.staff = StaffFactory.create(is_client_admin=True)
 
         self.client = APIClient()
         self.client.force_authenticate(user=self.staff.user)
