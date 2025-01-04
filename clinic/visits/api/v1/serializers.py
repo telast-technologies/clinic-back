@@ -1,7 +1,7 @@
 from django.utils import timezone
-from clinic.invoices.api.v1.serializers import InvoiceSerializer
 from rest_framework import serializers
 
+from clinic.invoices.api.v1.serializers import InvoiceSerializer
 from clinic.patients.api.v1.serializers import PatientSerializer
 from clinic.users.api.defaults import CurrentClinicDefault
 from clinic.visits.api.validators import TimeSlotValidator, VisitValidator
