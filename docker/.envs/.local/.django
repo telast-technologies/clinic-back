@@ -10,6 +10,6 @@ FERNET_KEY=c-wf1MA-43s-jBh9nxe9Wmtyyjt_Nqslhnby5flk9a0=
 # Password Reset
 PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL=http://localhost:3000/auth/password/reset/confirm
 # Brevo Mail Service
-DEFAULT_FROM_EMAIL=info@telast.tech
+DEFAULT_FROM_EMAIL=info@telasttechnologies.com
 BREVO_API_URL=https://api.brevo.com/v3/emailCampaigns
 BREVO_API_KEY=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

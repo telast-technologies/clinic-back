@@ -4,13 +4,13 @@ USE_DOCKER=yes
 IPYTHONDIR=/app/.ipython
 # Security
 INTERNAL_IPS=0.0.0.0
-ALLOWED_HOSTS=0.0.0.0,41.32.250.108,telast.tech,clinic.telast.tech
+ALLOWED_HOSTS=0.0.0.0,41.32.250.108,telasttechnologies.com,clinic.telasttechnologies.com
 SECRET_KEY=eFZFWdNAd4mIjn9Z2zIcsj4vblyoU5HVNtHaBL7CtieDLqU8OngU4B6GgvlA5XCV
 FERNET_KEY=c-wf1MA-43s-jBh9nxe9Wmtyyjt_Nqslhnby5flk9a0=
 # Password Reset
 PASSWORD_RESET_CONFIRM_REDIRECT_BASE_URL=https://production:3000/auth/password/reset/confirm
 # Brevo Mail Service
-DEFAULT_FROM_EMAIL=info@telast.tech
+DEFAULT_FROM_EMAIL=info@telasttechnologies.com
 BREVO_API_URL=https://api.brevo.com/v3/emailCampaigns
 BREVO_API_KEY=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
 # Database
