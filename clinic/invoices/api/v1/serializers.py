@@ -47,11 +47,13 @@ class ChargeServiceDetailSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(serializers.ModelSerializer):
     balance = serializers.IntegerField(read_only=True)
     total = serializers.IntegerField(read_only=True)
+    visit = serializers.CharField(source="visit.no", read_only=True)
+    patient_name = serializers.CharField(source="visit.patient.get_full_name", read_only=True)
+    patient_address = serializers.CharField(source="visit.patient.address", read_only=True)
 
     class Meta:
         model = Invoice
         fields = "__all__"
-        read_only_fields = ("visit",)
 
 
 class SelectInvoiceSerializer(serializers.ModelSerializer):
