@@ -1,4 +1,5 @@
 from django.utils import timezone
+from clinic.invoices.api.v1.serializers import InvoiceSerializer
 from rest_framework import serializers
 
 from clinic.patients.api.v1.serializers import PatientSerializer
@@ -52,7 +53,7 @@ class UpdateVisitSerializer(serializers.ModelSerializer):
 
 class VisitDetailSerializer(serializers.ModelSerializer):
     patient = PatientSerializer(read_only=True)
-    invoice = serializers.CharField(source="invoice.uid", read_only=True)
+    invoice = InvoiceSerializer(read_only=True)
 
     class Meta:
         model = Visit
