@@ -2,6 +2,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django_extensions.db.fields import RandomCharField
 
+from clinic.invoices.choices import InvoiceStatus
 from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
@@ -19,7 +20,9 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
     discount = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     sub_total = models.PositiveIntegerField(default=0, help_text="Total without tax and discount")
     due_date = models.DateTimeField(null=True, blank=True)
-    
+    comment = models.TextField(default="", blank=True)
+    status = models.CharField(max_length=20, choices=InvoiceStatus.choices, default=InvoiceStatus.UNPAID)
+
     @property
     def charges(self):
         item_charges = sum([item.charge for item in self.charge_items.all()])
