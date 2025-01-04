@@ -37,6 +37,7 @@ class InvoiceViewSet(
     search_fields = [
         "uid",
         "no",
+        "visit__no",
         "visit__patient__medical_number",
         "visit__patient__first_name",
         "visit__patient__last_name",
