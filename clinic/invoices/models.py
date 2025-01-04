@@ -22,6 +22,7 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
     due_date = models.DateTimeField(null=True, blank=True)
     comment = models.TextField(default="", blank=True)
     status = models.CharField(max_length=20, choices=InvoiceStatus.choices, default=InvoiceStatus.UNPAID)
+    signature = models.ImageField(upload_to="invoices/signatures", null=True, blank=True)
 
     @property
     def charges(self):
