@@ -18,7 +18,8 @@ class Invoice(UUIDAutoFieldMixin, TimestampMixin):
     tax = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     discount = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     sub_total = models.PositiveIntegerField(default=0, help_text="Total without tax and discount")
-
+    due_date = models.DateTimeField(null=True, blank=True)
+    
     @property
     def charges(self):
         item_charges = sum([item.charge for item in self.charge_items.all()])
