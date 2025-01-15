@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import Permission
 from django.core.cache import cache
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
@@ -33,9 +32,6 @@ class Clinic(UUIDAutoFieldMixin, TimestampMixin):
     email = models.EmailField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     capacity = models.PositiveIntegerField(_("Patient Count Capacity/Hours"), default=5)
-    profit_share = models.PositiveIntegerField(
-        _("Clinic Profit Share"), default=0, validators=[MinValueValidator(0), MaxValueValidator(100)]
-    )
     active = models.BooleanField(default=True)
 
     class Meta:

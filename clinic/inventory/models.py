@@ -1,4 +1,4 @@
-from django.core.validators import MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import F, Sum, Value
 from django.db.models.functions import Coalesce
@@ -27,6 +27,7 @@ class Supply(TimestampMixin, UUIDAutoFieldMixin):
     supply_type = models.CharField(max_length=10, choices=SupplyType.choices)
     unit_cost = models.FloatField(validators=[MinValueValidator(0.0)])
     quantity = models.FloatField(validators=[MinValueValidator(0.0)])
+    profit_share = models.PositiveIntegerField(default=0, validators=[MinValueValidator(0), MaxValueValidator(100)])
     charge = models.GeneratedField(
         expression=F("unit_cost") * F("quantity"),
         output_field=models.FloatField(validators=[MinValueValidator(0.0)]),
@@ -58,7 +59,7 @@ class Supply(TimestampMixin, UUIDAutoFieldMixin):
 
     @property
     def unit_sales_price(self):
-        price = self.unit_cost + (self.unit_cost * (self.clinic.profit_share / 100))
+        price = self.unit_cost + (self.unit_cost * (self.profit_share / 100))
         return price if self.supply_type == SupplyType.SUPPLEMENT else self.unit_cost
 
     @property

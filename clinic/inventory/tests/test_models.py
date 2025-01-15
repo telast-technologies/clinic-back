@@ -29,7 +29,7 @@ class SupplyModelTest(TestCase):
         self.assertEqual(self.obj.remains, 0.0)
 
     def test_display_unit_sales_price(self):
-        price = self.obj.unit_cost + (self.obj.unit_cost * (self.obj.clinic.profit_share / 100))
+        price = self.obj.unit_cost + (self.obj.unit_cost * (self.obj.profit_share / 100))
         expected = price if self.obj.supply_type == SupplyType.SUPPLEMENT else self.obj.unit_cost
 
         self.assertEqual(self.obj.unit_sales_price, expected)
