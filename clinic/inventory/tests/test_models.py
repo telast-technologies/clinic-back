@@ -14,9 +14,6 @@ class SupplyModelTest(TestCase):
         self.assertIsInstance(self.obj, Supply)
         self.assertIsInstance(self.obj.__str__(), str)
 
-    def test_display_label(self):
-        self.assertEqual(self.obj.label, f"{self.obj.item} ({self.obj.lot})")
-
     def test_display_remains_if_no_charges(self):
         self.assertEqual(self.obj.remains, self.obj.quantity)
 

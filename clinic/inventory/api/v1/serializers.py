@@ -21,10 +21,10 @@ class SupplyDetailSerializer(serializers.ModelSerializer):
 
 
 class SelectSupplySerializer(serializers.ModelSerializer):
-    label = serializers.CharField(read_only=True)
+    label = serializers.CharField(source="item", read_only=True)
     value = serializers.CharField(source="uid", read_only=True)
     unit_sales_price = serializers.FloatField(read_only=True)
 
     class Meta:
         model = Supply
-        fields = ("label", "value", "description", "unit_sales_price")
+        fields = ("label", "value", "description", "unit_sales_price", "quantity")

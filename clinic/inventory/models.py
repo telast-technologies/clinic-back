@@ -54,10 +54,6 @@ class Supply(TimestampMixin, UUIDAutoFieldMixin):
         return self.item
 
     @property
-    def label(self):
-        return f"{self.item} ({self.lot})"
-
-    @property
     def unit_sales_price(self):
         price = self.unit_cost + (self.unit_cost * (self.profit_share / 100))
         return price if self.supply_type == SupplyType.SUPPLEMENT else self.unit_cost
