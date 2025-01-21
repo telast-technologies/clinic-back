@@ -25,6 +25,7 @@ class SelectSupplySerializer(serializers.ModelSerializer):
     value = serializers.CharField(source="uid", read_only=True)
     unit_sales_price = serializers.FloatField(read_only=True)
     remains = serializers.FloatField(read_only=True)
+
     class Meta:
         model = Supply
         fields = ("label", "value", "description", "unit_sales_price", "remains")
