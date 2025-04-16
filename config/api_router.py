@@ -9,6 +9,7 @@ v1 = [
     path("inventory/", include("clinic.inventory.api.v1.urls", namespace="inventory")),
     path("visits/", include("clinic.visits.api.v1.urls", namespace="visits")),
     path("invoices/", include("clinic.invoices.api.v1.urls", namespace="invoices")),
+    path("users/", include("clinic.users.api.v1.urls", namespace="users")),
 ]
 
 urlpatterns = [

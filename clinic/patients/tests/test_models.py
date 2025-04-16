@@ -1,8 +1,8 @@
 import humanize
 from django.test import TestCase
 
-from clinic.patients.factories import PatientFactory, PatientReportFactory
-from clinic.patients.models import Patient, PatientReport
+from clinic.patients.factories import PatientFactory, PatientPrescriptionFactory, PatientReportFactory
+from clinic.patients.models import Patient, PatientPrescription, PatientReport
 
 
 class PatientModelTest(TestCase):
@@ -30,3 +30,12 @@ class PatientReportModelTest(TestCase):
 
     def test_display_size(self):
         self.assertEqual(self.obj.size, humanize.naturalsize(self.obj.document.size))
+
+
+class PatientPrescriptionModelTest(TestCase):
+    def setUp(self):
+        self.obj = PatientPrescriptionFactory.create()
+
+    def test_create_instance(self):
+        self.assertIsInstance(self.obj, PatientPrescription)
+        self.assertIsInstance(self.obj.__str__(), str)

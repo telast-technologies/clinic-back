@@ -1,5 +1,6 @@
 import humanize
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django_countries.fields import CountryField
 from django_extensions.db.fields import RandomCharField
@@ -68,3 +69,18 @@ class PatientReport(UUIDAutoFieldMixin, TimestampMixin):
 
     def __str__(self) -> str:
         return f"{self.document.url if self.document else '-'}"
+
+
+class PatientPrescription(UUIDAutoFieldMixin, TimestampMixin):
+    patient = models.ForeignKey(
+        "patients.Patient",
+        on_delete=models.CASCADE,
+        related_name="prescriptions",
+        db_index=True,
+    )
+    examination = models.TextField()
+    medicines = ArrayField(models.JSONField(), null=True, blank=True)
+    notes = models.TextField(default="", blank=True)
+
+    def __str__(self) -> str:
+        return f"Prescription for {self.patient.get_full_name()}"

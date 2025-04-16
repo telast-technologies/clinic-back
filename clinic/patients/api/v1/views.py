@@ -2,9 +2,14 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, mixins, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 
-from clinic.patients.api.v1.serializers import PatientReportSerializer, PatientSerializer, SelectPatientSerializer
+from clinic.patients.api.v1.serializers import (
+    PatientPrescriptionSerializer,
+    PatientReportSerializer,
+    PatientSerializer,
+    SelectPatientSerializer,
+)
 from clinic.patients.filters import PatientFilter, PatientReportFilter
-from clinic.patients.models import Patient, PatientReport
+from clinic.patients.models import Patient, PatientPrescription, PatientReport
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsStaff
 
@@ -37,6 +42,20 @@ class PatientReportViewSet(
 ):
     serializer_class = PatientReportSerializer
     queryset = PatientReport.objects.all()
+    permission_classes = [IsStaff]
+    filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
+    filterset_class = PatientReportFilter
+    filter_field = "patient__clinic"
+
+
+class PatientPrescriptionViewSet(
+    mixins.CreateModelMixin,
+    mixins.ListModelMixin,
+    mixins.DestroyModelMixin,
+    viewsets.GenericViewSet,
+):
+    serializer_class = PatientPrescriptionSerializer
+    queryset = PatientPrescription.objects.all()
     permission_classes = [IsStaff]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
     filterset_class = PatientReportFilter

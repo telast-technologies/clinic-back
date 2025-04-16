@@ -22,3 +22,11 @@ class PatientReportFactory(factory.django.DjangoModelFactory):
 
     patient = factory.SubFactory("clinic.patients.factories.PatientFactory")
     document = factory.django.FileField()
+
+
+class PatientPrescriptionFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = "patients.PatientPrescription"
+
+    patient = factory.SubFactory("clinic.patients.factories.PatientFactory")
+    examination = factory.Faker("sentence")

@@ -3,6 +3,8 @@ import logging
 from viewflow.fsm import State
 
 from clinic.invoices.models import Invoice
+from clinic.staff.models import Staff
+from clinic.utils.notifications import send_inbox
 from clinic.visits.choices import VisitStatus
 
 logger = logging.getLogger(__name__)
@@ -33,6 +35,20 @@ class VisitFlow:
 
     @status.transition(source=[VisitStatus.CHECKED_IN], target=VisitStatus.CHECKED_OUT)
     def check_out(self):
+        clinic = self.visit.patient.clinic
+        admin_staff_emails = list(
+            Staff.objects.filter(clinic=clinic, is_client_admin=True).values_list("user__email", flat=True)
+        )
+
+        for charge_item in self.visit.invoice.charge_items.all():
+            if charge_item.supply.remains < clinic.limit_threshold:
+                send_inbox(
+                    charge_item.supply,
+                    recipient_list=admin_staff_emails,
+                    title=f"Low supply for {charge_item.supply.item}",
+                    message=f"Please restock {charge_item.supply.item}",
+                )
+
         logger.info(f"Checking out {self.visit}")
 
     @status.transition(source=[VisitStatus.BOOKED, VisitStatus.CHECKED_IN], target=VisitStatus.CANCELLED)

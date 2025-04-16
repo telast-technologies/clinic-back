@@ -32,6 +32,7 @@ class Clinic(UUIDAutoFieldMixin, TimestampMixin):
     email = models.EmailField(null=True, blank=True)
     website = models.URLField(null=True, blank=True)
     capacity = models.PositiveIntegerField(_("Patient Count Capacity/Hours"), default=5)
+    limit_threshold = models.PositiveIntegerField(_("Inventory Limit Threshold"), default=10)
     active = models.BooleanField(default=True)
 
     class Meta:
@@ -75,7 +76,7 @@ class Clinic(UUIDAutoFieldMixin, TimestampMixin):
 
 
 class ExposedPermission(UUIDAutoFieldMixin, TimestampMixin):
-    permission = models.OneToOneField(Permission, on_delete=models.CASCADE)
+    permission = models.OneToOneField(Permission, on_delete=models.CASCADE, related_name="exposed_permission")
 
     class Meta:
         ordering = ("-created_at",)

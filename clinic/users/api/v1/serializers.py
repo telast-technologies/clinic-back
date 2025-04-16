@@ -1,6 +1,7 @@
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Permission
 from django.utils.translation import gettext_lazy as _
+from notifications.models import Notification
 from rest_framework import serializers
 
 from clinic.system_management.api.v1.serializers import ClinicSerializer
@@ -9,9 +10,11 @@ from clinic.users.models import User
 
 
 class PermissionDetailSerializer(serializers.ModelSerializer):
+    exposed_id = serializers.IntegerField(source="exposed_permission.id", read_only=True)
+
     class Meta:
         model = Permission
-        fields = ("name", "codename")
+        fields = ("exposed_id", "name", "codename")
 
 
 class UserProfileSerializer(serializers.ModelSerializer):
@@ -93,3 +96,13 @@ class UserModifySerializer(serializers.ModelSerializer):
             instance.save()
 
         return super().update(instance=instance, validated_data=validated_data)
+
+
+class NotificationInboxSerializer(serializers.ModelSerializer):
+    title = serializers.CharField(source="verb", read_only=True)
+    message = serializers.CharField(source="description", read_only=True)
+
+    class Meta:
+        model = Notification
+        fields = ["id", "title", "message", "timestamp", "level", "unread", "data"]
+        read_only_fields = ["timestamp"]

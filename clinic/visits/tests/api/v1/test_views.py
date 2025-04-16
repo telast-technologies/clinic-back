@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APIClient
 
+from clinic.invoices.factories import ChargeItemFactory, InvoiceFactory
 from clinic.patients.factories import PatientFactory
 from clinic.staff.factories import StaffFactory
 from clinic.visits.choices import VisitStatus, VisitType
@@ -153,6 +154,11 @@ class VisitViewSetTest(TestCase):
         visit = VisitFactory.create(
             patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.CHECKED_IN
         )
+        invoice = InvoiceFactory.create(visit=visit)
+        charge_item = ChargeItemFactory.create(invoice=invoice)
+        charge_item.supply.quantity = 5
+        charge_item.supply.save()
+
         url = reverse("api:v1:visits:visit-check-out", kwargs={"pk": visit.pk})
         response = self.client.patch(url, format="json")
 

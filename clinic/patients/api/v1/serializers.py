@@ -4,7 +4,7 @@ from django_countries.serializers import CountryFieldMixin
 from rest_framework import serializers
 
 from clinic.patients.api.validators import PatientReportValidator
-from clinic.patients.models import Patient, PatientReport
+from clinic.patients.models import Patient, PatientPrescription, PatientReport
 from clinic.users.api.defaults import CurrentClinicDefault
 
 
@@ -55,5 +55,12 @@ class PatientReportSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PatientReport
+        fields = "__all__"
+        validations = [PatientReportValidator()]
+
+
+class PatientPrescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PatientPrescription
         fields = "__all__"
         validations = [PatientReportValidator()]
