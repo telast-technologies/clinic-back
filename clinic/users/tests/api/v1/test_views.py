@@ -15,7 +15,9 @@ class NotificationsInboxViewTests(TestCase):
 
     def test_get_inbox(self):
         send_inbox(self.user, recipient_list=[self.user.email], title="Test title", message="Test message")
-        send_inbox(self.user, recipient_list=[UserFactory.create().email], title="Test title 2", message="Test message 2")
+        send_inbox(
+            self.user, recipient_list=[UserFactory.create().email], title="Test title 2", message="Test message 2"
+        )
 
         url = reverse("api:v1:users:notification_inbox-list")
 
