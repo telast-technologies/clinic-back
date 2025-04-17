@@ -18,6 +18,7 @@ class PatientReportFilter(django_filters.FilterSet):
         model = PatientReport
         fields = ("patient", "created_at")
 
+
 class PatientPrescriptionFilter(django_filters.FilterSet):
     created_at = django_filters.DateTimeFromToRangeFilter(field_name="created_at")
 
