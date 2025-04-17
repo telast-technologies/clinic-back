@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-12-31 04:55+0000\n"
+"POT-Creation-Date: 2025-04-17 10:03+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: clinic/approvals/admin.py:92
+#: clinic/approvals/admin.py:89
 msgid "Join Request Approved"
 msgstr ""
 
-#: clinic/approvals/admin.py:108
+#: clinic/approvals/admin.py:105
 msgid "Join Request Rejected"
 msgstr ""
 
@@ -48,6 +48,22 @@ msgstr ""
 
 #: clinic/invoices/api/validators.py:7 clinic/invoices/api/validators.py:22
 msgid "Invalid invoice data"
+msgstr ""
+
+#: clinic/invoices/choices.py:6
+msgid "Paid"
+msgstr ""
+
+#: clinic/invoices/choices.py:7
+msgid "Partial Paid"
+msgstr ""
+
+#: clinic/invoices/choices.py:8
+msgid "Unpaid"
+msgstr ""
+
+#: clinic/invoices/choices.py:9 clinic/visits/choices.py:19
+msgid "Cancelled"
 msgstr ""
 
 #: clinic/patients/api/v1/serializers.py:16
@@ -157,12 +173,12 @@ msgstr ""
 msgid "One Time Payment"
 msgstr ""
 
-#: clinic/system_management/models.py:35
+#: clinic/system_management/models.py:34
 msgid "Patient Count Capacity/Hours"
 msgstr ""
 
-#: clinic/system_management/models.py:37
-msgid "Clinic Profit Share"
+#: clinic/system_management/models.py:35
+msgid "Inventory Limit Threshold"
 msgstr ""
 
 #: clinic/system_management/tests/test_validators.py:19
@@ -182,19 +198,19 @@ msgstr ""
 msgid "Important dates"
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:53
+#: clinic/users/api/v1/serializers.py:56
 msgid "Password"
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:54
+#: clinic/users/api/v1/serializers.py:57
 msgid "Password must be at least 8 characters long."
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:59
+#: clinic/users/api/v1/serializers.py:62
 msgid "Password confirmation"
 msgstr ""
 
-#: clinic/users/api/v1/serializers.py:60
+#: clinic/users/api/v1/serializers.py:63
 msgid "Enter the same password as before, for verification."
 msgstr ""
 
@@ -256,10 +272,6 @@ msgstr ""
 
 #: clinic/visits/choices.py:18
 msgid "Checked Out"
-msgstr ""
-
-#: clinic/visits/choices.py:19
-msgid "Cancelled"
 msgstr ""
 
 #: clinic/visits/choices.py:23

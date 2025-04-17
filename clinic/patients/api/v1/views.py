@@ -8,7 +8,7 @@ from clinic.patients.api.v1.serializers import (
     PatientSerializer,
     SelectPatientSerializer,
 )
-from clinic.patients.filters import PatientFilter, PatientReportFilter
+from clinic.patients.filters import PatientFilter, PatientPrescriptionFilter, PatientReportFilter
 from clinic.patients.models import Patient, PatientPrescription, PatientReport
 from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsStaff
@@ -35,6 +35,7 @@ class SelectPatientView(QuerysetFilteredMixin, generics.ListAPIView):
 
 
 class PatientReportViewSet(
+    QuerysetFilteredMixin,
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.DestroyModelMixin,
@@ -49,6 +50,7 @@ class PatientReportViewSet(
 
 
 class PatientPrescriptionViewSet(
+    QuerysetFilteredMixin,
     mixins.CreateModelMixin,
     mixins.ListModelMixin,
     mixins.DestroyModelMixin,
@@ -58,5 +60,5 @@ class PatientPrescriptionViewSet(
     queryset = PatientPrescription.objects.all()
     permission_classes = [IsStaff]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
-    filterset_class = PatientReportFilter
+    filterset_class = PatientPrescriptionFilter
     filter_field = "patient__clinic"
