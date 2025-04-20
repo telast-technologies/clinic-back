@@ -5,7 +5,7 @@ from clinic.invoices.api.v1.serializers import InvoiceSerializer
 from clinic.patients.api.v1.serializers import PatientSerializer
 from clinic.users.api.defaults import CurrentClinicDefault
 from clinic.visits.api.validators import TimeSlotValidator, VisitValidator
-from clinic.visits.choices import VisitType
+from clinic.visits.choices import ArrivalPurposeType, VisitType
 from clinic.visits.models import TimeSlot, Visit
 
 
@@ -74,3 +74,18 @@ class VisitCalendarSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visit
         fields = ("uid", "date", "time", "status", "visit_type", "patient")
+
+
+class ArrivalPurposeSerializer(serializers.Serializer):
+    purpose = serializers.ChoiceField(choices=ArrivalPurposeType.choices)
+
+
+class QueueSerializer(serializers.Serializer):
+    visit_no = serializers.CharField(read_only=True)
+    patient = serializers.CharField(read_only=True)
+    queue = serializers.IntegerField(read_only=True)
+
+
+class VisitQueueSerializer(serializers.Serializer):
+    examination = QueueSerializer(many=True, read_only=True)
+    consultant = QueueSerializer(many=True, read_only=True)

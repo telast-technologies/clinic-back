@@ -15,6 +15,7 @@ class DaysOfWeek(models.TextChoices):
 class VisitStatus(models.TextChoices):
     BOOKED = "booked", _("Booked")
     CHECKED_IN = "checked_in", _("Checked In")
+    ARRIVED = "arrived", _("Arrived")
     CHECKED_OUT = "checked_out", _("Checked Out")
     CANCELLED = "cancelled", _("Cancelled")
 
@@ -22,6 +23,11 @@ class VisitStatus(models.TextChoices):
 class VisitType(models.TextChoices):
     SCHEDULED = "scheduled", _("Scheduled")
     WALK_IN = "walk_in", _("Walk In")
+
+
+class ArrivalPurposeType(models.TextChoices):
+    EXAMINATION = "examination", _("Examination")
+    CONSULTANT = "consultant", _("Consultant")
 
 
 class TimeChoices(models.TextChoices):

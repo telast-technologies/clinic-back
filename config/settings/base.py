@@ -65,6 +65,7 @@ THIRD_PARTY_APPS = [
     "notifications",
     "anymail",
     "viewflow",
+    "sequences.apps.SequencesConfig",
 ]
 
 CONTROLLED_LOCAL_APPS = [

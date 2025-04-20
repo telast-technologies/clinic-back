@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-17 10:03+0000\n"
+"POT-Creation-Date: 2025-04-20 16:11+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Unpaid"
 msgstr ""
 
-#: clinic/invoices/choices.py:9 clinic/visits/choices.py:19
+#: clinic/invoices/choices.py:9 clinic/visits/choices.py:20
 msgid "Cancelled"
 msgstr ""
 
@@ -271,26 +271,38 @@ msgid "Checked In"
 msgstr ""
 
 #: clinic/visits/choices.py:18
+msgid "Arrived"
+msgstr ""
+
+#: clinic/visits/choices.py:19
 msgid "Checked Out"
 msgstr ""
 
-#: clinic/visits/choices.py:23
+#: clinic/visits/choices.py:24
 msgid "Scheduled"
 msgstr ""
 
-#: clinic/visits/choices.py:24
+#: clinic/visits/choices.py:25
 msgid "Walk In"
 msgstr ""
 
 #: clinic/visits/choices.py:28
-msgid "Up Coming"
+msgid "Examination"
 msgstr ""
 
 #: clinic/visits/choices.py:29
+msgid "Consultant"
+msgstr ""
+
+#: clinic/visits/choices.py:33
+msgid "Up Coming"
+msgstr ""
+
+#: clinic/visits/choices.py:34
 msgid "Past"
 msgstr ""
 
-#: clinic/visits/choices.py:30
+#: clinic/visits/choices.py:35
 msgid "All"
 msgstr ""
 
@@ -298,10 +310,10 @@ msgstr ""
 msgid "Unable to determine your clinic or access is restricted."
 msgstr ""
 
-#: config/settings/base.py:173
+#: config/settings/base.py:174
 msgid "English"
 msgstr ""
 
-#: config/settings/base.py:174
+#: config/settings/base.py:175
 msgid "Arabic"
 msgstr ""

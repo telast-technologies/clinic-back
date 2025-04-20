@@ -1,5 +1,7 @@
 import logging
 
+from django.utils import timezone
+from sequences import get_next_value
 from viewflow.fsm import State
 
 from clinic.invoices.models import Invoice
@@ -28,7 +30,18 @@ class VisitFlow:
     def _on_transition_success(self, descriptor, source, target, *args, **kwargs):
         self.visit.save()
 
-    @status.transition(source=[VisitStatus.BOOKED], target=VisitStatus.CHECKED_IN)
+    @status.transition(source=[VisitStatus.BOOKED], target=VisitStatus.ARRIVED)
+    def arrive(self, purpose):
+        today = timezone.now().date()
+        self.visit.arrival_info = {
+            "purpose": purpose,
+            "date": f"{today}",
+            "queue": get_next_value(f"{today}-{self.visit.patient.clinic.pk}-{purpose}"),
+        }
+
+        logger.info(f"Arriving {self.visit}")
+
+    @status.transition(source=[VisitStatus.ARRIVED], target=VisitStatus.CHECKED_IN)
     def check_in(self):
         Invoice.objects.get_or_create(visit=self.visit)
         logger.info(f"Checking in {self.visit}")

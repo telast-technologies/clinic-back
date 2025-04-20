@@ -34,6 +34,7 @@ class Visit(UUIDAutoFieldMixin, TimestampMixin):
         max_length=20,
         choices=VisitType.choices,
     )
+    arrival_info = models.JSONField(default=dict, blank=True)
     status = models.CharField(
         max_length=20,
         choices=VisitStatus.choices,

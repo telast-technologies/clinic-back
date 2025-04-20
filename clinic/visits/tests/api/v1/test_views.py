@@ -123,9 +123,46 @@ class VisitViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_check_in_visit_valid_data(self):
+    def test_arrived_visit_valid_data(self):
         # Test updating visit with valid data
         visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.BOOKED)
+        url = reverse("api:v1:visits:visit-arrive", kwargs={"pk": visit.pk})
+        response = self.client.patch(url, data={"purpose": "examination"}, format="json")
+
+        visit.refresh_from_db()
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(visit.status, VisitStatus.ARRIVED)
+        self.assertIsNotNone(visit.arrival_info)
+
+    def test_arrived_visit_invalid_purpose_data(self):
+        # Test updating visit with valid data
+        visit = VisitFactory.create(patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.BOOKED)
+        url = reverse("api:v1:visits:visit-arrive", kwargs={"pk": visit.pk})
+        response = self.client.patch(url, data={"purpose": "OTHER"}, format="json")
+
+        visit.refresh_from_db()
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_arrived_visit_invalid_status_data(self):
+        # Test updating visit with valid data
+        visit = VisitFactory.create(
+            patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.CHECKED_IN
+        )
+        url = reverse("api:v1:visits:visit-arrive", kwargs={"pk": visit.pk})
+        response = self.client.patch(url, data={"purpose": "examination"}, format="json")
+
+        visit.refresh_from_db()
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(visit.status, VisitStatus.CHECKED_IN)
+
+    def test_check_in_visit_valid_data(self):
+        # Test updating visit with valid data
+        visit = VisitFactory.create(
+            patient=PatientFactory.create(clinic=self.staff.clinic), status=VisitStatus.ARRIVED
+        )
         url = reverse("api:v1:visits:visit-check-in", kwargs={"pk": visit.pk})
         response = self.client.patch(url, format="json")
 
@@ -261,6 +298,72 @@ class VisitAvailableSlotsViewTest(TestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+
+class VisitQueueViewTest(TestCase):
+    def setUp(self):
+        self.staff = StaffFactory.create(is_client_admin=True)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.staff.user)
+        self.url = reverse("api:v1:visits:today_queue")
+
+    def test_valid_retrieve_today_queue(self):
+        patient1 = PatientFactory(first_name="John", last_name="Doe")
+        patient2 = PatientFactory(first_name="Jane", last_name="Doe")
+        patient3 = PatientFactory(first_name="Alice", last_name="Smith")
+
+        VisitFactory(
+            patient=patient1,
+            date=date.today(),
+            status=VisitStatus.ARRIVED,
+            arrival_info={"purpose": "examination", "date": str(date.today()), "queue": 1},
+        )
+        VisitFactory(
+            patient=patient2,
+            date=date.today(),
+            status=VisitStatus.ARRIVED,
+            arrival_info={"purpose": "examination", "date": str(date.today()), "queue": 2},
+        )
+        VisitFactory(
+            patient=patient3,
+            date=date.today(),
+            status=VisitStatus.ARRIVED,
+            arrival_info={"purpose": "consultant", "date": str(date.today()), "queue": 1},
+        )
+
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("examination", response.data)
+        self.assertIn("consultant", response.data)
+        self.assertEqual(response.data["examination"][0]["patient"], "John Doe")
+        self.assertEqual(response.data["consultant"][0]["queue"], 1)
+
+    def test_no_visits_returns_empty(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {})
+
+    def test_excludes_non_arrived_visits(self):
+        VisitFactory(
+            date=date.today(),
+            status=VisitStatus.BOOKED,
+            arrival_info={"purpose": "examination", "date": str(date.today()), "queue": 1},
+        )
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {})
+
+    def test_missing_arrival_info(self):
+        VisitFactory(date=date.today(), status=VisitStatus.ARRIVED, arrival_info={})  # Missing purpose and queue
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, {})
+
+    def test_permission_denied_for_non_admin(self):
+        staff = StaffFactory.create(is_client_admin=False)
+        self.client.force_authenticate(user=staff.user)
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 
 class VisitCalendarViewSetTest(TestCase):

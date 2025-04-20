@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from clinic.visits.api.v1.serializers import VisitCalendarSerializer, VisitDetailSerializer
+from clinic.visits.api.v1.serializers import ArrivalPurposeSerializer, VisitCalendarSerializer, VisitDetailSerializer
 from clinic.visits.flows import VisitFlow
 
 logger = logging.getLogger(__name__)
@@ -28,6 +28,25 @@ class VisitFlowViewMixin:
 
         try:
             flow.cancel(reason=request.data.get("reason", ""))
+            serializer = VisitDetailSerializer(self.get_object(), context={"request": request}, read_only=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except viewflow.fsm.TransitionNotAllowed as e:
+            logger.error(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    @extend_schema(
+        request=ArrivalPurposeSerializer,
+        responses={200: VisitDetailSerializer},
+    )
+    @action(detail=True, methods=["patch"])
+    def arrive(self, request, pk, *args, **kwargs):
+        flow = self.flow_class(self.get_object())
+
+        serializer = ArrivalPurposeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        try:
+            flow.arrive(purpose=serializer.validated_data["purpose"])
             serializer = VisitDetailSerializer(self.get_object(), context={"request": request}, read_only=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except viewflow.fsm.TransitionNotAllowed as e:
