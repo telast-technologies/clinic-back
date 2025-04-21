@@ -28,6 +28,7 @@ class VisitType(models.TextChoices):
 class ArrivalPurposeType(models.TextChoices):
     EXAMINATION = "examination", _("Examination")
     CONSULTANT = "consultant", _("Consultant")
+    BANDAGE = "bandage", _("Bandage")
 
 
 class TimeChoices(models.TextChoices):
