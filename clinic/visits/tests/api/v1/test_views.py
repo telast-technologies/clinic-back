@@ -308,9 +308,9 @@ class VisitQueueViewTest(TestCase):
         self.url = reverse("api:v1:visits:today_queue")
 
     def test_valid_retrieve_today_queue(self):
-        patient1 = PatientFactory(first_name="John", last_name="Doe")
-        patient2 = PatientFactory(first_name="Jane", last_name="Doe")
-        patient3 = PatientFactory(first_name="Alice", last_name="Smith")
+        patient1 = PatientFactory(first_name="John", last_name="Doe", clinic=self.staff.clinic)
+        patient2 = PatientFactory(first_name="Jane", last_name="Doe", clinic=self.staff.clinic)
+        patient3 = PatientFactory(first_name="Alice", last_name="Smith", clinic=self.staff.clinic)
 
         VisitFactory(
             patient=patient1,
@@ -333,6 +333,7 @@ class VisitQueueViewTest(TestCase):
 
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
         self.assertIn("examination", response.data)
         self.assertIn("consultant", response.data)
         self.assertEqual(response.data["examination"][0]["patient"], "John Doe")
@@ -363,6 +364,54 @@ class VisitQueueViewTest(TestCase):
         staff = StaffFactory.create(is_client_admin=False)
         self.client.force_authenticate(user=staff.user)
         response = self.client.get(self.url)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+
+class ReorderQueueAPIViewTest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.staff = StaffFactory.create(is_client_admin=True)
+        self.client.force_authenticate(user=self.staff.user)
+
+        self.patient1 = PatientFactory(first_name="John", last_name="Doe", clinic=self.staff.clinic)
+        self.patient2 = PatientFactory(first_name="Jane", last_name="Doe", clinic=self.staff.clinic)
+
+        self.visit1 = VisitFactory.create(
+            patient=self.patient1,
+            date=date.today(),
+            status=VisitStatus.ARRIVED,
+            arrival_info={"purpose": "examination", "date": str(date.today()), "queue": 1},
+        )
+        self.visit2 = VisitFactory.create(
+            patient=self.patient2,
+            date=date.today(),
+            status=VisitStatus.ARRIVED,
+            arrival_info={"purpose": "examination", "date": str(date.today()), "queue": 2},
+        )
+
+        self.url = reverse("api:v1:visits:reorder_queue")
+
+    def test_reorder_queue_successfully(self):
+        data = [
+            {"visit_pk": str(self.visit2.pk), "queue": 1},
+            {"visit_pk": str(self.visit1.pk), "queue": 2},
+        ]
+
+        response = self.client.patch(self.url, data, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn("examination", response.data)
+        self.assertEqual(response.data["examination"][0]["visit_pk"], str(self.visit2.pk))
+        self.assertEqual(response.data["examination"][1]["visit_pk"], str(self.visit1.pk))
+
+    def test_reorder_queue_invalid_user(self):
+        # Auth as non-admin staff
+        non_admin = StaffFactory.create(is_client_admin=False)
+        self.client.force_authenticate(user=non_admin.user)
+
+        data = [{"visit_pk": str(self.visit1.pk), "queue": 1}]
+        response = self.client.patch(self.url, data, format="json")
+
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
 
 

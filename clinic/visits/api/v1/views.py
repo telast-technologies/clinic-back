@@ -2,8 +2,8 @@ from collections import defaultdict
 
 from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
-from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema
-from rest_framework import status, views, viewsets
+from drf_spectacular.utils import OpenApiExample, OpenApiResponse, extend_schema, inline_serializer
+from rest_framework import serializers, status, views, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
 from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
@@ -19,6 +19,7 @@ from clinic.visits.api.v1.serializers import (
     UpdateVisitSerializer,
     VisitDetailSerializer,
     VisitQueueSerializer,
+    VisitReOrderQueueSerializer,
 )
 from clinic.visits.choices import VisitStatus
 from clinic.visits.filters import TimeSlotFilter, VisitFilter
@@ -127,7 +128,7 @@ class VisitAvailableDatesView(views.APIView):
 
 
 class TodayQueueAPIView(views.APIView):
-    permission_classes = [IsAdminStaff]  # Optional
+    permission_classes = [IsAdminStaff]
 
     @extend_schema(
         responses={
@@ -151,7 +152,9 @@ class TodayQueueAPIView(views.APIView):
     )
     def get(self, request):
         today = timezone.now().date()
-        visits = Visit.objects.filter(arrival_info__date=f"{today}", status=VisitStatus.ARRIVED)
+        visits = Visit.objects.filter(
+            patient__clinic=request.user.staff.clinic, arrival_info__date=f"{today}", status=VisitStatus.ARRIVED
+        )
 
         categorized_queue = defaultdict(list)
         for visit in visits:
@@ -161,6 +164,77 @@ class TodayQueueAPIView(views.APIView):
                 categorized_queue[purpose].append(
                     {
                         "visit_no": visit.no,
+                        "visit_pk": visit.pk,
+                        "patient": visit.patient.get_full_name(),
+                        "queue": queue_value,
+                    }
+                )
+
+        # Sort each purpose list by 'queue' ascending
+        for purpose in categorized_queue:
+            categorized_queue[purpose] = sorted(categorized_queue[purpose], key=lambda x: x["queue"])
+
+        return Response(categorized_queue)
+
+
+class ReorderQueueAPIView(views.APIView):
+    permission_classes = [IsAdminStaff]
+
+    @extend_schema(
+        responses={
+            200: OpenApiResponse(
+                response=VisitQueueSerializer,
+                description="List of available queues for the patient",
+                examples=[
+                    OpenApiExample(
+                        "Example Response",
+                        value={
+                            "examination": [
+                                {"visit_pk": "1", "visit_no": "1", "patient": "John Doe", "queue": 1},
+                                {"visit_pk": "2", "visit_no": "2", "patient": "Jane Doe", "queue": 2},
+                            ],
+                            "consultant": [{"visit_pk": "3", "visit_no": "3", "patient": "Alice Smith", "queue": 1}],
+                            "bandage": [{"visit_pk": "4", "visit_no": "4", "patient": "Bob Smith", "queue": 1}],
+                        },
+                    ),
+                ],
+            )
+        },
+        request=inline_serializer(
+            name="VisitReorderRequest",
+            many=True,
+            fields={
+                "visit_pk": serializers.CharField(),
+                "queue": serializers.IntegerField(),
+            },
+        ),
+    )
+    def patch(self, request):
+        serializer = VisitReOrderQueueSerializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+
+        today = timezone.now().date()
+        visits = Visit.objects.filter(
+            patient__clinic=request.user.staff.clinic,
+            pk__in=[visit["visit_pk"] for visit in serializer.validated_data],
+            arrival_info__date=f"{today}",
+            status=VisitStatus.ARRIVED,
+        )
+
+        categorized_queue = defaultdict(list)
+        for visit in visits:
+            visit.arrival_info["queue"] = next(
+                (v["queue"] for v in serializer.validated_data if v["visit_pk"] == visit.pk), None
+            )
+            visit.save()
+
+            purpose = visit.arrival_info.get("purpose")
+            queue_value = visit.arrival_info.get("queue")
+            if purpose is not None and queue_value is not None:
+                categorized_queue[purpose].append(
+                    {
+                        "visit_no": visit.no,
+                        "visit_pk": visit.pk,
                         "patient": visit.patient.get_full_name(),
                         "queue": queue_value,
                     }

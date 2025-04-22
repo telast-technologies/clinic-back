@@ -3,6 +3,7 @@ from rest_framework.routers import DefaultRouter
 
 from clinic.visits.api.url_converters import DateConverter
 from clinic.visits.api.v1.views import (
+    ReorderQueueAPIView,
     TimeSlotViewSet,
     TodayQueueAPIView,
     VisitAvailableDatesView,
@@ -36,5 +37,6 @@ urlpatterns = [
         TodayQueueAPIView.as_view(),
         name="today_queue",
     ),
+    path("reorder_queue/", ReorderQueueAPIView.as_view(), name="reorder_queue"),
     path("", include(router.urls)),
 ]

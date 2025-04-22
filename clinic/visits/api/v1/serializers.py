@@ -81,6 +81,7 @@ class ArrivalPurposeSerializer(serializers.Serializer):
 
 
 class QueueSerializer(serializers.Serializer):
+    visit_pk = serializers.CharField(read_only=True)
     visit_no = serializers.CharField(read_only=True)
     patient = serializers.CharField(read_only=True)
     queue = serializers.IntegerField(read_only=True)
@@ -89,3 +90,9 @@ class QueueSerializer(serializers.Serializer):
 class VisitQueueSerializer(serializers.Serializer):
     examination = QueueSerializer(many=True, read_only=True)
     consultant = QueueSerializer(many=True, read_only=True)
+    bandage = QueueSerializer(many=True, read_only=True)
+
+
+class VisitReOrderQueueSerializer(serializers.Serializer):
+    visit_pk = serializers.CharField()
+    queue = serializers.IntegerField()
