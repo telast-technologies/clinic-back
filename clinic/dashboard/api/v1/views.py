@@ -33,6 +33,7 @@ class VisitDashboardView(PandasSimpleView):
         new_patients_count = patients.annotate(visit_count=Count("visits")).filter(visit_count=1).count()
         returning_patients_count = patients.annotate(visit_count=Count("visits")).filter(visit_count__gt=1).count()
         patient_region_distribution = list(patients.values("country").annotate(count=Count("uid")))
+        patient_channel_distribution = list(patients.values("channel").annotate(count=Count("uid")))
         # services
         services_distribution = list(
             ChargeService.objects.filter(
@@ -60,6 +61,7 @@ class VisitDashboardView(PandasSimpleView):
                         "new_patients": new_patients_count,
                         "returning_patients": returning_patients_count,
                         "region_distribution": patient_region_distribution,
+                        "channel_distribution": patient_channel_distribution,
                     },
                     "services": {"distribution": services_distribution},
                     "supplies": {
