@@ -1,10 +1,13 @@
 import pandas as pd
 from django.db.models import Count
 from django.utils import timezone
-from rest_pandas import PandasSimpleView
+from rest_pandas import PandasSimpleView, PandasView
 
 from clinic.invoices.choices import InvoiceStatus
 from clinic.invoices.models import ChargeService, Invoice
+from clinic.patients.api.v1.serializers import PatientSerializer
+from clinic.patients.models import Patient
+from clinic.users.abstracts.mixins import QuerysetFilteredMixin
 from clinic.users.api.permissions import IsAdminStaff
 from clinic.visits.models import Visit
 
@@ -72,3 +75,9 @@ class VisitDashboardView(PandasSimpleView):
                 }
             ]
         )
+
+
+class ExportPatientsView(QuerysetFilteredMixin, PandasView):
+    queryset = Patient.objects.all()
+    serializer_class = PatientSerializer
+    permission_classes = [IsAdminStaff]

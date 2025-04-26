@@ -33,6 +33,7 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
     nid = models.CharField(max_length=14, help_text="National ID", default="", blank=True)
     passport = models.CharField(max_length=10, help_text="Passport ID", default="", blank=True)
     channel = models.CharField(max_length=100, choices=Channels.choices)
+    other_channel = models.CharField(max_length=100, default="", blank=True)
 
     class Meta:
         ordering = ("-created_at",)
