@@ -10,5 +10,5 @@ app_name = "dashboard"
 
 urlpatterns = [
     path("visit/<date:start_date>/<date:end_date>/", VisitDashboardView.as_view(), name="visit"),
-    path("export_patients", ExportPatientsView.as_view(), name="export_patients"),
+    path("export_patients/", ExportPatientsView.as_view(), name="export_patients"),
 ]

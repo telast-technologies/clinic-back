@@ -81,3 +81,4 @@ class ExportPatientsView(QuerysetFilteredMixin, PandasView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
     permission_classes = [IsAdminStaff]
+    filter_field = "clinic"
