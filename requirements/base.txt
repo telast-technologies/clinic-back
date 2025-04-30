@@ -1,7 +1,7 @@
 django==5.0.6 # https://pypi.org/project/Django/
 django-environ==0.11.2 # https://pypi.org/project/django-environ/
 django-phonenumber-field==7.3.0 # https://django-phonenumber-field.readthedocs.io/en/latest/
-djangorestframework==3.15.1 # https://pypi.org/project/djangorestframework/
+djangorestframework==3.15.2 # https://pypi.org/project/djangorestframework/
 phonenumberslite==8.13.38 # https://pypi.org/project/phonenumberslite/
 pillow==10.3.0 # https://pypi.org/project/pillow/
 drf-spectacular==0.27.2  # https://github.com/tfranzel/drf-spectacular
