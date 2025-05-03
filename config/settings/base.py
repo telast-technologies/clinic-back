@@ -142,7 +142,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 # JWT Token - https://django-rest-framework-simplejwt.readthedocs.io/en/latest/getting_started.html
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timezone.timedelta(minutes=540),
+    "ACCESS_TOKEN_LIFETIME": timezone.timedelta(days=90),
     "SLIDING_TOKEN_REFRESH_LIFETIME": timezone.timedelta(days=1),
     "SLIDING_TOKEN_LIFETIME": timezone.timedelta(days=7),
     "SLIDING_TOKEN_REFRESH_LIFETIME_ALLOW_REFRESH": True,

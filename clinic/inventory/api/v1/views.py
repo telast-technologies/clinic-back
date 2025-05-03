@@ -1,3 +1,4 @@
+from django.utils import timezone
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import generics, viewsets
 from rest_framework.filters import OrderingFilter, SearchFilter
@@ -21,7 +22,11 @@ class SupplyViewSet(QuerysetFilteredMixin, viewsets.ModelViewSet):
 
 
 class SelectSupplyViewSet(QuerysetFilteredMixin, generics.ListAPIView):
-    queryset = Supply.objects.query_remains(remain__gt=0).order_by("expires_at")
+    queryset = (
+        Supply.objects.filter(expires_at__date__gt=timezone.now().date())
+        .query_remains(remain__gt=0)
+        .order_by("expires_at")
+    )
     serializer_class = SelectSupplySerializer
     permission_classes = [IsAdminStaff]
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]

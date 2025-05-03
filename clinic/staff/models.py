@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_extensions.db.fields import RandomCharField
 
+from clinic.staff.choices import StaffRoles
 from clinic.utils.models import TimestampMixin, UUIDAutoFieldMixin
 
 
@@ -23,6 +24,11 @@ class Staff(UUIDAutoFieldMixin, TimestampMixin):
         include_alpha=False,
         include_punctuation=False,
         include_digits=True,
+    )
+    role = models.CharField(
+        max_length=50,
+        choices=StaffRoles.choices,
+        default=StaffRoles.ADMIN,
     )
     permissions = models.ManyToManyField("system_management.ExposedPermission", related_name="staff", blank=True)
     is_client_admin = models.BooleanField(_("Client Admin"), default=False)

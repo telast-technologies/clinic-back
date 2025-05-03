@@ -20,6 +20,7 @@ class PermissionDetailSerializer(serializers.ModelSerializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     clinic = ClinicSerializer(read_only=True)
     permissions = PermissionDetailSerializer(many=True, read_only=True)
+    role = serializers.CharField(source="staff.role", read_only=True)
 
     class Meta:
         model = User
@@ -33,6 +34,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "clinic",
             "avatar",
             "permissions",
+            "role",
         )
 
 
