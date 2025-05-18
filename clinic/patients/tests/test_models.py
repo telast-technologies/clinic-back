@@ -1,5 +1,6 @@
 import humanize
 from django.test import TestCase
+from django.utils import timezone
 
 from clinic.patients.factories import PatientFactory, PatientPrescriptionFactory, PatientReportFactory
 from clinic.patients.models import Patient, PatientPrescription, PatientReport
@@ -7,7 +8,7 @@ from clinic.patients.models import Patient, PatientPrescription, PatientReport
 
 class PatientModelTest(TestCase):
     def setUp(self):
-        self.obj = PatientFactory.create()
+        self.obj = PatientFactory.create(birthdate=timezone.now() - timezone.timedelta(days=365 * 30))
 
     def test_create_instance(self):
         self.assertIsInstance(self.obj, Patient)
@@ -15,6 +16,9 @@ class PatientModelTest(TestCase):
 
     def test_display_fullname(self):
         self.assertEqual(self.obj.get_full_name(), f"{self.obj.first_name} {self.obj.last_name}")
+
+    def test_display_age(self):
+        self.assertEqual(self.obj.age, (timezone.now() - self.obj.birthdate).days // 365)
 
 
 class PatientReportModelTest(TestCase):

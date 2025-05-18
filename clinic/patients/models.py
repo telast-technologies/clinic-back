@@ -2,6 +2,7 @@ import humanize
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+from django.utils import timezone
 from django_countries.fields import CountryField
 from django_extensions.db.fields import RandomCharField
 from phonenumber_field.modelfields import PhoneNumberField
@@ -43,6 +44,10 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
 
     def get_full_name(self) -> str:
         return f"{self.first_name} {self.last_name}"
+
+    @property
+    def age(self):
+        return (timezone.now() - self.birthdate).days // 365 if self.birthdate else 0
 
     def __str__(self) -> str:
         return self.get_full_name()

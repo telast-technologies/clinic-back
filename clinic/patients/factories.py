@@ -10,7 +10,6 @@ class PatientFactory(factory.django.DjangoModelFactory):
     last_name = factory.Faker("last_name")
     email = factory.Faker("email")
     phone = factory.Faker("phone_number")
-    birthdate = factory.Faker("date")
     address = factory.Faker("address")
     nid = factory.Faker("ean8")
     channel = "facebook"
