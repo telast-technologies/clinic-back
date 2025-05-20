@@ -27,7 +27,7 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
     last_name = models.CharField(max_length=100)
     gender = models.CharField(max_length=10, choices=GenderChoices.choices)
     email = models.EmailField(null=True, blank=True)
-    phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION, unique=True)
+    phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION)
     birthdate = models.DateTimeField(null=True, blank=True)
     country = CountryField(default="EG")
     address = models.CharField(max_length=100, default="", blank=True)
