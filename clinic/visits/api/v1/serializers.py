@@ -91,6 +91,7 @@ class VisitQueueSerializer(serializers.Serializer):
     examination = QueueSerializer(many=True, read_only=True)
     consultant = QueueSerializer(many=True, read_only=True)
     bandage = QueueSerializer(many=True, read_only=True)
+    injection = QueueSerializer(many=True, read_only=True)
 
 
 class VisitReOrderQueueSerializer(serializers.Serializer):

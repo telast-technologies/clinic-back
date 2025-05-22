@@ -29,6 +29,7 @@ class ArrivalPurposeType(models.TextChoices):
     EXAMINATION = "examination", _("Examination")
     CONSULTANT = "consultant", _("Consultant")
     BANDAGE = "bandage", _("Bandage")
+    INJECTION = "injection", _("Injection")
 
 
 class TimeChoices(models.TextChoices):
