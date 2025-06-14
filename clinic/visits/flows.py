@@ -38,12 +38,12 @@ class VisitFlow:
             "date": f"{today}",
             "queue": get_next_value(f"{today}-{self.visit.patient.clinic.pk}-{purpose}"),
         }
+        Invoice.objects.get_or_create(visit=self.visit)
 
         logger.info(f"Arriving {self.visit}")
 
     @status.transition(source=[VisitStatus.ARRIVED], target=VisitStatus.CHECKED_IN)
     def check_in(self):
-        Invoice.objects.get_or_create(visit=self.visit)
         logger.info(f"Checking in {self.visit}")
 
     @status.transition(source=[VisitStatus.CHECKED_IN], target=VisitStatus.CHECKED_OUT)

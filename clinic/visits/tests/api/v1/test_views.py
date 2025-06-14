@@ -134,6 +134,7 @@ class VisitViewSetTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(visit.status, VisitStatus.ARRIVED)
         self.assertIsNotNone(visit.arrival_info)
+        self.assertTrue(hasattr(visit, "invoice"))
 
     def test_arrived_visit_invalid_purpose_data(self):
         # Test updating visit with valid data
@@ -170,7 +171,6 @@ class VisitViewSetTest(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(visit.status, VisitStatus.CHECKED_IN)
-        self.assertTrue(hasattr(visit, "invoice"))
 
     def test_check_in_invalid_data(self):
         # Test updating visit with valid data
