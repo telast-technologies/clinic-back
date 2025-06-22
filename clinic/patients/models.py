@@ -23,8 +23,8 @@ class Patient(UUIDAutoFieldMixin, TimestampMixin):
         include_punctuation=False,
         include_digits=True,
     )
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255, default="", blank=True)
     gender = models.CharField(max_length=10, choices=GenderChoices.choices)
     email = models.EmailField(null=True, blank=True)
     phone = PhoneNumberField(region=settings.PHONENUMBER_DEFAULT_REGION)
