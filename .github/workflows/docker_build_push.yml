@@ -37,7 +37,7 @@ jobs:
 
       - name: Build and push Django image
         id: build-and-push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: "./docker/qa/django/Dockerfile"
@@ -49,7 +49,7 @@ jobs:
 
       - name: Build and push DB image
         id: build-and-push-postgres
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: "./docker/qa/postgres/Dockerfile"
